@@ -1,0 +1,32 @@
+{
+  "string": [
+    {
+      "name": "page_show",
+      "value": "page from package"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "label"
+    },
+    {
+      "name": "custom_tab_home",
+      "value": "首页"
+    },
+    {
+      "name": "custom_tab_tendency",
+      "value": "趋势"
+    },
+    {
+      "name": "custom_tab_recommend",
+      "value": "推荐"
+    },
+    {
+      "name": "custom_tab_mine",
+      "value": "我的"
+    }
+  ]
+}

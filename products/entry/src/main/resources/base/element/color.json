@@ -75,6 +75,22 @@
     {
       "name": "logOrRes_button_word",
       "value": "#FFFFFF"
+    },
+    {
+      "name": "tabBar_background",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "tabBar_fontColor",
+      "value": "#000000"
+    },
+    {
+      "name": "tabBar_fontColor_selected",
+      "value": "#CCF493"
+    },
+    {
+      "name": "tabBar_border",
+      "value": "#cccccc"
     }
   ]
 }

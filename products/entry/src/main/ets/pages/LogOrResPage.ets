@@ -1,5 +1,5 @@
-import { backgroundAndIpView } from "../View/backgroundAndIpView"
-import { logOrResView } from "../View/logOrResView"
+import { backgroundAndIpView } from "../View/BackgroundAndIpView"
+import { logOrResView } from "../View/LogOrResView"
 
 @Component
 export struct LogOrResPage {

@@ -1,0 +1,9 @@
+{
+  "module": {
+    "name": "recommend",
+    "type": "har",
+    "deviceTypes": [
+      "default"
+    ]
+  }
+}

@@ -57,8 +57,20 @@
       "srcPath": "./commons/customRouter",
     },
     {
-      "name": "quickStart",
-      "srcPath": "./features/quickStart",
+      "name": "tendency",
+      "srcPath": "./features/tendency"
+    },
+    {
+      "name": "home",
+      "srcPath": "./features/home",
+    },
+    {
+      "name": "recommend",
+      "srcPath": "./features/recommend",
+    },
+    {
+      "name": "mine",
+      "srcPath": "./features/mine"
     }
   ]
 }

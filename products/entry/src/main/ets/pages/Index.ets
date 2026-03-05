@@ -1,12 +1,12 @@
 import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstants } from '@ohos/customrouter';
 import { AdsPage } from './AdsPage';
 import { LogOrResPage } from './LogOrResPage';
+import { quickStart } from './quickStart';
 
 @Entry
 @Component
 struct EntryHap {
   @StorageLink('entryHapRouter') entryHapRouter: NavPathStack = new NavPathStack()
-  @State firstAds: boolean = true//
 
   aboutToAppear() {
     if (!this.entryHapRouter) {
@@ -21,6 +21,8 @@ struct EntryHap {
       AdsPage()
     } else if (builderName === 'LogOrResPage') {
       LogOrResPage()
+    } else if (builderName === 'quickStart') {
+      quickStart()
     } else {
       RouterModule.getBuilder(builderName).builder(param)
     }

@@ -5,7 +5,7 @@ class AdsViewModel {
   @Trace adsList: AdsTypeModel[] = [
     {
       image: $r('app.media.launchPage'),
-        word: '从绿途开始,\n' + '        记录你的绿色足迹'
+      word: '从绿途开始,\n' + '        记录你的绿色足迹'
     },
     {
       image: $r('app.media.ads_first'),

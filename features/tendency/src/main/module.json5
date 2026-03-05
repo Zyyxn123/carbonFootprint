@@ -1,0 +1,9 @@
+{
+  "module": {
+    "name": "tendency",
+    "type": "har",
+    "deviceTypes": [
+      "default"
+    ]
+  }
+}

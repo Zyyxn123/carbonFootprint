@@ -1,4 +1,3 @@
-
 export class BuilderNameConstants {
   static readonly HARA_A1: string = '@ohos/hara_A1'
   static readonly HARA_A2: string = '@ohos/hara_A2'
@@ -8,6 +7,7 @@ export class BuilderNameConstants {
   static readonly HARC_C1: string = '@ohos/harc_C1'
   static readonly HARC_C2: string = '@ohos/harc_C2'
   static readonly HAR_quickStart_qsPage: string = '@ohos/quickstart_qsPage'
+  static readonly HAR_home_mainPage: string = '@ohos/home_mainPage'
 }
 
 
