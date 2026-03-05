@@ -1,0 +1,28 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "碳迹"
+    },
+    {
+      "name": "launch_ads_skipButton",
+      "value": "跳过"
+    },
+    {
+      "name": "logOrRes_forgetPsw",
+      "value": "忘记密码?"
+    },
+    {
+      "name": "logOrRes_button",
+      "value": "注册/登录"
+    }
+  ]
+}

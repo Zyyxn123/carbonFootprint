@@ -1,0 +1,9 @@
+{
+  "module": {
+    "name": "quickStart",
+    "type": "har",
+    "deviceTypes": [
+      "default"
+    ]
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "app": {
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "C:\\Users\\朱韵宇\\.ohos\\config\\default_carbonFootPrint_-9ebauaaAYHmwJiYal8sLu9b7NDgAN1I5Zr2ly9vyq8=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001B0F1C23290C782765D64E59F0377DD51B2C2C390D07D7A9A4033F043A833A4093CCFF21B7A7B84A",
+          "profile": "C:\\Users\\朱韵宇\\.ohos\\config\\default_carbonFootPrint_-9ebauaaAYHmwJiYal8sLu9b7NDgAN1I5Zr2ly9vyq8=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:\\Users\\朱韵宇\\.ohos\\config\\default_carbonFootPrint_-9ebauaaAYHmwJiYal8sLu9b7NDgAN1I5Zr2ly9vyq8=.p12",
+          "storePassword": "0000001B495C5BCC328213CC49712E7F978206EE4541D9FF85231F2549DECF4AB8BAAD65AE5E01A2ED2E31"
+        }
+      }
+    ],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+        "targetSdkVersion": "6.0.1(21)",
+        "compatibleSdkVersion": "6.0.1(21)",
+        "runtimeOS": "HarmonyOS",
+        "buildOption": {
+          "strictMode": {
+            "caseSensitiveCheck": true,
+            "useNormalizedOHMUrl": true
+          }
+        }
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug",
+      },
+      {
+        "name": "release"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./products/entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "customRouter",
+      "srcPath": "./commons/customRouter",
+    },
+    {
+      "name": "quickStart",
+      "srcPath": "./features/quickStart",
+    }
+  ]
+}

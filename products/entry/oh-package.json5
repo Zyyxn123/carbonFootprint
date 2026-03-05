@@ -1,0 +1,13 @@
+{
+  "name": "@ohos/entry",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "",
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "@ohos/customrouter": "file:../../commons/customRouter",
+    "@ohos/quickstart": "file:../../features/quickStart",
+  }
+}
+

@@ -1,0 +1,80 @@
+{
+  "color": [
+    {
+      "name": "start_window_background",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "launch_ads_background",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "launchPage_background",
+      "value": "#EDFFDD"
+    },
+    {
+      "name": "ads_second_button_background",
+      "value": "#37800F"
+    },
+    {
+      "name": "ads_second_buttonWord_background",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "launch_ads_bottomWord",
+      "value": "#7FA25E"
+    },
+    {
+      "name": "launch_ads_routerBar",
+      "value": "#CCF493"
+    },
+    {
+      "name": "launch_ads_routerBar_selected",
+      "value": "#7FA25E"
+    },
+    {
+      "name": "launch_ads_skipButton_background",
+      "value": "#CCCCCCCC"
+    },
+    {
+      "name": "launch_ads_skipButton_word",
+      "value": "#ffffff"
+    },
+    {
+      "name": "logOrRes_background",
+      "value": "#EDFFDD"
+    },
+    {
+      "name": "logOrRes_background_fore",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "logOrRes_shadow",
+      "value": "#CCCCCCCC"
+    },
+    {
+      "name": "logOrRes_button_border",
+      "value": "#7FA25E"
+    },
+    {
+      "name": "logOrRes_button_word_a",
+      "value": "#cccccc"
+    },
+    {
+      "name": "logOrRes_button_word_b",
+      "value": "#7FA25E"
+    },
+    {
+      "name": "logOrRes_button_word_c",
+      "value": "#000000"
+    },
+    {
+      "name": "logOrRes_button_background",
+      "value": "#37800F"
+    },
+    {
+      "name": "logOrRes_button_word",
+      "value": "#FFFFFF"
+    }
+  ]
+}

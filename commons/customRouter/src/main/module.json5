@@ -1,0 +1,9 @@
+{
+  "module": {
+    "name": "customRouter",
+    "type": "har",
+    "deviceTypes": [
+      "default"
+    ]
+  }
+}
