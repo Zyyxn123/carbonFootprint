@@ -6,7 +6,7 @@ import { LogOrResPage } from './LogOrResPage';
 @Component
 struct EntryHap {
   @StorageLink('entryHapRouter') entryHapRouter: NavPathStack = new NavPathStack()
-  @State firstAds: boolean = true
+  @State firstAds: boolean = true//
 
   aboutToAppear() {
     if (!this.entryHapRouter) {
