@@ -61,7 +61,7 @@ export struct quickStart {
       direction: GradientDirection.Bottom,
       repeating: false,
       colors: [[$r('app.color.page_background_green'), 0.4],
-        [$r('app.color.page_background_white'), 0.7]]
+        [$r('app.color.page_background_white'), 0.8]]
     })
   }
 }

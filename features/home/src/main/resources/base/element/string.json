@@ -11,6 +11,14 @@
     {
       "name": "searchView_placeholder",
       "value": "搜索"
+    },
+    {
+      "name": "carbonLevel_carbonEmission",
+      "value": "今日总碳排放量"
+    },
+    {
+      "name": "carbonLevel_carbonEmissionLevel",
+      "value": "等级分类"
     }
   ]
 }

@@ -8,7 +8,7 @@ import { searchForView } from "../View/searchForView"
 @Component
 export struct home_mainPage {
   build() {
-    Column() {
+    Column({ space: 15 }) {
       searchForView()
       carbonLevelView()
       functionListsView()

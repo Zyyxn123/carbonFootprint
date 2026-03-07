@@ -13,8 +13,16 @@
       "value": "#000000"
     },
     {
+      "name": "carbonLevel_carbonEmission_color",
+      "value": "#000000"
+    },
+    {
       "name": "searchFor_placeholder_color",
       "value": "#808080"
+    },
+    {
+      "name": "carbonLevel_carbonEmission_background",
+      "value": "#FF5FBC1C"
     }
   ]
 }
