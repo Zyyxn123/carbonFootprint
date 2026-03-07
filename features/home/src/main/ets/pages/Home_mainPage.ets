@@ -11,8 +11,8 @@ export struct home_mainPage {
     Column({ space: 15 }) {
       searchForView()
       carbonLevelView()
-      protectionTipsView()
       functionListsView()
+      protectionTipsView()
       auxiliaryInfoView()
     }
     .width('100%')

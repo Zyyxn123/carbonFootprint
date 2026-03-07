@@ -20,7 +20,7 @@ export struct protectionTipsView {
               .fontSize(18)
 
             Text('了解森林对地球生态系统的影响')
-              .fontColor(Color.Black)
+              .fontColor('#cccccc')
               .fontWeight(400)
               .fontSize(12)
           }

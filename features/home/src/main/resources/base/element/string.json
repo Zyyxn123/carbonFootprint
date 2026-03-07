@@ -39,6 +39,10 @@
     {
       "name": "protectionTips_title",
       "value": "每日环保小知识"
+    },
+    {
+      "name": "auxiliaryInfo_title",
+      "value": "辅助信息"
     }
   ]
 }

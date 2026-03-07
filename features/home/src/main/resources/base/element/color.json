@@ -23,6 +23,10 @@
     {
       "name": "carbonLevel_carbonEmission_background",
       "value": "#FF5FBC1C"
+    },
+    {
+      "name": "auxiliaryInfo_verticalBar",
+      "value": "#37800F"
     }
   ]
 }
