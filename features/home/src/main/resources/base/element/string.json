@@ -35,6 +35,10 @@
     {
       "name": "functionLists_recycling",
       "value": "回收利用"
+    },
+    {
+      "name": "protectionTips_title",
+      "value": "每日环保小知识"
     }
   ]
 }
