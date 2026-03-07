@@ -19,6 +19,22 @@
     {
       "name": "carbonLevel_carbonEmissionLevel",
       "value": "等级分类"
+    },
+    {
+      "name": "functionLists_greenTravel",
+      "value": "绿色出行"
+    },
+    {
+      "name": "functionLists_environmentalEncyclopedia",
+      "value": "环保百科"
+    },
+    {
+      "name": "functionLists_garbageIdentification",
+      "value": "垃圾识别"
+    },
+    {
+      "name": "functionLists_recycling",
+      "value": "回收利用"
     }
   ]
 }
