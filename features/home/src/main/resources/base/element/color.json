@@ -1,0 +1,20 @@
+{
+  "color": [
+    {
+      "name": "searchFor_border_color",
+      "value": "#37800F"
+    },
+    {
+      "name": "searchFor_magnifier_color",
+      "value": "#808080"
+    },
+    {
+      "name": "searchFor_carbonEmission_color",
+      "value": "#000000"
+    },
+    {
+      "name": "searchFor_placeholder_color",
+      "value": "#808080"
+    }
+  ]
+}

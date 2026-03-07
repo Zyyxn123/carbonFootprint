@@ -3,6 +3,14 @@
     {
       "name": "page_show",
       "value": "page from package"
+    },
+    {
+      "name": "searchView_carbonEmission",
+      "value": "碳排放"
+    },
+    {
+      "name": "searchView_placeholder",
+      "value": "搜索"
     }
   ]
 }
