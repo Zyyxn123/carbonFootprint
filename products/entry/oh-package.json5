@@ -9,7 +9,7 @@
     "@ohos/customrouter": "file:../../commons/customRouter",
     "@ohos/tendency": "file:../../features/tendency",
     "@ohos/home": "file:../../features/home",
-    "@ohos/recommend": "file:../../features/recommend",
+    "@ohos/carboncircle": "file:../../features/carbonCircle",
     "@ohos/mine": "file:../../features/mine"
   }
 }

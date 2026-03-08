@@ -1,6 +1,6 @@
 {
   "module": {
-    "name": "recommend",
+    "name": "carbonCircle",
     "type": "har",
     "deviceTypes": [
       "default"

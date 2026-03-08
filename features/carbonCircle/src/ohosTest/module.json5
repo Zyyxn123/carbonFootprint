@@ -1,6 +1,6 @@
 {
   "module": {
-    "name": "recommend_test",
+    "name": "carbonCircle_test",
     "type": "feature",
     "deviceTypes": [
       "default"

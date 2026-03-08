@@ -14,7 +14,7 @@ class TabMenusViewModel {
       selectImage: $r("app.media.tab_carbonFootprint_selected")
     },
     {
-      text: $r("app.string.custom_tab_recommend"),
+      text: $r("app.string.custom_tab_carbonFriendCircle"),
       image: $r("app.media.tab_activity"),
       selectImage: $r("app.media.tab_activity_selected")
     },

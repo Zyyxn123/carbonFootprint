@@ -1,6 +1,6 @@
 import { home_mainPage } from "@ohos/home";
 import { Mine_homePage } from "@ohos/mine";
-import { recommend_homePage } from "@ohos/recommend";
+import { carbonCircle_homePage } from "@ohos/carboncircle";
 import { tendency_homePage } from "@ohos/tendency";
 import TabMenusViewModel from "../ViewModel/TabMenusViewModel";
 
@@ -38,7 +38,7 @@ export struct quickStart {
         .border({ width: { bottom: 1 }, color: $r('app.color.tabBar_border')})
 
         TabContent() {
-          recommend_homePage()
+          carbonCircle_homePage()
         }
         .tabBar(this.tabBarType(2))
         .border({ width: { bottom: 1 }, color: $r('app.color.tabBar_border')})
@@ -65,3 +65,5 @@ export struct quickStart {
     })
   }
 }
+
+// 碳友圈：关联所有账户，发的评论可以被所有人看见，（点赞，评论留言）

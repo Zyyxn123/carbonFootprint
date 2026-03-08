@@ -1,5 +1,5 @@
 @Component
-export struct recommend_homePage {
+export struct carbonCircle_homePage {
   build() {
     Button('456789123')
   }

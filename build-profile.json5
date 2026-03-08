@@ -65,8 +65,8 @@
       "srcPath": "./features/home",
     },
     {
-      "name": "recommend",
-      "srcPath": "./features/recommend",
+      "name": "carbonCircle",
+      "srcPath": "./features/carbonCircle"
     },
     {
       "name": "mine",
