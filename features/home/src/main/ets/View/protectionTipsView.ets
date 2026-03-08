@@ -1,3 +1,5 @@
+import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from "@ohos/customrouter"
+
 @Component
 export struct protectionTipsView {
   build() {
@@ -33,6 +35,9 @@ export struct protectionTipsView {
         .backgroundColor(Color.White)
         .border({ width: 1, color: '#cccccc'})
         .borderRadius(25)
+        .onClick(() => {
+          buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_home_environmentalTip);
+        })
 
         Row() {
           Image($r('app.media.protectionTips_two'))

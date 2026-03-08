@@ -8,6 +8,8 @@ export class BuilderNameConstants {
   static readonly HARC_C2: string = '@ohos/harc_C2'
   static readonly HAR_quickStart_qsPage: string = '@ohos/quickstart_qsPage'
   static readonly HAR_home_mainPage: string = '@ohos/home_mainPage'
+  static readonly HAR_home_environmentalTip: string = '@ohos/home_environmentalTipPage'
+  static readonly HAR_entry_adsPage: string = '@ohos/entry_adsPage'
 }
 
 

@@ -15,6 +15,26 @@
     {
       "name": "carbonFootprintTitle_color",
       "value": "#000000"
+    },
+    {
+      "name": "record_background",
+      "value": "#e7fdff"
+    },
+    {
+      "name": "task_background",
+      "value": "#edffdd"
+    },
+    {
+      "name": "recAndTask_background",
+      "value": "#37800f"
+    },
+    {
+      "name": "recAndTask_title_color",
+      "value": "#000000"
+    },
+    {
+      "name": "recAndTask_content_color",
+      "value": "#ffffff"
     }
   ]
 }

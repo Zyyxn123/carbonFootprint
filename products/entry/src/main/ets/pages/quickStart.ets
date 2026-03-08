@@ -8,17 +8,18 @@ import TabMenusViewModel from "../ViewModel/TabMenusViewModel";
 export struct quickStart {
   @State currentIndex: number = 0;
 
-
   @Builder
   tabBarType(index: number) {
     Column() {
-      Image(this.currentIndex === index ? TabMenusViewModel.TabsMenu[index].selectImage : TabMenusViewModel.TabsMenu[index].image)
+      Image(this.currentIndex === index ? TabMenusViewModel.TabsMenu[index].selectImage :
+        TabMenusViewModel.TabsMenu[index].image)
         .width(30)
         .margin({ bottom: 5 })
 
       Text(TabMenusViewModel.TabsMenu[index].text)
         .fontSize(15)
-        .fontColor(this.currentIndex === index ? $r('app.color.tabBar_fontColor_selected') : $r('app.color.tabBar_fontColor'))
+        .fontColor(this.currentIndex === index ? $r('app.color.tabBar_fontColor_selected') :
+          $r('app.color.tabBar_fontColor'))
     }
   }
 
@@ -29,25 +30,25 @@ export struct quickStart {
           home_mainPage()
         }
         .tabBar(this.tabBarType(0))
-        .border({ width: { bottom: 1 }, color: $r('app.color.tabBar_border')})
+        .border({ width: { bottom: 1 }, color: $r('app.color.tabBar_border') })
 
         TabContent() {
           tendency_homePage()
         }
         .tabBar(this.tabBarType(1))
-        .border({ width: { bottom: 1 }, color: $r('app.color.tabBar_border')})
+        .border({ width: { bottom: 1 }, color: $r('app.color.tabBar_border') })
 
         TabContent() {
           carbonCircle_homePage()
         }
         .tabBar(this.tabBarType(2))
-        .border({ width: { bottom: 1 }, color: $r('app.color.tabBar_border')})
+        .border({ width: { bottom: 1 }, color: $r('app.color.tabBar_border') })
 
         TabContent() {
           Mine_homePage()
         }
         .tabBar(this.tabBarType(3))
-        .border({ width: { bottom: 1 }, color: $r('app.color.tabBar_border')})
+        .border({ width: { bottom: 1 }, color: $r('app.color.tabBar_border') })
       }
       .scrollable(true)
       .barMode(BarMode.Fixed)
@@ -63,6 +64,7 @@ export struct quickStart {
       colors: [[$r('app.color.page_background_green'), 0.4],
         [$r('app.color.page_background_white'), 0.8]]
     })
+    .onBackPressed(() => true)
   }
 }
 

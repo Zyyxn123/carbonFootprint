@@ -13,6 +13,7 @@ struct EntryHap {
       this.entryHapRouter = new NavPathStack()
     }
     RouterModule.createRouter(RouterNameConstants.ENTRY_HAP, this.entryHapRouter)
+    AppStorage.setOrCreate('entryHapRouter', this.entryHapRouter)
   }
 
   @Builder

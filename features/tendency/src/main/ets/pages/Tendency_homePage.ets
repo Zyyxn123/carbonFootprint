@@ -19,5 +19,3 @@ export struct tendency_homePage {
     .padding({ left: 10, right: 10, top: 10 })
   }
 }
-
-

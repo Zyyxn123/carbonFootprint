@@ -31,6 +31,22 @@
     {
       "name": "carbonFootprintTitle",
       "value": "碳足迹"
+    },
+    {
+      "name": "recordTitle",
+      "value": "碳行记录"
+    },
+    {
+      "name": "recordContent",
+      "value": "绿色节能足迹"
+    },
+    {
+      "name": "taskTitle",
+      "value": "减碳任务"
+    },
+    {
+      "name": "taskContent",
+      "value": "参与获得积分"
     }
   ]
 }
