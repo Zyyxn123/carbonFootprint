@@ -10,13 +10,13 @@ class TabMenusViewModel {
     },
     {
       text: $r("app.string.custom_tab_tendency"),
-      image: $r("app.media.tab_carbonFootprint"),
-      selectImage: $r("app.media.tab_carbonFootprint_selected")
+      image: $r("app.media.tab_tendency"),
+      selectImage: $r("app.media.tab_tendency_selected")
     },
     {
       text: $r("app.string.custom_tab_carbonFriendCircle"),
-      image: $r("app.media.tab_activity"),
-      selectImage: $r("app.media.tab_activity_selected")
+      image: $r("app.media.tab_square"),
+      selectImage: $r("app.media.tab_square_selected")
     },
     {
       text: $r("app.string.custom_tab_mine"),

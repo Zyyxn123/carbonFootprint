@@ -37,7 +37,7 @@ struct EntryHap {
     .backgroundColor($r('app.color.launch_ads_background'))
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
     .onAppear(() => {
-      this.entryHapRouter.replacePathByName('AdsPage', null, false)
+      this.entryHapRouter.replacePathByName('LogOrResPage', null, false)
     })
   }
 }

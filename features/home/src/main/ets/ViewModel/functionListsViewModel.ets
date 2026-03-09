@@ -4,12 +4,12 @@ import functionListsTypeModel from '../Model/functionListsModel'
 class functionListsViewModel {
   @Trace functionLists: functionListsTypeModel[] = [
     {
-      image: $r('app.media.greenTravel'),
+      image: '1',
       text: $r('app.string.functionLists_greenTravel'),
       url: ''
     },
     {
-      image: $r('app.media.environmentalEncyclopedia'),
+      image: '2',
       text: $r('app.string.functionLists_environmentalEncyclopedia'),
       url: ''
     },

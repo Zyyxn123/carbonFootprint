@@ -13,8 +13,8 @@ export struct quickStart {
     Column() {
       Image(this.currentIndex === index ? TabMenusViewModel.TabsMenu[index].selectImage :
         TabMenusViewModel.TabsMenu[index].image)
-        .width(30)
-        .margin({ bottom: 5 })
+        .width(25)
+        .margin({ bottom: 5, top: 6 })
 
       Text(TabMenusViewModel.TabsMenu[index].text)
         .fontSize(15)

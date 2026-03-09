@@ -7,14 +7,14 @@ class RecordAndTaskViewModel {
       title: $r('app.string.recordTitle'),
       content: $r('app.string.recordContent'),
       uri: '',
-      image: $r('app.media.carbonRecord'),
+      image: $r('app.media.tendency_bird'),
       backgroundColor: $r('app.color.record_background')
     },
     {
       title: $r('app.string.taskTitle'),
       content: $r('app.string.taskContent'),
       uri: '',
-      image: $r('app.media.carbonReductionTask'),
+      image: $r('app.media.tendency_turtle'),
       backgroundColor: $r('app.color.task_background')
     }
   ]

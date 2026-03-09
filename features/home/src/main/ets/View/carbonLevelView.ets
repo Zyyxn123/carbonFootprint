@@ -54,8 +54,8 @@ export struct carbonLevelView {
         .borderRadius(15)
         .alignItems(VerticalAlign.Center)
         .backgroundColor($r('app.color.carbonLevel_carbonEmission_background'))
-        .backgroundBlurStyle(BlurStyle.Thin,
-          { colorMode: ThemeColorMode.LIGHT, adaptiveColor: AdaptiveColor.DEFAULT, scale: 1.0 })
+        // .backgroundBlurStyle(BlurStyle.Thin,
+        //   { colorMode: ThemeColorMode.LIGHT, adaptiveColor: AdaptiveColor.DEFAULT, scale: 1.0 })
       }
     }
     .width('100%')

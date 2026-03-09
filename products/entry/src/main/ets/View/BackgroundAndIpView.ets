@@ -3,11 +3,12 @@ export struct backgroundAndIpView {
   build() {
     Column() {
       Row() {
-        Image($r('app.media.ip_word'))
+        Image($r('app.media.img_1'))
           .width(120)
+          .fillColor(Color.Blue)
 
-        Image($r('app.media.ip'))
-          .width(220)
+        Image($r('app.media.ip_new'))
+          .width(200)
       }
       .width('100%')
       .margin('10%')

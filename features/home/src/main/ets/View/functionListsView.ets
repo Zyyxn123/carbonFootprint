@@ -6,8 +6,32 @@ export struct functionListsView {
 
   @Builder funcListItem(item: functionListsTypeModel, index: number) {
     Column({ space: 10 }) {
-      Image(item.image)
+      if (item.image === '1') {
+        Row() {
+          Image($r('app.media.func_greenOut'))
+            .width(35)
+        }
+        .alignItems(VerticalAlign.Center)
+        .justifyContent(FlexAlign.Center)
         .width(45)
+        .backgroundColor('#37800f')
+        .height(45)
+        .borderRadius(22.5)
+      } else if (item.image === '2') {
+        Row() {
+          Image($r('app.media.func_book'))
+            .width(26)
+        }
+        .alignItems(VerticalAlign.Center)
+        .justifyContent(FlexAlign.Center)
+        .width(45)
+        .backgroundColor('#ffd4c81d')
+        .height(45)
+        .borderRadius(22.5)
+      } else {
+        Image(item.image)
+          .width(45)
+      }
 
       Text(item.text)
         .fontColor(Color.Black)

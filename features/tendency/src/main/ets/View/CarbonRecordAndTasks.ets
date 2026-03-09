@@ -28,8 +28,8 @@ export struct carbonRecordAndTasks {
       .margin({ left: 15 })
 
       Image(item.image)
-        .width(100)
-        .margin({ left: 70 })
+        .width(index === 0 ? 80 : 90)
+        .margin(index === 0 ? { left: 70, top: 20 } : { left: 70, top: 30 })
     }
     .alignItems(HorizontalAlign.Start)
     .justifyContent(FlexAlign.Start)
