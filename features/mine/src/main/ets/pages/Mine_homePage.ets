@@ -9,15 +9,17 @@ export struct Mine_homePage {
     Column() {
       basicData()
 
-      Column() {
+      Column({ space: 20}) {
         faceCards()
         commonTools()
       }
       .width('100%')
       .layoutWeight(1)
-      .backgroundColor(Color.White)
+      .backgroundColor('#fffdfdfd')
       .borderRadius({ topLeft: 20, topRight: 20})
       .border({ width: 1, color: '#cccccc'})
+      .justifyContent(FlexAlign.Start)
+      .alignItems(HorizontalAlign.Center)
     }
     .width('100%')
     .height('100%')
