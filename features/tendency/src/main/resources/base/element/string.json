@@ -47,6 +47,18 @@
     {
       "name": "taskContent",
       "value": "参与获得积分"
+    },
+    {
+      "name": "reduceEmission_title",
+      "value": "随手减碳"
+    },
+    {
+      "name": "lineChart_lastWeek",
+      "value": "上周"
+    },
+    {
+      "name": "lineChart_nowWeek",
+      "value": "本周"
     }
   ]
 }

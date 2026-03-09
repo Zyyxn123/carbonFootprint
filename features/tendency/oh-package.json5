@@ -6,6 +6,7 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "@ohos/customrouter": "file:../../commons/customRouter"
+    "@ohos/customrouter": "file:../../commons/customRouter",
+    "@abner/polyline": "^1.0.0"
   }
 }
