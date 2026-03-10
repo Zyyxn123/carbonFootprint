@@ -5,20 +5,24 @@
       "value": "page from package"
     },
     {
-      "name": "searchView_carbonEmission",
+      "name": "searchForView_carbonEmission",
       "value": "碳排放"
     },
     {
-      "name": "searchView_placeholder",
+      "name": "searchForView_placeholder",
       "value": "搜索"
     },
     {
-      "name": "carbonLevel_carbonEmission",
+      "name": "carbonLevelView_carbonEmission",
       "value": "本日总碳耗量"
     },
     {
-      "name": "carbonLevel_carbonEmissionLevel",
+      "name": "carbonLevelView_carbonEmissionLevel",
       "value": "评级划分"
+    },
+    {
+      "name": "carbonLevelView_carbonEmissionReduce",
+      "value": "今日减碳增加15%"
     },
     {
       "name": "functionLists_greenTravel",
@@ -41,8 +45,32 @@
       "value": "每日生态小贴士"
     },
     {
-      "name": "auxiliaryInfo_title",
+      "name": "protectionTipsView_title",
+      "value": "森林保护的重要性"
+    },
+    {
+      "name": "protectionTipsView_content",
+      "value": "了解森林对地球生态系统的影响"
+    },
+    {
+      "name": "auxiliaryInfoView_title",
       "value": "补充信息"
+    },
+    {
+      "name": "auxiliaryInfoView_title_one",
+      "value": "查看详细碳排"
+    },
+    {
+      "name": "auxiliaryInfoView_content_one",
+      "value": "基于用户采集行为数据，按排放因子公式计算"
+    },
+    {
+      "name": "auxiliaryInfoView_title_two",
+      "value": "碳排等级解读"
+    },
+    {
+      "name": "auxiliaryInfoView_content_two",
+      "value": "个人碳排等级 + 风险标签"
     }
   ]
 }

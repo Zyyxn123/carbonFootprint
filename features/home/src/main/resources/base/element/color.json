@@ -1,31 +1,87 @@
 {
   "color": [
     {
-      "name": "searchFor_border_color",
+      "name": "searchForView_carbonEmission_color",
+      "value": "#000000"
+    },
+    {
+      "name": "searchForView_magnifier_color",
+      "value": "#808080"
+    },
+    {
+      "name": "searchForView_placeholder_color",
+      "value": "#808080"
+    },
+    {
+      "name": "searchForView_border_color",
       "value": "#37800F"
     },
     {
-      "name": "searchFor_magnifier_color",
-      "value": "#808080"
-    },
-    {
-      "name": "searchFor_carbonEmission_color",
+      "name": "carbonLevelView_carbonEmissionAndLevel_color",
       "value": "#000000"
     },
     {
-      "name": "carbonLevel_carbonEmission_color",
-      "value": "#000000"
+      "name": "carbonLevelView_data_background",
+      "value": "#FFFFFF"
     },
     {
-      "name": "searchFor_placeholder_color",
-      "value": "#808080"
-    },
-    {
-      "name": "carbonLevel_carbonEmission_background",
+      "name": "carbonLevelView_carbonEmissionAndLevel_background",
       "value": "#37800f"
     },
     {
-      "name": "auxiliaryInfo_verticalBar",
+      "name": "functionListsView_out_background",
+      "value": "#37800F"
+    },
+    {
+      "name": "functionListsView_tips_background",
+      "value": "#ffd4c81d"
+    },
+    {
+      "name": "protectionTipsView_title_background",
+      "value": "#000000"
+    },
+    {
+      "name": "protectionTipsView_content_background",
+      "value": "#cccccc"
+    },
+    {
+      "name": "protectionTipsView_total_background",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "protectionTipsView_border",
+      "value": "#cccccc"
+    },
+    {
+      "name": "protectionTipsView_button_background",
+      "value": "#37800F"
+    },
+    {
+      "name": "auxiliaryInfoView_title_background",
+      "value": "#000000"
+    },
+    {
+      "name": "auxiliaryInfoView_verticalBar",
+      "value": "#37800F"
+    },
+    {
+      "name": "auxiliaryInfoView_img",
+      "value": "#37800F"
+    },
+    {
+      "name": "auxiliaryInfoView_title",
+      "value": "#000000"
+    },
+    {
+      "name": "auxiliaryInfoView_content",
+      "value": "#cccccc"
+    },
+    {
+      "name": "auxiliaryInfoView_onwards",
+      "value": "#37800F"
+    },
+    {
+      "name": "auxiliaryInfoView_border",
       "value": "#37800F"
     }
   ]

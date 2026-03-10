@@ -5,10 +5,10 @@ export struct auxiliaryInfoView {
       Row() {
         Image($r('app.media.verticalBar'))
           .width(30)
-          .fillColor($r('app.color.auxiliaryInfo_verticalBar'))
+          .fillColor($r('app.color.auxiliaryInfoView_verticalBar'))
 
-        Text($r('app.string.auxiliaryInfo_title'))
-          .fontColor(Color.Black)
+        Text($r('app.string.auxiliaryInfoView_title'))
+          .fontColor($r('app.color.auxiliaryInfoView_title_background'))
           .fontSize(18)
           .fontWeight(600)
       }
@@ -16,17 +16,17 @@ export struct auxiliaryInfoView {
       Row({ space: 10 }) {
         Image($r('app.media.detailedAttention'))
           .width(30)
-          .fillColor("#37800F")
+          .fillColor($r('app.color.auxiliaryInfoView_img'))
           .margin({ left: 5 })
 
         Column({ space: 10 }) {
-          Text('查看详细碳排')
-            .fontColor(Color.Black)
+          Text($r('app.string.auxiliaryInfoView_title_one'))
+            .fontColor($r('app.color.auxiliaryInfoView_title'))
             .fontWeight(600)
             .fontSize(16)
 
-          Text('基于用户采集行为数据，按排放因子公式计算')
-            .fontColor('#cccccc')
+          Text($r('app.string.auxiliaryInfoView_content_one'))
+            .fontColor($r('app.color.auxiliaryInfoView_content'))
             .fontWeight(500)
             .fontSize(12)
         }
@@ -35,33 +35,29 @@ export struct auxiliaryInfoView {
 
         Image($r('app.media.onwards'))
           .width(20)
-          .fillColor("#37800F")
+          .fillColor($r('app.color.auxiliaryInfoView_onwards'))
           .margin({ right: 6 })
       }
       .height(65)
       .width('100%')
       .borderRadius(25)
-      .border({ width: { left: 2, bottom: 1 }, color: "#37800F" })
-      .linearGradient({
-        direction: GradientDirection.Bottom,
-        colors: [["#ccf493", 0.2], ['#ffffff', 0.7]]
-      })
+      .border({ width: { left: 2, bottom: 1 }, color: $r('app.color.auxiliaryInfoView_border') })
       .justifyContent(FlexAlign.SpaceBetween)
 
       Row({ space: 10 }) {
         Image($r('app.media.levelDecode'))
           .width(20)
-          .fillColor("#37800F")
+          .fillColor($r('app.color.auxiliaryInfoView_img'))
           .margin({ left: 11, right: 5 })
 
         Column({ space: 10 }) {
-          Text('碳排等级解读')
-            .fontColor(Color.Black)
+          Text($r('app.string.auxiliaryInfoView_title_two'))
+            .fontColor($r('app.color.auxiliaryInfoView_title'))
             .fontWeight(600)
             .fontSize(16)
 
-          Text('个人碳排等级 + 风险标签')
-            .fontColor('#cccccc')
+          Text($r('app.string.auxiliaryInfoView_content_two'))
+            .fontColor($r('app.color.auxiliaryInfoView_content'))
             .fontWeight(500)
             .fontSize(12)
         }
@@ -70,17 +66,13 @@ export struct auxiliaryInfoView {
 
         Image($r('app.media.onwards'))
           .width(20)
-          .fillColor("#37800F")
+          .fillColor($r('app.color.auxiliaryInfoView_onwards'))
           .margin({ right: 6 })
       }
       .height(65)
       .width('100%')
       .borderRadius(25)
-      .border({ width: { left: 2, bottom: 1 }, color: "#37800F" })
-      .linearGradient({
-        direction: GradientDirection.Bottom,
-        colors: [["#ccf493", 0.2], ['#ffffff', 0.7]]
-      })
+      .border({ width: { left: 2, bottom: 1 }, color: $r('app.color.auxiliaryInfoView_border') })
       .justifyContent(FlexAlign.SpaceBetween)
     }
     .alignItems(HorizontalAlign.Start)

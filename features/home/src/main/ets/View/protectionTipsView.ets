@@ -5,7 +5,7 @@ export struct protectionTipsView {
   build() {
     Column({ space: 10 }) {
       Text($r('app.string.protectionTips_title'))
-        .fontColor(Color.Black)
+        .fontColor($r('app.color.protectionTipsView_title_background'))
         .fontSize(18)
         .fontWeight(600)
 
@@ -16,13 +16,13 @@ export struct protectionTipsView {
             .margin({ left: 15 })
 
           Column({ space: 15 }) {
-            Text('森林保护的重要性')
-              .fontColor(Color.Black)
+            Text($r('app.string.protectionTipsView_title'))
+              .fontColor($r('app.color.protectionTipsView_title_background'))
               .fontWeight(600)
               .fontSize(18)
 
-            Text('了解森林对地球生态系统的影响')
-              .fontColor('#cccccc')
+            Text($r('app.string.protectionTipsView_content'))
+              .fontColor($r('app.color.protectionTipsView_content_background'))
               .fontWeight(400)
               .fontSize(12)
           }
@@ -32,8 +32,8 @@ export struct protectionTipsView {
         .alignItems(VerticalAlign.Center)
         .width('78%')
         .height(100)
-        .backgroundColor(Color.White)
-        .border({ width: 1, color: '#cccccc'})
+        .backgroundColor($r('app.color.protectionTipsView_total_background'))
+        .border({ width: 1, color: $r('app.color.protectionTipsView_border')})
         .borderRadius(25)
         .onClick(() => {
           buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_home_environmentalTip);
@@ -43,7 +43,7 @@ export struct protectionTipsView {
           Image($r('app.media.protectionTips_two'))
             .width(30)
         }
-        .backgroundColor('#37800f')
+        .backgroundColor($r('app.color.protectionTipsView_button_background'))
         .alignItems(VerticalAlign.Center)
         .justifyContent(FlexAlign.Center)
         .width('18%')

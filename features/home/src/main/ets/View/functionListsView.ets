@@ -3,8 +3,8 @@ import functionListsViewModel from '../ViewModel/functionListsViewModel'
 
 @Component
 export struct functionListsView {
-
-  @Builder funcListItem(item: functionListsTypeModel, index: number) {
+  @Builder
+  funcListItem(item: functionListsTypeModel, index: number) {
     Column({ space: 10 }) {
       if (item.image === '1') {
         Row() {
@@ -14,7 +14,7 @@ export struct functionListsView {
         .alignItems(VerticalAlign.Center)
         .justifyContent(FlexAlign.Center)
         .width(45)
-        .backgroundColor('#37800f')
+        .backgroundColor($r('app.color.functionListsView_out_background'))
         .height(45)
         .borderRadius(22.5)
       } else if (item.image === '2') {
@@ -25,7 +25,7 @@ export struct functionListsView {
         .alignItems(VerticalAlign.Center)
         .justifyContent(FlexAlign.Center)
         .width(45)
-        .backgroundColor('#ffd4c81d')
+        .backgroundColor($r('app.color.functionListsView_tips_background'))
         .height(45)
         .borderRadius(22.5)
       } else {

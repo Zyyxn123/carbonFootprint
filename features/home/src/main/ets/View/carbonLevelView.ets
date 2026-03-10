@@ -6,29 +6,26 @@ export struct carbonLevelView {
   build() {
     Row({ space: 15 }) {
       Column({ space: 15 }) {
-        Text($r('app.string.carbonLevel_carbonEmission'))
-          .fontColor($r('app.color.carbonLevel_carbonEmission_color'))
+        Text($r('app.string.carbonLevelView_carbonEmission'))
+          .fontColor($r('app.color.carbonLevelView_carbonEmissionAndLevel_color'))
           .fontSize(15)
           .fontWeight(FontWeight.Bold)
           .margin({ top: 10 })
 
         gaugeComponent()
-          .backgroundColor(Color.White)
+          .backgroundColor($r('app.color.carbonLevelView_data_background'))
           .padding(5)
           .borderRadius(25)
       }
       .width('48%')
       .height('30%')
-      .backgroundColor($r('app.color.carbonLevel_carbonEmission_background'))
+      .backgroundColor($r('app.color.carbonLevelView_carbonEmissionAndLevel_background'))
       .borderRadius(25)
-      .shadow({ radius: 25, color: '#000000', type: ShadowType.BLUR })
-      .backgroundBlurStyle(BlurStyle.Thin,
-        { colorMode: ThemeColorMode.LIGHT, adaptiveColor: AdaptiveColor.DEFAULT, scale: 1.0 })
 
       Column({ space: 10 }) {
         Column({ space: 5 }) {
-          Text($r('app.string.carbonLevel_carbonEmissionLevel'))
-            .fontColor($r('app.color.carbonLevel_carbonEmission_color'))
+          Text($r('app.string.carbonLevelView_carbonEmissionLevel'))
+            .fontColor($r('app.color.carbonLevelView_carbonEmissionAndLevel_color'))
             .fontSize(15)
             .fontWeight(FontWeight.Bold)
             .margin({ top: 10 })
@@ -37,14 +34,11 @@ export struct carbonLevelView {
         }
         .width('48%')
         .height('22%')
-        .backgroundColor($r('app.color.carbonLevel_carbonEmission_background'))
+        .backgroundColor($r('app.color.carbonLevelView_carbonEmissionAndLevel_background'))
         .borderRadius(25)
-        .shadow({ radius: 25, color: '#000000', type: ShadowType.BLUR })
-        .backgroundBlurStyle(BlurStyle.Thin,
-          { colorMode: ThemeColorMode.LIGHT, adaptiveColor: AdaptiveColor.DEFAULT, scale: 1.0 })
 
         Row() {
-          Text('今日摊牌减少15%')
+          Text($r('app.string.carbonLevelView_carbonEmissionReduce'))
             .fontColor(Color.Black)
             .fontSize(14)
             .margin(6)
@@ -53,9 +47,7 @@ export struct carbonLevelView {
         .width(160)
         .borderRadius(15)
         .alignItems(VerticalAlign.Center)
-        .backgroundColor($r('app.color.carbonLevel_carbonEmission_background'))
-        // .backgroundBlurStyle(BlurStyle.Thin,
-        //   { colorMode: ThemeColorMode.LIGHT, adaptiveColor: AdaptiveColor.DEFAULT, scale: 1.0 })
+        .backgroundColor($r('app.color.carbonLevelView_carbonEmissionAndLevel_background'))
       }
     }
     .width('100%')
