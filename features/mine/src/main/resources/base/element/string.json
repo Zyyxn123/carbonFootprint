@@ -3,6 +3,30 @@
     {
       "name": "page_show",
       "value": "page from package"
+    },
+    {
+      "name": "mine_tools_attention_content",
+      "value": "关注列表"
+    },
+    {
+      "name": "mine_tools_fans_content",
+      "value": "我的粉丝"
+    },
+    {
+      "name": "mine_tools_medal_content",
+      "value": "个人成就"
+    },
+    {
+      "name": "mine_tools_help_content",
+      "value": "反馈中心"
+    },
+    {
+      "name": "mine_tools_settings_content",
+      "value": "我的设置"
+    },
+    {
+      "name": "mine_tools_title",
+      "value": "常用工具"
     }
   ]
 }

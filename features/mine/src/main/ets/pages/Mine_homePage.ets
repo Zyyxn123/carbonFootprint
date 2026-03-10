@@ -15,7 +15,7 @@ export struct Mine_homePage {
       }
       .width('100%')
       .layoutWeight(1)
-      .backgroundColor('#fffdfdfd')
+      .backgroundColor('#fff6f6f6')
       .borderRadius({ topLeft: 20, topRight: 20})
       .border({ width: 1, color: '#cccccc'})
       .justifyContent(FlexAlign.Start)

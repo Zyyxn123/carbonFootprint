@@ -1,0 +1,16 @@
+{
+  "color": [
+    {
+      "name": "color_1",
+      "value": "#ff0000"
+    },
+    {
+      "name": "toolsList_darkModeColor",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "toolsList_lightModeColor",
+      "value": "#000000"
+    }
+  ]
+}
