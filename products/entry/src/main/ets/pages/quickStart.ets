@@ -4,9 +4,12 @@ import { carbonCircle_homePage } from "@ohos/carboncircle";
 import { tendency_homePage } from "@ohos/tendency";
 import TabMenusViewModel from "../ViewModel/TabMenusViewModel";
 
+AppStorage.setOrCreate('CurrentIndex', 0)
+
 @Component
 export struct quickStart {
-  @State currentIndex: number = 0;
+  @StorageLink('CurrentIndex') currentIndex: number = 0
+  tabCtrl: TabsController = new TabsController()
 
   @Builder
   tabBarType(index: number) {
@@ -25,7 +28,7 @@ export struct quickStart {
 
   build() {
     NavDestination() {
-      Tabs({ barPosition: BarPosition.End }) {
+      Tabs({ barPosition: BarPosition.End, controller: this.tabCtrl }) {
         TabContent() {
           home_mainPage()
         }
@@ -50,10 +53,14 @@ export struct quickStart {
         .tabBar(this.tabBarType(3))
         .border({ width: { bottom: 1 }, color: $r('app.color.tabBar_border') })
       }
-      .scrollable(true)
+      .scrollable(false)
       .barMode(BarMode.Fixed)
       .onChange((index: number) => {
         this.currentIndex = index
+      })
+      .onAppear(() => {
+        this.tabCtrl.preloadItems([0, 1, 2, 3])
+        this.tabCtrl.changeIndex(AppStorage.get('CurrentIndex') as number)
       })
     }
     .hideTitleBar(true)

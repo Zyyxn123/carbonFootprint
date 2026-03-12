@@ -38,7 +38,7 @@ export class RouterModule {
     const harName = router.builderName.split('_')[0]
     // Dynamically import the page to be redirected to.
     await import(harName).then((ns: ESObject): Promise<void> => ns.harInit(router.builderName))
-    RouterModule.getRouter(router.routerName).replacePath({ name: router.builderName, param: router.param })
+    RouterModule.getRouter(router.routerName).pushPath({ name: router.builderName, param: router.param })
   }
 
   // Obtain the page stack and pop it.

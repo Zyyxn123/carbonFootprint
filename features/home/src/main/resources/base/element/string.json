@@ -34,11 +34,11 @@
     },
     {
       "name": "functionLists_garbageIdentification",
-      "value": "垃圾识别"
+      "value": "家用电器"
     },
     {
       "name": "functionLists_recycling",
-      "value": "循环利用"
+      "value": "食物饮品"
     },
     {
       "name": "protectionTips_title",
@@ -66,11 +66,15 @@
     },
     {
       "name": "auxiliaryInfoView_title_two",
-      "value": "碳排等级解读"
+      "value": "减排实施方案"
     },
     {
       "name": "auxiliaryInfoView_content_two",
-      "value": "个人碳排等级 + 风险标签"
+      "value": "用户习惯 + 风险标签 + 减碳方案"
+    },
+    {
+      "name": "greenTravelPage_title",
+      "value": "低碳出行"
     }
   ]
 }

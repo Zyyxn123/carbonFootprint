@@ -65,7 +65,6 @@ export struct logOrResView {
         .borderRadius(25)
         .onClick(() => {
           this.entryHapRouter.pushPathByName('quickStart', null, false)
-          // buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_quickStart_qsPage)
         })
     }
     .alignItems(HorizontalAlign.Center)

@@ -10,7 +10,7 @@ export struct protectionTipsView {
         .fontWeight(600)
 
       Row({ space: 10 }) {
-        Row({ space: 30 }) {
+        Row({ space: 15 }) {
           Image($r('app.media.protectionTips_one'))
             .width(40)
             .margin({ left: 15 })
@@ -36,7 +36,7 @@ export struct protectionTipsView {
         .border({ width: 1, color: $r('app.color.protectionTipsView_border')})
         .borderRadius(25)
         .onClick(() => {
-          buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_home_environmentalTip);
+          buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_home_environmentalTip)
         })
 
         Row() {
@@ -49,11 +49,14 @@ export struct protectionTipsView {
         .width('18%')
         .borderRadius(15)
         .height(100)
+        .onClick(() => {
+          buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_home_environmentalTip)
+        })
       }
     }
     .alignItems(HorizontalAlign.Start)
     .justifyContent(FlexAlign.Start)
-    .height(130)
+    .height(110)
     .width('100%')
     .padding({ left: 10, right: 10 })
   }

@@ -9,9 +9,7 @@ import { searchForView } from "../View/searchForView"
 export struct home_mainPage {
   build() {
     Column({ space: 15 }) {
-      /**
-       * searchForView: 搜索功能待定
-       */
+      // ToDo: func of search is unknown
       searchForView()
       carbonLevelView()
       functionListsView()
@@ -23,5 +21,3 @@ export struct home_mainPage {
     .padding({ top: 10 })
   }
 }
-
-

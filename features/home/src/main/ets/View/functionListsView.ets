@@ -1,3 +1,4 @@
+import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from '@ohos/customrouter'
 import functionListsTypeModel from '../Model/functionListsModel'
 import functionListsViewModel from '../ViewModel/functionListsViewModel'
 
@@ -17,6 +18,9 @@ export struct functionListsView {
         .backgroundColor($r('app.color.functionListsView_out_background'))
         .height(45)
         .borderRadius(22.5)
+        .onClick(() => {
+          buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_home_greenTravel)
+        })
       } else if (item.image === '2') {
         Row() {
           Image($r('app.media.func_book'))
@@ -28,9 +32,15 @@ export struct functionListsView {
         .backgroundColor($r('app.color.functionListsView_tips_background'))
         .height(45)
         .borderRadius(22.5)
+        .onClick(() => {
+          buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_home_environmentalTips)
+        })
       } else {
         Image(item.image)
           .width(45)
+          .onClick(() => {
+            buildRouterModel(RouterNameConstants.ENTRY_HAP, item.url)
+          })
       }
 
       Text(item.text)

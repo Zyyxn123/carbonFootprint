@@ -6,6 +6,8 @@ import { reduceCarbonEmission } from "../View/ReduceCarbonEmission"
 
 @Component
 export struct tendency_homePage {
+  private tabCtrl: TabsController = new TabsController()
+
   build() {
     Column({ space: 15 }) {
       carbonFootprintTitle()

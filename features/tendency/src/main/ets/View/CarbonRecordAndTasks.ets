@@ -1,3 +1,4 @@
+import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from "@ohos/customrouter"
 import { RecordAndTaskTypeModel } from "../Model/RecordAndTaskModel"
 import RecordAndTaskViewModel from "../ViewModel/RecordAndTaskViewModel"
 
@@ -39,6 +40,9 @@ export struct carbonRecordAndTasks {
     .linearGradient({
       angle: 60,
       colors: [[item.backgroundColor, 0.2], ['#ffffff', 0.4]]
+    })
+    .onClick(() => {
+      buildRouterModel(RouterNameConstants.ENTRY_HAP, item.uri)
     })
   }
 

@@ -1,3 +1,5 @@
+import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from "@ohos/customrouter"
+
 @Component
 export struct auxiliaryInfoView {
   build() {
@@ -36,7 +38,10 @@ export struct auxiliaryInfoView {
         Image($r('app.media.onwards'))
           .width(20)
           .fillColor($r('app.color.auxiliaryInfoView_onwards'))
-          .margin({ right: 6 })
+          .margin({ right: 10 })
+          .onClick(() => {
+            buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_home_detailCarbonEmission)
+          })
       }
       .height(65)
       .width('100%')
@@ -67,7 +72,10 @@ export struct auxiliaryInfoView {
         Image($r('app.media.onwards'))
           .width(20)
           .fillColor($r('app.color.auxiliaryInfoView_onwards'))
-          .margin({ right: 6 })
+          .margin({ right: 10 })
+          .onClick(() => {
+            buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_home_reduceCarbonEmissionMethod)
+          })
       }
       .height(65)
       .width('100%')

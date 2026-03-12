@@ -5,7 +5,10 @@ import { gaugeComponent } from "../Component/gaugeComponent"
 export struct carbonLevelView {
   build() {
     Row({ space: 15 }) {
-      Column({ space: 15 }) {
+      /**
+       * 总碳耗量
+       */
+      Column({ space: 5 }) {
         Text($r('app.string.carbonLevelView_carbonEmission'))
           .fontColor($r('app.color.carbonLevelView_carbonEmissionAndLevel_color'))
           .fontSize(15)
@@ -14,15 +17,18 @@ export struct carbonLevelView {
 
         gaugeComponent()
           .backgroundColor($r('app.color.carbonLevelView_data_background'))
-          .padding(5)
+          .padding(3)
           .borderRadius(25)
       }
       .width('48%')
-      .height('30%')
+      .height('32%')
       .backgroundColor($r('app.color.carbonLevelView_carbonEmissionAndLevel_background'))
       .borderRadius(25)
 
-      Column({ space: 10 }) {
+      /**
+       * 等级评分
+       */
+      Column({ space: 5 }) {
         Column({ space: 5 }) {
           Text($r('app.string.carbonLevelView_carbonEmissionLevel'))
             .fontColor($r('app.color.carbonLevelView_carbonEmissionAndLevel_color'))
@@ -33,10 +39,13 @@ export struct carbonLevelView {
           dataPanelComponent()
         }
         .width('48%')
-        .height('22%')
+        .height('25%')
         .backgroundColor($r('app.color.carbonLevelView_carbonEmissionAndLevel_background'))
-        .borderRadius(25)
+        .borderRadius(15)
 
+        /**
+         * 目前减碳增量（对比昨天）
+         */
         Row() {
           Text($r('app.string.carbonLevelView_carbonEmissionReduce'))
             .fontColor(Color.Black)

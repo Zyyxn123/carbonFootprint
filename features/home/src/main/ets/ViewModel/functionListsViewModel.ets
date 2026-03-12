@@ -1,3 +1,4 @@
+import { BuilderNameConstants } from '@ohos/customrouter'
 import functionListsTypeModel from '../Model/functionListsModel'
 
 @ObservedV2
@@ -16,12 +17,12 @@ class functionListsViewModel {
     {
       image: $r('app.media.garbageIdentification'),
       text: $r('app.string.functionLists_garbageIdentification'),
-      url: ''
+      url: BuilderNameConstants.HAR_home_houseApplication
     },
     {
       image: $r('app.media.recycling'),
       text: $r('app.string.functionLists_recycling'),
-      url: ''
+      url: BuilderNameConstants.HAR_home_foodAndDrink
     },
   ]
 }
