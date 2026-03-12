@@ -1,6 +1,7 @@
 import { BuilderNameConstants, RouterModule, RouterNameConstants } from "@ohos/customrouter";
 import { backButton } from "../Component/BackButton";
 import { funcListsCards } from "../Component/FuncListsCards";
+import { funcListsSelectedMap } from "../Component/FuncListsSelectedMap";
 import foodAndDrinkViewModel from "../ViewModel/FoodAndDrinkViewModel";
 
 @Component
@@ -18,13 +19,13 @@ export struct foodAndDrinkPage {
             popBoxDataList: foodAndDrinkViewModel.popBoxData
           })
         }
-      //
-      //   ListItem() {
-      //     funcListsSelectedMap({
-      //       funcList: GreenTravelViewModel.transportLists,
-      //       title: GreenTravelViewModel.title })
-      //   }
-      //
+
+        ListItem() {
+          funcListsSelectedMap({
+            funcList: foodAndDrinkViewModel.foodAndDrinkLists,
+            title: foodAndDrinkViewModel.title })
+        }
+
       //   ListItem() {
       //     funcListsCurrAction()
       //   }

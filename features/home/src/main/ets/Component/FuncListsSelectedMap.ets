@@ -1,9 +1,11 @@
+import { foodAndDrinkTypeModel } from "../Model/FoodAndDrinkModel"
 import { transportsTypeModel } from "../Model/GreenTravelModel"
+import { applicationsTypeModel } from "../Model/HouseApplicationModel"
 import GreenTravelViewModel from "../ViewModel/GreenTravelViewModel"
 
 @Component
 export struct funcListsSelectedMap {
-  @Prop funcList: transportsTypeModel[]
+  @Prop funcList: transportsTypeModel[] | applicationsTypeModel[] | foodAndDrinkTypeModel[]
   @Prop title: string
 
   @Builder

@@ -27,9 +27,9 @@ export struct greenTravelPage {
             title: GreenTravelViewModel.title })
         }
 
-        ListItem() {
-          funcListsCurrAction()
-        }
+        // ListItem() {
+        //   funcListsCurrAction()
+        // }
       }
       .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: true })
     }

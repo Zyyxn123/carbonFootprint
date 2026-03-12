@@ -50,78 +50,78 @@ class foodAndDrinkViewModel {
       unit: ''
     }
   ]
-  @Trace transportLists: foodAndDrinkTypeModel[] = [
+  @Trace foodAndDrinkLists: foodAndDrinkTypeModel[] = [
     {
-      ts: '骑行',
-      tsc: '#4CAF50', // 亮绿（图标色）
-      bgc: '#2D5F2E',  // 深橄榄绿（背景圆）
-      img: $r('app.media.transports_zixingche') // 自行车图标
+      ts: '米饭',
+      tsc: '#8D6E63', // 亮米棕（图标色，贴合主食属性）
+      bgc: '#5D4037',  // 深棕（背景圆）
+      img: $r('app.media.food_mifan') // 米饭图标
     },
     {
-      ts: '步行',
-      tsc: '#FFC107', // 亮黄（图标色）
+      ts: '青菜',
+      tsc: '#4CAF50', // 亮绿（图标色，贴合蔬菜低碳属性）
+      bgc: '#2D5F2E',  // 深橄榄绿（背景圆）
+      img: $r('app.media.food_qingcai') // 青菜图标
+    },
+    {
+      ts: '猪肉',
+      tsc: '#E57373', // 亮红粉（图标色，贴合肉类属性）
+      bgc: '#B71C1C',  // 深红（背景圆）
+      img: $r('app.media.food_zhurou') // 猪肉图标
+    },
+    {
+      ts: '鸡蛋',
+      tsc: '#FFC107', // 亮黄（图标色，贴合蛋类属性）
       bgc: '#6B5A1E',  // 深棕黄（背景圆）
-      img: $r('app.media.transports_buxing') // 步行图标
+      img: $r('app.media.food_jidan') // 鸡蛋图标
     },
     {
-      ts: '电动车',
-      tsc: '#E91E63', // 亮粉紫（图标色）
-      bgc: '#4A235A',  // 深紫（背景圆）
-      img: $r('app.media.transports_diandongche') // 电动车图标
+      ts: '牛奶',
+      tsc: '#F5F5F5', // 亮白（图标色，贴合乳制品属性）
+      bgc: '#9E9E9E',  // 深灰（背景圆）
+      img: $r('app.media.food_niunai') // 牛奶图标
     },
     {
-      ts: '公交车',
-      tsc: '#2196F3', // 亮蓝（图标色）
-      bgc: '#0F4C81',  // 深蓝（背景圆）
-      img: $r('app.media.transports_gongjiaoche') // 公交车图标
-    },
-    {
-      ts: '地铁',
-      tsc: '#4CAF50', // 亮绿（图标色）
-      bgc: '#2D5F2E',  // 深橄榄绿（背景圆）
-      img: $r('app.media.transports_ditie') // 地铁图标
-    },
-    {
-      ts: '高铁',
-      tsc: '#FF9800', // 亮橙（图标色）
-      bgc: '#6B4423',  // 深棕橙（背景圆）
-      img: $r('app.media.transports_gaotie') // 高铁图标
-    },
-    {
-      ts: '火车',
-      tsc: '#795548', // 棕灰（图标色）
+      ts: '咖啡',
+      tsc: '#795548', // 棕灰（图标色，贴合饮品属性）
       bgc: '#3E2723',  // 深棕（背景圆）
-      img: $r('app.media.transports_huoche') // 火车图标
+      img: $r('app.media.food_kafei') // 咖啡图标
     },
     {
-      ts: '飞机',
-      tsc: '#3F51B5', // 靛蓝（图标色）
-      bgc: '#1A237E',  // 深靛蓝（背景圆）
-      img: $r('app.media.transports_feiji') // 飞机图标
+      ts: '苹果',
+      tsc: '#F44336', // 亮红（图标色，贴合水果属性）
+      bgc: '#C62828',  // 深红（背景圆）
+      img: $r('app.media.food_pingguo') // 苹果图标
     },
     {
-      ts: '邮轮',
-      tsc: '#009688', // 青绿色（图标色）
-      bgc: '#004D40',  // 深青（背景圆）
-      img: $r('app.media.transports_youlun') // 邮轮图标
+      ts: '豆制品',
+      tsc: '#FFEB3B', // 亮浅黄（图标色，贴合豆类属性）
+      bgc: '#F57F17',  // 深黄（背景圆）
+      img: $r('app.media.food_douzhipin') // 豆制品图标
     },
     {
-      ts: '私家车',
-      tsc: '#FF5722', // 亮橙红（图标色）
-      bgc: '#5D4037',  // 深棕橙（背景圆）
-      img: $r('app.media.transports_sijiache') // 私家车（私家车）图标
+      ts: '鸡肉',
+      tsc: '#FFCCBC', // 亮浅橙（图标色，贴合禽类属性）
+      bgc: '#8D6E63',  // 深棕（背景圆）
+      img: $r('app.media.food_jirou') // 鸡肉图标
     },
     {
-      ts: '长途',
-      tsc: '#8BC34A', // 亮浅绿（图标色）
-      bgc: '#33691E',  // 深墨绿（背景圆）
-      img: $r('app.media.transports_gongjiaoche') // 暂用公交车图标，后续可替换为长途客车专属图标
+      ts: '饮用水',
+      tsc: '#2196F3', // 亮蓝（图标色，贴合水属性）
+      bgc: '#0F4C81',  // 深蓝（背景圆）
+      img: $r('app.media.food_yinyongshui') // 饮用水图标
+    },
+    {
+      ts: '面包',
+      tsc: '#FF9800', // 亮橙（图标色，贴合主食属性）
+      bgc: '#E65100',  // 深橙（背景圆）
+      img: $r('app.media.food_mianbao') // 面包图标
     },
     {
       ts: '更多',
-      tsc: '#9E9E9E', // 浅灰（图标色，通用中性色）
-      bgc: '#424242',  // 深灰（背景圆，匹配“更多”的通用属性）
-      img: $r('app.media.func_add') // 替换为你的“更多”通用图标
+      tsc: '#9E9E9E', // 浅灰（通用图标色）
+      bgc: '#424242',  // 深灰（背景圆）
+      img: $r('app.media.func_add') // 更多通用图标
     }
   ]
   @Trace title: string = '请选择你的饮食'
