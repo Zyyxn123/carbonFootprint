@@ -1,4 +1,6 @@
 import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from "@ohos/customrouter"
+import { HealthyNewsPreference, HTTPForHealthyNews } from "@ohos/utils"
+import { common } from "@kit.AbilityKit"
 
 @Component
 export struct logOrResView {
@@ -6,7 +8,10 @@ export struct logOrResView {
   @State passwordStr: string = ''
   private isSelected: boolean = false
   @StorageLink('entryHapRouter') entryHapRouter: NavPathStack = new NavPathStack()
-
+  @State isLogin: boolean = false
+  private healthyNewsPre: HealthyNewsPreference = HealthyNewsPreference.getInstance()
+  private httpForHN: HTTPForHealthyNews = HTTPForHealthyNews.getInstance()
+  private context = this.getUIContext().getHostContext() as common.UIAbilityContext
 
   build() {
     Column() {
@@ -36,7 +41,7 @@ export struct logOrResView {
           .width(275)
           .placeholderColor($r('app.color.logOrRes_button_word_a'))
           .fontColor($r('app.color.logOrRes_button_word_c'))
-          .passwordIcon({ onIconSrc: $r('app.media.log_secret'), offIconSrc: $r('app.media.log_secret_selected')})
+          .passwordIcon({ onIconSrc: $r('app.media.log_secret'), offIconSrc: $r('app.media.log_secret_selected') })
           .type(InputType.Password)
           .backgroundColor(Color.Transparent)
           .copyOption(CopyOptions.LocalDevice)
@@ -61,11 +66,26 @@ export struct logOrResView {
         .backgroundColor($r('app.color.logOrRes_button_background'))
         .width('85%')
         .height(50)
-        .margin({ top: 30})
+        .margin({ top: 30 })
         .borderRadius(25)
         .onClick(() => {
-          this.entryHapRouter.pushPathByName('quickStart', null, false)
+          this.isLogin = true
+
+          setTimeout(() => {
+            this.healthyNewsPre.setTodayData_HN(this.httpForHN.data) // 三种肿瘤早筛全攻略，请收好！
+          }, 500)
+
+          setTimeout(() => {
+            this.entryHapRouter.pushPathByName('quickStart', null, false)
+          }, 2000)
         })
+
+      if (this.isLogin) {
+        LoadingProgress()
+          .color('37800f')
+          .width(70)
+          .margin({ top: 30 })
+      }
     }
     .alignItems(HorizontalAlign.Center)
     .width('100%')

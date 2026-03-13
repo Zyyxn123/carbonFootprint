@@ -10,7 +10,8 @@
     "@ohos/tendency": "file:../../features/tendency",
     "@ohos/home": "file:../../features/home",
     "@ohos/carboncircle": "file:../../features/carbonCircle",
-    "@ohos/mine": "file:../../features/mine"
+    "@ohos/mine": "file:../../features/mine",
+    "@ohos/utils": "file:../../commons/utils"
   }
 }
 

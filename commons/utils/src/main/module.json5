@@ -1,0 +1,14 @@
+{
+  "module": {
+    "requestPermissions": [
+      {
+        "name": 'ohos.permission.INTERNET'
+      }
+    ],
+    "name": "utils",
+    "type": "har",
+    "deviceTypes": [
+      "default"
+    ]
+  }
+}

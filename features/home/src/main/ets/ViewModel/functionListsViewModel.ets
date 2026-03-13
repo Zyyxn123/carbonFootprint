@@ -1,5 +1,7 @@
 import { BuilderNameConstants } from '@ohos/customrouter'
+import { HealthNewsResult, HealthyNewsPreference, HTTPForHealthyNews } from '@ohos/utils'
 import functionListsTypeModel from '../Model/functionListsModel'
+import { JSON } from '@kit.ArkTS'
 
 @ObservedV2
 class functionListsViewModel {

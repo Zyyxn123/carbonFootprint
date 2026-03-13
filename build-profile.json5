@@ -71,6 +71,10 @@
     {
       "name": "mine",
       "srcPath": "./features/mine"
+    },
+    {
+      "name": "utils",
+      "srcPath": "./commons/utils",
     }
   ]
 }
