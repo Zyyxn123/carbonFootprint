@@ -1,4 +1,4 @@
-import { cardsDataTypeModel, popBoxDataTypeModel, transportsTypeModel } from '../Model/GreenTravelModel'
+import { cardsDataTypeModel, popBoxDataTypeModel, transportsTypeModel } from '../Model/ToDoItemsModel'
 
 @ObservedV2
 class GreenTravelViewModel {

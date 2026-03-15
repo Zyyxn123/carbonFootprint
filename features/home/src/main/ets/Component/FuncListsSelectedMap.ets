@@ -1,12 +1,55 @@
-import { foodAndDrinkTypeModel } from "../Model/FoodAndDrinkModel"
-import { transportsTypeModel } from "../Model/GreenTravelModel"
-import { applicationsTypeModel } from "../Model/HouseApplicationModel"
-import GreenTravelViewModel from "../ViewModel/GreenTravelViewModel"
+import { transportsTypeModel } from "../Model/ToDoItemsModel"
 
 @Component
 export struct funcListsSelectedMap {
-  @Prop funcList: transportsTypeModel[] | applicationsTypeModel[] | foodAndDrinkTypeModel[]
+  @State isShow: boolean = false
+  @Prop index_page: number
+  @Prop funcList: transportsTypeModel[]
   @Prop title: string
+  private sheetHeight: number = 500
+
+  @Builder
+  bindSheet_first(item: transportsTypeModel, index: number) {
+  }
+
+  @Builder
+  bindSheet_second(item: transportsTypeModel, index: number) {
+  }
+
+  @Builder
+  bindSheet_third(item: transportsTypeModel, index: number) {
+  }
+
+  @Builder
+  myBuilder(item: transportsTypeModel, index: number) {
+    Column() {
+      Row() {
+        Image($r('app.media.arrow_up'))
+          .padding(10)
+          .width(40)
+          .borderRadius(22)
+          .backgroundColor('#ffe3e3e3')
+          .fillColor('#000')
+          .rotate({
+            angle: 180
+          })
+      }
+      .justifyContent(FlexAlign.End)
+      .width('100%')
+      .padding(15)
+      .onClick(() => {
+        this.isShow = false
+      })
+
+      if (this.index_page === 1) {
+        this.bindSheet_first(item, index)
+      } else if (this.index_page === 2) {
+        this.bindSheet_second(item, index)
+      } else if (this.index_page === 3) {
+        this.bindSheet_third(item, index)
+      }
+    }
+  }
 
   @Builder
   funcListBuilder(item: transportsTypeModel, index: number) {
@@ -21,6 +64,28 @@ export struct funcListsSelectedMap {
       .padding(10)
       .backgroundColor(item.bgc)
       .borderRadius(20)
+      .onClick(() => {
+        this.isShow = !this.isShow
+      })
+      .bindSheet($$this.isShow, this.myBuilder(item, index), {
+        height: this.sheetHeight,
+        backgroundColor: Color.White,
+        showClose: false,
+        onWillAppear: () => {
+          console.info("BindSheet onWillAppear.");
+          this.isShow = true
+        },
+        onAppear: () => {
+          console.info("BindSheet onAppear.");
+        },
+        onWillDisappear: () => {
+          console.info("BindSheet onWillDisappear.");
+          this.isShow = false
+        },
+        onDisappear: () => {
+          console.info("BindSheet onDisappear.");
+        }
+      })
 
       Text(item.ts)
         .fontColor('#000')

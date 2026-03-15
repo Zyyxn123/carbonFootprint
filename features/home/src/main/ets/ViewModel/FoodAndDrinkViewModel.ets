@@ -1,9 +1,8 @@
-import { foodAndDrinkCardsDataTypeModel, foodAndDrinkPopBoxDataTypeModel,
-  foodAndDrinkTypeModel } from '../Model/FoodAndDrinkModel'
+import { cardsDataTypeModel, popBoxDataTypeModel, transportsTypeModel } from '../Model/ToDoItemsModel'
 
 @ObservedV2
 class foodAndDrinkViewModel {
-  @Trace cardsData: foodAndDrinkCardsDataTypeModel[] = [
+  @Trace cardsData: cardsDataTypeModel[] = [
     // 上排左侧：总饮食碳排（核心数据）
     {
       text: '累计碳排',
@@ -24,7 +23,7 @@ class foodAndDrinkViewModel {
       img: $r('app.media.icon_vegetable') // 蔬菜/麦穗图标，适配饮食场景
     }
   ]
-  @Trace popBoxData: foodAndDrinkPopBoxDataTypeModel[] = [
+  @Trace popBoxData: popBoxDataTypeModel[] = [
     // 展开后第一行左侧：本月饮食次数
     {
       text: '本月饮食次数',
@@ -50,7 +49,7 @@ class foodAndDrinkViewModel {
       unit: ''
     }
   ]
-  @Trace foodAndDrinkLists: foodAndDrinkTypeModel[] = [
+  @Trace foodAndDrinkLists: transportsTypeModel[] = [
     {
       ts: '米饭',
       tsc: '#8D6E63', // 亮米棕（图标色，贴合主食属性）

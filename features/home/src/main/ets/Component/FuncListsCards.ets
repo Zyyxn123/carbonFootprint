@@ -1,14 +1,12 @@
-import { foodAndDrinkCardsDataTypeModel, foodAndDrinkPopBoxDataTypeModel } from "../Model/FoodAndDrinkModel"
-import { cardsDataTypeModel, popBoxDataTypeModel } from "../Model/GreenTravelModel"
-import { applicationsCardsDataTypeModel, applicationsPopBoxDataTypeModel } from "../Model/HouseApplicationModel"
+import { cardsDataTypeModel, popBoxDataTypeModel } from "../Model/ToDoItemsModel"
 
 @Component
 export struct funcListsCards {
   @State arrow_towards: number = 180
   @State myBorderRadius: number = 20
   @State appear_bol: boolean = false
-  @Prop cardsDataList: cardsDataTypeModel[] | applicationsCardsDataTypeModel[] | foodAndDrinkCardsDataTypeModel[]
-  @Prop popBoxDataList: popBoxDataTypeModel[] | applicationsPopBoxDataTypeModel[] | foodAndDrinkPopBoxDataTypeModel[]
+  @Prop cardsDataList: cardsDataTypeModel[]
+  @Prop popBoxDataList: popBoxDataTypeModel[]
   private effect: object = TransitionEffect.asymmetric(
     TransitionEffect.OPACITY.animation({
       duration: 500,

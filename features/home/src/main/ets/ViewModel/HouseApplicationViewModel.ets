@@ -1,10 +1,8 @@
-import {
-  applicationsCardsDataTypeModel,
-  applicationsPopBoxDataTypeModel, applicationsTypeModel } from "../Model/HouseApplicationModel"
+import { cardsDataTypeModel, popBoxDataTypeModel, transportsTypeModel } from "../Model/ToDoItemsModel"
 
 @ObservedV2
 class houseApplicationViewModel {
-  @Trace cardsData: applicationsCardsDataTypeModel[] = [
+  @Trace cardsData: cardsDataTypeModel[] = [
     // 上排左侧：总用电碳排放
     {
       text: '累计碳排',
@@ -25,7 +23,7 @@ class houseApplicationViewModel {
       img: $r('app.media.icon_bulb') // 节能灯泡图标
     }
   ]
-  @Trace popBoxData: applicationsPopBoxDataTypeModel[] = [
+  @Trace popBoxData: popBoxDataTypeModel[] = [
     // 展开后第一行左侧：本月用电次数
     {
       text: '本月用电次数',
@@ -51,7 +49,7 @@ class houseApplicationViewModel {
       unit: ''
     }
   ]
-  @Trace applicationsLists: applicationsTypeModel[] = [
+  @Trace applicationsLists: transportsTypeModel[] = [
     {
       ts: '冰箱',
       tsc: '#2196F3', // 亮蓝（图标色，贴合制冷属性）

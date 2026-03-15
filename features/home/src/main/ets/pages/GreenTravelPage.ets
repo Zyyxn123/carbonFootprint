@@ -23,6 +23,7 @@ export struct greenTravelPage {
 
         ListItem() {
           funcListsSelectedMap({
+            index_page: 1,
             funcList: GreenTravelViewModel.transportLists,
             title: GreenTravelViewModel.title })
         }

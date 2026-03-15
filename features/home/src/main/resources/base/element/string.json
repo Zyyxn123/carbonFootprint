@@ -58,15 +58,15 @@
     },
     {
       "name": "auxiliaryInfoView_title_one",
-      "value": "查看详细碳排"
+      "value": "查看碳排放计算规则"
     },
     {
       "name": "auxiliaryInfoView_content_one",
-      "value": "基于用户采集行为数据，按排放因子公式计算"
+      "value": "排放因子公式等"
     },
     {
       "name": "auxiliaryInfoView_title_two",
-      "value": "减排实施方案"
+      "value": "减排推荐方案"
     },
     {
       "name": "auxiliaryInfoView_content_two",

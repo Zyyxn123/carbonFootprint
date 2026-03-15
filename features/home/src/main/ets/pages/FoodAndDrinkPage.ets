@@ -22,6 +22,7 @@ export struct foodAndDrinkPage {
 
         ListItem() {
           funcListsSelectedMap({
+            index_page: 3,
             funcList: foodAndDrinkViewModel.foodAndDrinkLists,
             title: foodAndDrinkViewModel.title })
         }

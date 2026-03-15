@@ -6,23 +6,19 @@ class ProtectionTipsViewModel {
   private healthyNewsPre: HealthyNewsPreference = HealthyNewsPreference.getInstance()
 
   private httpForHN: HTTPForHealthyNews = HTTPForHealthyNews.getInstance()
+  @Trace dataList: HealthNewsItem[] | undefined = undefined
   @Trace tipTitle: string = 'title'
   @Trace tipAuthor_name: string = 'author'
+  @Trace tipUri: string = ''
   @Trace dataVM: HealthNewsItem[] | undefined = undefined
-
-  // async getInfo() {
-  //   await this.HTTPIns.HTTPFunc()
-  //   const param = this.HTTPIns.data
-  //   if (!param) {
-  //     this.data = JSON.parse(param) as HealthNewsItem
-  //   }
-  // }
 
   getTipMsg() {
     let myData = JSON.parse(this.healthyNewsPre.getTodayData_HN()) as HealthNewsItem[]
+    this.dataList = myData
     this.dataVM = myData
-    this.tipTitle = this.dataVM[0].title
-    this.tipAuthor_name = this.dataVM[0].author_name
+    this.tipTitle = this.dataVM[1].title
+    this.tipAuthor_name = this.dataVM[1].author_name
+    this.tipUri = this.dataVM[1].url
   }
 }
 

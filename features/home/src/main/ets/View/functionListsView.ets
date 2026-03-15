@@ -1,9 +1,17 @@
 import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from '@ohos/customrouter'
 import functionListsTypeModel from '../Model/functionListsModel'
 import functionListsViewModel from '../ViewModel/functionListsViewModel'
+import ProtectionTipsViewModel from '../ViewModel/ProtectionTipsViewModel'
 
 @Component
 export struct functionListsView {
+
+  aboutToAppear(): void {
+    if (ProtectionTipsViewModel.tipUri === '') {
+      ProtectionTipsViewModel.getTipMsg()
+    }
+  }
+
   @Builder
   funcListItem(item: functionListsTypeModel, index: number) {
     Column({ space: 10 }) {
@@ -33,7 +41,9 @@ export struct functionListsView {
         .height(45)
         .borderRadius(22.5)
         .onClick(() => {
-          buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_home_environmentalTips)
+          buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_home_environmentalTips, new Object({
+            dataList: ProtectionTipsViewModel.dataList
+          }))
         })
       } else {
         Image(item.image)

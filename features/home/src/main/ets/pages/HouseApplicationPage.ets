@@ -24,6 +24,7 @@ export struct houseApplicationPage {
 
         ListItem() {
           funcListsSelectedMap({
+            index_page: 2,
             funcList: houseApplicationViewModel.applicationsLists,
             title: houseApplicationViewModel.title })
         }

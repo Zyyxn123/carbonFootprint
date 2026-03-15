@@ -4,11 +4,11 @@ import ProtectionTipsViewModel from "../ViewModel/ProtectionTipsViewModel"
 
 @Component
 export struct protectionTipsView {
-
   aboutToAppear(): void {
-    ProtectionTipsViewModel.getTipMsg()
+    if (ProtectionTipsViewModel.tipUri === '') {
+      ProtectionTipsViewModel.getTipMsg()
+    }
   }
-
 
   build() {
     Column({ space: 10 }) {
@@ -47,7 +47,9 @@ export struct protectionTipsView {
         .border({ width: 1, color: $r('app.color.protectionTipsView_border') })
         .borderRadius(25)
         .onClick(() => {
-          buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_home_environmentalTip)
+          buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_home_environmentalTip, new Object({
+            uri: ProtectionTipsViewModel.tipUri
+          }))
         })
 
         Row() {
@@ -61,7 +63,9 @@ export struct protectionTipsView {
         .borderRadius(15)
         .height(100)
         .onClick(() => {
-          buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_home_environmentalTip)
+          buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_home_environmentalTip, new Object({
+            uri: ProtectionTipsViewModel.tipUri
+          }))
         })
       }
     }
