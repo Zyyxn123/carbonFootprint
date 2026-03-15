@@ -45,7 +45,7 @@ export class HTTPForHealthyNews {
         HTTPLogger.info(`page: ${msg.result.page}`)
         HTTPLogger.info(`pageSize: ${msg.result.pageSize}`)
         HTTPLogger.info(`data: ${JSON.stringify(msg.result.data)}`)
-        this.data = data.result.toString()
+        this.data = JSON.stringify(msg.result.data)
         httpRequest.destroy()
       } else {
         HTTPLogger.error(`error: ${JSON.stringify(err)}`)
