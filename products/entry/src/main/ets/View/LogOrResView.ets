@@ -7,8 +7,8 @@ export struct logOrResView {
   @State accountStr: string = ''
   @State passwordStr: string = ''
   private isSelected: boolean = false
-  @StorageLink('entryHapRouter') entryHapRouter: NavPathStack = new NavPathStack()
-  @State isLogin: boolean = false
+  // @StorageLink('entryHapRouter') entryHapRouter: NavPathStack = new NavPathStack()
+  @Link isLogin: boolean
   private healthyNewsPre: HealthyNewsPreference = HealthyNewsPreference.getInstance()
   private httpForHN: HTTPForHealthyNews = HTTPForHealthyNews.getInstance()
   private context = this.getUIContext().getHostContext() as common.UIAbilityContext
@@ -70,14 +70,15 @@ export struct logOrResView {
         .borderRadius(25)
         .onClick(() => {
           this.isLogin = true
+          AppStorage.set('isLoginState', true)
 
           setTimeout(() => {
             this.healthyNewsPre.setTodayData_HN(this.httpForHN.data) // 三种肿瘤早筛全攻略，请收好！
           }, 500)
 
-          setTimeout(() => {
-            this.entryHapRouter.pushPathByName('quickStart', null, false)
-          }, 2000)
+          // setTimeout(() => {
+          //   this.entryHapRouter.pushPathByName('quickStart', null, false)
+          // }, 2000)
         })
 
       if (this.isLogin) {

@@ -49,12 +49,14 @@ export struct carbonLevelView {
         Row() {
           Text($r('app.string.carbonLevelView_carbonEmissionReduce'))
             .fontColor(Color.Black)
-            .fontSize(14)
+            .fontSize(15)
+            .fontWeight(550)
             .margin(6)
         }
         .height('6%')
         .width(160)
         .borderRadius(15)
+        .justifyContent(FlexAlign.Center)
         .alignItems(VerticalAlign.Center)
         .backgroundColor($r('app.color.carbonLevelView_carbonEmissionAndLevel_background'))
       }

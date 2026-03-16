@@ -3,27 +3,124 @@ import { transportsTypeModel } from "../Model/ToDoItemsModel"
 @Component
 export struct funcListsSelectedMap {
   @State isShow: boolean = false
+  @State textFir: string = ''
+  @State textSec: string = ''
+  @State currIndex: number = 0
   @Prop index_page: number
   @Prop funcList: transportsTypeModel[]
   @Prop title: string
-  private sheetHeight: number = 500
+  private sheetHeight: number = 450
 
   @Builder
-  bindSheet_first(item: transportsTypeModel, index: number) {
+  bindSheet_first(index: number) {
+    Column({ space: 25 }) {
+      Row({ space: 10 }) {
+        Image($r('app.media.BS_fir_transport'))
+          .width(30)
+          .fillColor('#37800f')
+        Text('交通工具')
+          .fontColor('#000')
+          .fontSize(18)
+        Text(this.funcList[index].ts)
+          .fontColor('#000')
+          .fontSize(16)
+          .width('65%')
+          .textAlign(TextAlign.End)
+          .padding({ right: 15 })
+      }
+
+      Row({ space: 10 }) {
+        Image($r('app.media.BS_fir_footprint'))
+          .width(30)
+          .fillColor('#37800f')
+        Text('出行里程')
+          .fontColor('#000')
+          .fontSize(18)
+        TextInput({ placeholder: '请输入里程(km)', text: $$this.textFir })
+          .placeholderColor('#ccc')
+          .fontColor('#000')
+          .width(220)
+      }
+
+      Row({ space: 10 }) {
+        Image($r('app.media.BS_all_time'))
+          .width(30)
+          .fillColor('#37800f')
+        Text('出行时长')
+          .fontColor('#000')
+          .fontSize(18)
+        TextInput({ placeholder: '选填，单位：分钟', text: $$this.textSec })
+          .placeholderColor('#ccc')
+          .fontColor('#000')
+          .width(220)
+      }
+
+      Divider()
+        .color('#ccc')
+        .strokeWidth(1)
+        .width('100%')
+        .padding({ left: 10, right: 10 })
+        .vertical(false)
+
+      Row({ space: 30 }) {
+        Button('取消')
+          .width('45%')
+          .fontSize(18)
+          .backgroundColor('#ffa90000')
+          .fontColor('#fff')
+          .onClick(() => {
+            this.textFir = ''
+            this.textSec = ''
+            this.isShow = false
+          })
+        Button('确定')
+          .width('45%')
+          .fontSize(18)
+          .backgroundColor('#37800f')
+          .fontColor('#fff')
+          .onClick(() => {
+            this.isShow = false
+          })
+      }
+      .justifyContent(FlexAlign.SpaceBetween)
+      .width('100%')
+      .padding(15)
+    }
+    .padding(15)
+    .alignItems(HorizontalAlign.Center)
+    .justifyContent(FlexAlign.Start)
+    .width('100%')
   }
 
   @Builder
-  bindSheet_second(item: transportsTypeModel, index: number) {
+  bindSheet_second(index: number) {
   }
 
   @Builder
-  bindSheet_third(item: transportsTypeModel, index: number) {
+  bindSheet_third(index: number) {
   }
 
   @Builder
-  myBuilder(item: transportsTypeModel, index: number) {
+  myBuilder(index: number) {
     Column() {
       Row() {
+        if (this.index_page === 1) {
+          Text('选择出行详情')
+            .fontSize(22)
+            .fontWeight(600)
+            .fontColor('#000')
+        } else if (this.index_page === 2) {
+          Text('选择出行详情')
+            .fontSize(20)
+            .fontWeight(600)
+            .fontColor('#000')
+        } else if (this.index_page === 3) {
+          Text('选择出行详情')
+            .fontSize(20)
+            .fontWeight(600)
+            .fontColor('#000')
+        }
+
         Image($r('app.media.arrow_up'))
           .padding(10)
           .width(40)
@@ -34,7 +131,7 @@ export struct funcListsSelectedMap {
             angle: 180
           })
       }
-      .justifyContent(FlexAlign.End)
+      .justifyContent(FlexAlign.SpaceBetween)
       .width('100%')
       .padding(15)
       .onClick(() => {
@@ -42,11 +139,11 @@ export struct funcListsSelectedMap {
       })
 
       if (this.index_page === 1) {
-        this.bindSheet_first(item, index)
+        this.bindSheet_first(index)
       } else if (this.index_page === 2) {
-        this.bindSheet_second(item, index)
+        this.bindSheet_second(index)
       } else if (this.index_page === 3) {
-        this.bindSheet_third(item, index)
+        this.bindSheet_third(index)
       }
     }
   }
@@ -64,28 +161,7 @@ export struct funcListsSelectedMap {
       .padding(10)
       .backgroundColor(item.bgc)
       .borderRadius(20)
-      .onClick(() => {
-        this.isShow = !this.isShow
-      })
-      .bindSheet($$this.isShow, this.myBuilder(item, index), {
-        height: this.sheetHeight,
-        backgroundColor: Color.White,
-        showClose: false,
-        onWillAppear: () => {
-          console.info("BindSheet onWillAppear.");
-          this.isShow = true
-        },
-        onAppear: () => {
-          console.info("BindSheet onAppear.");
-        },
-        onWillDisappear: () => {
-          console.info("BindSheet onWillDisappear.");
-          this.isShow = false
-        },
-        onDisappear: () => {
-          console.info("BindSheet onDisappear.");
-        }
-      })
+
 
       Text(item.ts)
         .fontColor('#000')
@@ -106,6 +182,10 @@ export struct funcListsSelectedMap {
           GridItem() {
             this.funcListBuilder(item, index)
           }
+          .onClick(() => {
+            this.isShow = !this.isShow
+            this.currIndex = index
+          })
         })
       }
       .height(280)
@@ -113,6 +193,25 @@ export struct funcListsSelectedMap {
       .rowsTemplate('1fr 1fr 1fr')
       .columnsGap(15)
       .rowsGap(10)
+      .bindSheet($$this.isShow, this.myBuilder(this.currIndex), {
+        height: this.sheetHeight,
+        backgroundColor: Color.White,
+        showClose: false,
+        onWillAppear: () => {
+          console.info("BindSheet onWillAppear.");
+          this.isShow = true
+        },
+        onAppear: () => {
+          console.info("BindSheet onAppear.");
+        },
+        onWillDisappear: () => {
+          console.info("BindSheet onWillDisappear.");
+          this.isShow = false
+        },
+        onDisappear: () => {
+          console.info("BindSheet onDisappear.");
+        }
+      })
     }
     .alignItems(HorizontalAlign.Start)
     .justifyContent(FlexAlign.Center)

@@ -14,7 +14,7 @@ export struct tendency_homePage {
       carbonRecordAndTasks()
       carbonLineChart()
       additionalInfo()
-      reduceCarbonEmission()
+      // reduceCarbonEmission()
     }
     .width('100%')
     .height('100%')

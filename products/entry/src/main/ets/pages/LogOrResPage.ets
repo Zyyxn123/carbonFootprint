@@ -3,6 +3,7 @@ import { logOrResView } from "../View/LogOrResView"
 
 @Component
 export struct LogOrResPage {
+  @Link isLogin: boolean
   @StorageLink('entryHapRouter') entryHapRouter: NavPathStack = new NavPathStack()
 
   build() {
@@ -10,7 +11,7 @@ export struct LogOrResPage {
       Stack({ alignContent: Alignment.Bottom}) {
         backgroundAndIpView()
 
-        logOrResView()
+        logOrResView({ isLogin: this.isLogin})
       }
       .width('100%')
       .height('100%')

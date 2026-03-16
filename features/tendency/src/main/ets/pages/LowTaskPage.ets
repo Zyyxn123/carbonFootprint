@@ -1,4 +1,4 @@
-import { BuilderNameConstants, RouterModule } from "@ohos/customrouter"
+import { BuilderNameConstants, RouterModule, RouterNameConstants } from "@ohos/customrouter"
 
 @Component
 export struct lowTaskPage {
@@ -15,8 +15,9 @@ export function harBuilder(value: object) {
   }
   .title('lowTaskPage')
   .onBackPressed(() => {
-    (AppStorage.get('entryHapRouter') as NavPathStack).replacePathByName('quickStart', null, false)
-    AppStorage.set('CurrentIndex', 1)
+    // (AppStorage.get('entryHapRouter') as NavPathStack).replacePathByName('quickStart', null, false)
+    // AppStorage.set('CurrentIndex', 1)
+    RouterModule.pop(RouterNameConstants.ENTRY_HAP)
     return true
   })
 }

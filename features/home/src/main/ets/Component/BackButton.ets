@@ -1,4 +1,4 @@
-import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from "@ohos/customrouter"
+import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstants } from "@ohos/customrouter"
 
 @Component
 export struct backButton {
@@ -14,7 +14,8 @@ export struct backButton {
         .padding(10)
         .borderRadius(25)
         .onClick(() => {
-          (AppStorage.get('entryHapRouter') as NavPathStack).replacePathByName('quickStart', null, false)
+          // (AppStorage.get('entryHapRouter') as NavPathStack).replacePathByName('quickStart', null, false)
+          RouterModule.pop(RouterNameConstants.ENTRY_HAP)
         })
 
       Text(this.pageTitle)

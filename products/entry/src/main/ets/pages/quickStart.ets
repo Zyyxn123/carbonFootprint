@@ -4,7 +4,7 @@ import { carbonCircle_homePage } from "@ohos/carboncircle";
 import { tendency_homePage } from "@ohos/tendency";
 import TabMenusViewModel from "../ViewModel/TabMenusViewModel";
 
-AppStorage.setOrCreate('CurrentIndex', 0)
+// AppStorage.setOrCreate('CurrentIndex', 0)
 
 @Component
 export struct quickStart {

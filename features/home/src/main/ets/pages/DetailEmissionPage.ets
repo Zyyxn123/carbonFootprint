@@ -14,7 +14,8 @@ export function harBuilder(value: object) {
   }
   .title('detailEmissionPage')
   .onBackPressed(() => {
-    (AppStorage.get('entryHapRouter') as NavPathStack).replacePathByName('quickStart', null, false)
+    RouterModule.pop(RouterNameConstants.ENTRY_HAP)
+    // (AppStorage.get('entryHapRouter') as NavPathStack).replacePathByName('quickStart', null, false)
     return true
   })
 }
