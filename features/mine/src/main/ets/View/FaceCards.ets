@@ -18,6 +18,10 @@ export struct faceCards {
       .width('48%')
       .height(80)
       .border({ width: 1, color: '#bfbfbf', radius: 15 })
+      .onClick(() => {
+        AppStorage.set('isLoginState', false)
+        AppStorage.set('CurrentIndex', 0)
+      })
 
       Row({ space: 10 }) {
         Image($r('app.media.mine_advance'))

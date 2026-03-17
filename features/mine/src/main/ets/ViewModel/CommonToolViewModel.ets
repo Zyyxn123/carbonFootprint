@@ -4,13 +4,6 @@ import { commonToolTypeModel } from "../Model/CommonToolModel"
 class CommonToolViewModel {
   @Trace toolsList: commonToolTypeModel[] = [
     {
-      img: $r('app.media.mine_tools_attention'),
-      content: $r('app.string.mine_tools_attention_content'),
-      uri: '',
-      darkModeColor: $r('app.color.toolsList_darkModeColor'),
-      lightModeColor: $r('app.color.toolsList_lightModeColor')
-    },
-    {
       img: $r('app.media.mine_tools_fans'),
       content: $r('app.string.mine_tools_fans_content'),
       uri: '',
@@ -18,8 +11,8 @@ class CommonToolViewModel {
       lightModeColor: $r('app.color.toolsList_lightModeColor')
     },
     {
-      img: $r('app.media.mine_tools_medal'),
-      content: $r('app.string.mine_tools_medal_content'),
+      img: $r('app.media.mine_tools_attention'),
+      content: $r('app.string.mine_tools_attention_content'),
       uri: '',
       darkModeColor: $r('app.color.toolsList_darkModeColor'),
       lightModeColor: $r('app.color.toolsList_lightModeColor')
@@ -34,6 +27,13 @@ class CommonToolViewModel {
     {
       img: $r('app.media.mine_tools_settings'),
       content: $r('app.string.mine_tools_settings_content'),
+      uri: '',
+      darkModeColor: $r('app.color.toolsList_darkModeColor'),
+      lightModeColor: $r('app.color.toolsList_lightModeColor')
+    },
+    {
+      img: $r('app.media.mine_tools_out'),
+      content: $r('app.string.mine_tools_out_content'),
       uri: '',
       darkModeColor: $r('app.color.toolsList_darkModeColor'),
       lightModeColor: $r('app.color.toolsList_lightModeColor')

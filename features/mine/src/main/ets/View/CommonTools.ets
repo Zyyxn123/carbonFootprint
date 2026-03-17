@@ -16,9 +16,9 @@ export struct commonTools {
           .fontColor(item.lightModeColor)
           .fontSize(14)
 
-        Text('as')
-          .fontColor(Color.Black)
-          .fontSize(12)
+        Image($r('app.media.dayuhao'))
+          .fillColor(Color.Black)
+          .width(17)
           .margin({ right: 10 })
       }
       .width('88%')

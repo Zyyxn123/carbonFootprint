@@ -10,7 +10,7 @@
     },
     {
       "name": "mine_tools_fans_content",
-      "value": "我的粉丝"
+      "value": "个人资料"
     },
     {
       "name": "mine_tools_medal_content",
@@ -23,6 +23,10 @@
     {
       "name": "mine_tools_settings_content",
       "value": "我的设置"
+    },
+    {
+      "name": "mine_tools_out_content",
+      "value": "退出登录"
     },
     {
       "name": "mine_tools_title",

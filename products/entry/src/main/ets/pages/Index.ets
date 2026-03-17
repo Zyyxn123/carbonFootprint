@@ -47,15 +47,7 @@ struct EntryHap {
 
   @Builder
   routerMap(builderName: string, param: object) {
-    // if (builderName === 'AdsPage') {
-    //   // AdsPage()
-    // } else if (builderName === 'LogOrResPage') {
-    //   // LogOrResPage()
-    // } else if (builderName === 'quickStart') {
-    //   // quickStart()
-    // } else {
       RouterModule.getBuilder(builderName).builder(param)
-    // }
   }
 
   @Builder

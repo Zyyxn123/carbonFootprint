@@ -1,27 +1,28 @@
+import { UserRdbStore } from "@ohos/utils"
+import { UserDataViewModel } from "../ViewModel/UserDataViewModel"
+
 @Component
 export struct basicData {
+  private userDataVM: UserDataViewModel = new UserDataViewModel()
+
+  async aboutToAppear(): Promise<void> {
+    await this.userDataVM.getUserData()
+  }
+
   build() {
     Row() {
       Column({ space: 15 }) {
-        Image($r('app.media.avatar_1th'))
+        Image($r(`app.media.${this.userDataVM.avatar}`))
           .width(100)
           .height(100)
           .borderRadius(50)
           .margin({ left: 25, right: 15 })
 
         Row() {
-          Text('用户姓名')
+          Text(this.userDataVM.name)
             .fontSize(20)
             .fontWeight(600)
             .fontColor(Color.Black)
-
-          // Button('关注')
-          //   .backgroundColor('#37800f')
-          //   .fontColor(Color.Black)
-          //   .borderRadius(15)
-          //   .fontSize(12)
-          //   .fontWeight(500)
-          //   .height(30)
         }
         .margin({ left: 25, right: 15 })
       }

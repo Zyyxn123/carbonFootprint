@@ -1,5 +1,5 @@
 import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from "@ohos/customrouter"
-import { HealthyNewsPreference, HTTPForHealthyNews } from "@ohos/utils"
+import { HealthyNewsPreference, HTTPForHealthyNews, UserRdbStore } from "@ohos/utils"
 import { common } from "@kit.AbilityKit"
 
 @Component
@@ -11,6 +11,7 @@ export struct logOrResView {
   @Link isLogin: boolean
   private healthyNewsPre: HealthyNewsPreference = HealthyNewsPreference.getInstance()
   private httpForHN: HTTPForHealthyNews = HTTPForHealthyNews.getInstance()
+  private userRdbStoreIns: UserRdbStore = UserRdbStore.getInstance()
   private context = this.getUIContext().getHostContext() as common.UIAbilityContext
 
   build() {
@@ -68,25 +69,34 @@ export struct logOrResView {
         .height(50)
         .margin({ top: 30 })
         .borderRadius(25)
-        .onClick(() => {
-          this.isLogin = true
-          AppStorage.set('isLoginState', true)
-
-          setTimeout(() => {
-            this.healthyNewsPre.setTodayData_HN(this.httpForHN.data) // 三种肿瘤早筛全攻略，请收好！
-          }, 500)
-
-          // setTimeout(() => {
-          //   this.entryHapRouter.pushPathByName('quickStart', null, false)
-          // }, 2000)
+        .onClick(async () => {
+          const bol: Boolean = await this.userRdbStoreIns.hasAcc(this.accountStr)
+          if (bol) {
+            // this.userRdbStoreIns.
+          } else {
+            this.userRdbStoreIns.setOriginalData(this.accountStr)
+          }
         })
 
-      if (this.isLogin) {
-        LoadingProgress()
-          .color('37800f')
-          .width(70)
-          .margin({ top: 30 })
-      }
+      Button('删除数据库')
+        .onClick(() => {
+          this.userRdbStoreIns.deleteMyTable()
+        })
+
+      Button('游客登陆')
+        .onClick(() => {
+          this.isLogin = true
+          setTimeout(() => {
+            this.healthyNewsPre.setTodayData_HN(this.httpForHN.data)
+          }, 500)
+        })
+
+      // if (this.isLogin) {
+      //   LoadingProgress()
+      //     .color('37800f')
+      //     .width(70)
+      //     .margin({ top: 30 })
+      // }
     }
     .alignItems(HorizontalAlign.Center)
     .width('100%')

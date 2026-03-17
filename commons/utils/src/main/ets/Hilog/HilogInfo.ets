@@ -37,3 +37,5 @@ class Logger {
 export const HTTPLogger: Logger = new Logger('[utils_HTTPLogger_HN]')
 
 export const PreLogger_HN: Logger = new Logger('[utils_PreLogger_HN]')
+
+export const UserRdbLogger: Logger = new Logger('[utils_UserRdbLogger]')
