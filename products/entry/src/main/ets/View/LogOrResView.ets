@@ -6,13 +6,13 @@ import { common } from "@kit.AbilityKit"
 export struct logOrResView {
   @State accountStr: string = ''
   @State passwordStr: string = ''
-  private isSelected: boolean = false
-  // @StorageLink('entryHapRouter') entryHapRouter: NavPathStack = new NavPathStack()
+  @State loginProgressBol: boolean = false
   @Link isLogin: boolean
   private healthyNewsPre: HealthyNewsPreference = HealthyNewsPreference.getInstance()
   private httpForHN: HTTPForHealthyNews = HTTPForHealthyNews.getInstance()
   private userRdbStoreIns: UserRdbStore = UserRdbStore.getInstance()
   private context = this.getUIContext().getHostContext() as common.UIAbilityContext
+  private isSelected: boolean = false
 
   build() {
     Column() {
@@ -69,14 +69,14 @@ export struct logOrResView {
         .height(50)
         .margin({ top: 30 })
         .borderRadius(25)
-        .onClick(async () => {
+        /*.onClick(async () => {
           const bol: Boolean = await this.userRdbStoreIns.hasAcc(this.accountStr)
           if (bol) {
             // this.userRdbStoreIns.
           } else {
             this.userRdbStoreIns.setOriginalData(this.accountStr)
           }
-        })
+        })*/
 
       Button('删除数据库')
         .onClick(() => {
@@ -84,19 +84,27 @@ export struct logOrResView {
         })
 
       Button('游客登陆')
-        .onClick(() => {
-          this.isLogin = true
+        .onClick(async () => {
+          const bol: Boolean = await this.userRdbStoreIns.hasAcc('testDemo')
+          if (!bol) {
+            this.userRdbStoreIns.setOriginalData('testDemo')
+          }
+
+          this.loginProgressBol = true
           setTimeout(() => {
+            this.isLogin = true
             this.healthyNewsPre.setTodayData_HN(this.httpForHN.data)
+            this.loginProgressBol = false
           }, 500)
         })
+        .margin({ top: 30 })
 
-      // if (this.isLogin) {
-      //   LoadingProgress()
-      //     .color('37800f')
-      //     .width(70)
-      //     .margin({ top: 30 })
-      // }
+      if (this.loginProgressBol) {
+        LoadingProgress()
+          .color('37800f')
+          .width(70)
+          .margin({ top: 30 })
+      }
     }
     .alignItems(HorizontalAlign.Center)
     .width('100%')
