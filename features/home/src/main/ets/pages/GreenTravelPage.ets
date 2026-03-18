@@ -58,7 +58,6 @@ export function harBuilder(value: object) {
   .title($r('app.string.greenTravelPage_title'))
   .onBackPressed(() => {
     RouterModule.pop(RouterNameConstants.ENTRY_HAP)
-    // (AppStorage.get('entryHapRouter') as NavPathStack).replacePathByName('quickStart', null, false)
     return true
   })
 }

@@ -14,7 +14,7 @@ export function harBuilder(value: object) {
   }
   .title('reduceEmissionMethodPage')
   .onBackPressed(() => {
-    (AppStorage.get('entryHapRouter') as NavPathStack).replacePathByName('quickStart', null, false)
+    RouterModule.pop(RouterNameConstants.ENTRY_HAP)
     return true
   })
 }

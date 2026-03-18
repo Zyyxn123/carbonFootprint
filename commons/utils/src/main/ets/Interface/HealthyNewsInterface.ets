@@ -25,11 +25,11 @@ export interface HealthNewsItem {
   /** 资讯详情链接 */
   url: string;
   /** 缩略图1（可能为空字符串） */
-  thumbnail_pic_s: string;
+  thumbnail_pic_s?: string;
   /** 缩略图2（可选字段） */
-  // thumbnail_pic_s02?: string;
-  // /** 缩略图3（可选字段） */
-  // thumbnail_pic_s03?: string;
+  thumbnail_pic_s02?: string;
+  /** 缩略图3（可选字段） */
+  thumbnail_pic_s03?: string;
   /** 是否有正文内容（1表示有） */
   is_content: string;
 }

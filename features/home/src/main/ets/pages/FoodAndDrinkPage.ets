@@ -55,7 +55,7 @@ export function harBuilder(value: object) {
   .hideTitleBar(true)
   .title($r('app.string.functionLists_recycling'))
   .onBackPressed(() => {
-    // (AppStorage.get('entryHapRouter') as NavPathStack).replacePathByName('quickStart', null, false)
+    RouterModule.pop(RouterNameConstants.ENTRY_HAP)
     return true
   })
 }

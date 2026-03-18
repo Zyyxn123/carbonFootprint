@@ -40,7 +40,7 @@ export function harBuilder(value: object) {
   .hideTitleBar(true)
   .title('environmentalTipPage')
   .onBackPressed(() => {
-    (AppStorage.get('entryHapRouter') as NavPathStack).replacePathByName('quickStart', null, false)
+    RouterModule.pop(RouterNameConstants.ENTRY_HAP)
     return true
   })
 }

@@ -94,10 +94,164 @@ export struct funcListsSelectedMap {
 
   @Builder
   bindSheet_second(index: number) {
+    Column({ space: 25 }) {
+      Row({ space: 10 }) {
+        Image($r('app.media.BS_sec_appliance'))
+          .width(30)
+          .fillColor('#37800f')
+        Text('电器类型')
+          .fontColor('#000')
+          .fontSize(18)
+        Text(this.funcList[index].ts)
+          .fontColor('#000')
+          .fontSize(16)
+          .width('65%')
+          .textAlign(TextAlign.End)
+          .padding({ right: 15 })
+      }
+
+      Row({ space: 10 }) {
+        Image($r('app.media.BS_all_time'))
+          .width(30)
+          .fillColor('#37800f')
+        Text('使用时长')
+          .fontColor('#000')
+          .fontSize(18)
+        TextInput({ placeholder: '请输入时长(小时)', text: $$this.textFir })
+          .placeholderColor('#ccc')
+          .fontColor('#000')
+          .width(220)
+      }
+
+      Row({ space: 10 }) {
+        Image($r('app.media.BS_sec_power'))
+          .width(30)
+          .fillColor('#37800f')
+        Text('用电功率')
+          .fontColor('#000')
+          .fontSize(18)
+        TextInput({ placeholder: '选填，单位：瓦(W)', text: $$this.textSec })
+          .placeholderColor('#ccc')
+          .fontColor('#000')
+          .width(220)
+      }
+
+      Divider()
+        .color('#ccc')
+        .strokeWidth(1)
+        .width('100%')
+        .padding({ left: 10, right: 10 })
+        .vertical(false)
+
+      Row({ space: 30 }) {
+        Button('取消')
+          .width('45%')
+          .fontSize(18)
+          .backgroundColor('#ffa90000')
+          .fontColor('#fff')
+          .onClick(() => {
+            this.textFir = ''
+            this.textSec = ''
+            this.isShow = false
+          })
+        Button('确定')
+          .width('45%')
+          .fontSize(18)
+          .backgroundColor('#37800f')
+          .fontColor('#fff')
+          .onClick(() => {
+            this.isShow = false
+          })
+      }
+      .justifyContent(FlexAlign.SpaceBetween)
+      .width('100%')
+      .padding(15)
+    }
+    .padding(15)
+    .alignItems(HorizontalAlign.Center)
+    .justifyContent(FlexAlign.Start)
+    .width('100%')
   }
 
   @Builder
   bindSheet_third(index: number) {
+    Column({ space: 25 }) {
+      Row({ space: 10 }) {
+        Image($r('app.media.BS_ird_food'))
+          .width(30)
+          .fillColor('#37800f')
+        Text('饮食类型')
+          .fontColor('#000')
+          .fontSize(18)
+        Text(this.funcList[index].ts)
+          .fontColor('#000')
+          .fontSize(16)
+          .width('65%')
+          .textAlign(TextAlign.End)
+          .padding({ right: 15 })
+      }
+
+      Row({ space: 10 }) {
+        Image($r('app.media.BS_ird_num'))
+          .width(30)
+          .fillColor('#37800f')
+        Text('食用份量')
+          .fontColor('#000')
+          .fontSize(18)
+        TextInput({ placeholder: '请输入份量(g/份)', text: $$this.textFir })
+          .placeholderColor('#ccc')
+          .fontColor('#000')
+          .width(220)
+      }
+
+      Row({ space: 10 }) {
+        Image($r('app.media.BS_all_time'))
+          .width(30)
+          .fillColor('#37800f')
+        Text('食用时长')
+          .fontColor('#000')
+          .fontSize(18)
+        TextInput({ placeholder: '选填，单位：分钟', text: $$this.textSec })
+          .placeholderColor('#ccc')
+          .fontColor('#000')
+          .width(220)
+      }
+
+      Divider()
+        .color('#ccc')
+        .strokeWidth(1)
+        .width('100%')
+        .padding({ left: 10, right: 10 })
+        .vertical(false)
+
+      Row({ space: 30 }) {
+        Button('取消')
+          .width('45%')
+          .fontSize(18)
+          .backgroundColor('#ffa90000')
+          .fontColor('#fff')
+          .onClick(() => {
+            this.textFir = ''
+            this.textSec = ''
+            this.isShow = false
+          })
+        Button('确定')
+          .width('45%')
+          .fontSize(18)
+          .backgroundColor('#37800f')
+          .fontColor('#fff')
+          .onClick(() => {
+            this.isShow = false
+          })
+      }
+      .justifyContent(FlexAlign.SpaceBetween)
+      .width('100%')
+      .padding(15)
+    }
+    .padding(15)
+    .alignItems(HorizontalAlign.Center)
+    .justifyContent(FlexAlign.Start)
+    .width('100%')
   }
 
   @Builder
@@ -110,12 +264,12 @@ export struct funcListsSelectedMap {
             .fontWeight(600)
             .fontColor('#000')
         } else if (this.index_page === 2) {
-          Text('选择出行详情')
+          Text('选择用电详情')
             .fontSize(20)
             .fontWeight(600)
             .fontColor('#000')
         } else if (this.index_page === 3) {
-          Text('选择出行详情')
+          Text('选择饮食详情')
             .fontSize(20)
             .fontWeight(600)
             .fontColor('#000')
