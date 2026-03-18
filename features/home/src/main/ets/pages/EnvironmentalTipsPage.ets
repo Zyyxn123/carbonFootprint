@@ -1,4 +1,4 @@
-import { BuilderNameConstants, RouterModule, RouterNameConstants } from "@ohos/customrouter";
+import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstants } from "@ohos/customrouter";
 import { backButton } from "../Component/BackButton";
 import EnvironmentalTipsViewModel from "../ViewModel/ProtectionTipsViewModel";
 import { JSON } from "@kit.ArkTS";
@@ -52,9 +52,9 @@ export struct environmentalTipsPage {
             }
           }
           .onClick(() => {
-            /**
-             * 跳转到另一个展示的页面
-             */
+            buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_home_webNews, new Object({
+              url: item.url
+            }))
           })
         }, (item: EnvironTipItemType) => item.id.toString())
       }

@@ -23,6 +23,9 @@ export async function harInit(builderName: string): Promise<void> {
     case BuilderNameConstants.HAR_home_reduceCarbonEmissionMethod:
       await import("./src//main//ets//pages//ReduceEmissionMethodPage")
       break
+    case BuilderNameConstants.HAR_home_webNews:
+      await import("./src//main//ets//pages/WebNewsPage")
+      break
     default:
       break
   }

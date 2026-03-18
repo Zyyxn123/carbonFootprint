@@ -14,7 +14,6 @@ export struct backButton {
         .padding(10)
         .borderRadius(25)
         .onClick(() => {
-          // (AppStorage.get('entryHapRouter') as NavPathStack).replacePathByName('quickStart', null, false)
           RouterModule.pop(RouterNameConstants.ENTRY_HAP)
         })
 
