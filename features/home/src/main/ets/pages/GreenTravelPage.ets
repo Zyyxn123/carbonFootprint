@@ -1,13 +1,17 @@
 import { BuilderNameConstants, RouterModule, RouterNameConstants } from "@ohos/customrouter";
 import { backButton } from "../Component/BackButton";
 import { funcListsCards } from "../Component/FuncListsCards";
-import { funcListsCurrAction } from "../Component/FuncListsCurrAction";
 import { funcListsSelectedMap } from "../Component/FuncListsSelectedMap";
-import GreenTravelViewModel from "../ViewModel/GreenTravelViewModel";
+import GreenTVM from "../ViewModel/GreenTravelViewModel";
 
 @Component
 export struct greenTravelPage {
   @State pageTitle: ResourceStr = $r('app.string.greenTravelPage_title')
+  @StorageLink('currLoginAcc') acc: string = ''
+
+  async aboutToAppear(): Promise<void> {
+    await GreenTVM.getTotalData(this.acc)
+  }
 
   build() {
     Column() {
@@ -16,22 +20,24 @@ export struct greenTravelPage {
       List() {
         ListItem() {
           funcListsCards({
-            cardsDataList: GreenTravelViewModel.cardsData,
-            popBoxDataList: GreenTravelViewModel.popBoxData
+            cardsDataList: GreenTVM.cardsData,
+            popBoxDataList: GreenTVM.popBoxData
           })
         }
 
         ListItem() {
           funcListsSelectedMap({
             index_page: 1,
-            funcList: GreenTravelViewModel.transportLists,
-            title: GreenTravelViewModel.title })
+            funcList: GreenTVM.transportLists,
+            title: GreenTVM.title })
         }
 
         // ListItem() {
         //   funcListsCurrAction()
         // }
       }
+      .width('100%')
+      .height('100%')
       .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: true })
     }
     .width('100%')

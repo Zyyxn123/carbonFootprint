@@ -23,7 +23,7 @@ export struct funcListsCards {
   @Builder
   cardsBuilder() {
     Column() {
-      Text(this.cardsDataList[0].num.toString() + this.cardsDataList[0]!.unit)
+      Text(this.cardsDataList[0].num.toFixed(1) + this.cardsDataList[0]!.unit)
         .fontColor('#000')
         .fontSize(25)
 
@@ -53,7 +53,7 @@ export struct funcListsCards {
       .strokeWidth(1)
 
     Column() {
-      Text(this.cardsDataList[1].num.toString() + this.cardsDataList[1]!.unit)
+      Text(this.cardsDataList[1].num.toFixed(1) + this.cardsDataList[1]!.unit)
         .fontColor('#000')
         .fontSize(25)
         .margin({ bottom: 5 })

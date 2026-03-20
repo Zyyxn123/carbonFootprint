@@ -52,75 +52,99 @@ class foodAndDrinkViewModel {
   @Trace foodAndDrinkLists: transportsTypeModel[] = [
     {
       ts: '米饭',
-      tsc: '#8D6E63', // 亮米棕（图标色，贴合主食属性）
-      bgc: '#5D4037',  // 深棕（背景圆）
-      img: $r('app.media.food_mifan') // 米饭图标
+      tsc: '#8D6E63',
+      bgc: '#5D4037',
+      img: $r('app.media.food_mifan'),
+      carEmissionPer: 11, // 100克米饭碳排放（克CO₂）
+      pointsPerOrder: 7
     },
     {
       ts: '青菜',
-      tsc: '#4CAF50', // 亮绿（图标色，贴合蔬菜低碳属性）
-      bgc: '#2D5F2E',  // 深橄榄绿（背景圆）
-      img: $r('app.media.food_qingcai') // 青菜图标
+      tsc: '#4CAF50',
+      bgc: '#2D5F2E',
+      img: $r('app.media.food_qingcai'),
+      carEmissionPer: 2, // 100克青菜碳排放
+      pointsPerOrder: 9
     },
     {
       ts: '猪肉',
-      tsc: '#E57373', // 亮红粉（图标色，贴合肉类属性）
-      bgc: '#B71C1C',  // 深红（背景圆）
-      img: $r('app.media.food_zhurou') // 猪肉图标
+      tsc: '#E57373',
+      bgc: '#B71C1C',
+      img: $r('app.media.food_zhurou'),
+      carEmissionPer: 1280, // 100克猪肉碳排放
+      pointsPerOrder: 2
     },
     {
       ts: '鸡蛋',
-      tsc: '#FFC107', // 亮黄（图标色，贴合蛋类属性）
-      bgc: '#6B5A1E',  // 深棕黄（背景圆）
-      img: $r('app.media.food_jidan') // 鸡蛋图标
+      tsc: '#FFC107',
+      bgc: '#6B5A1E',
+      img: $r('app.media.food_jidan'),
+      carEmissionPer: 300, // 100克鸡蛋碳排放
+      pointsPerOrder: 5
     },
     {
       ts: '牛奶',
-      tsc: '#F5F5F5', // 亮白（图标色，贴合乳制品属性）
-      bgc: '#9E9E9E',  // 深灰（背景圆）
-      img: $r('app.media.food_niunai') // 牛奶图标
+      tsc: '#F5F5F5',
+      bgc: '#9E9E9E',
+      img: $r('app.media.food_niunai'),
+      carEmissionPer: 190, // 100毫升牛奶碳排放
+      pointsPerOrder: 6
     },
     {
       ts: '咖啡',
-      tsc: '#795548', // 棕灰（图标色，贴合饮品属性）
-      bgc: '#3E2723',  // 深棕（背景圆）
-      img: $r('app.media.food_kafei') // 咖啡图标
+      tsc: '#795548',
+      bgc: '#3E2723',
+      img: $r('app.media.food_kafei'),
+      carEmissionPer: 180, // 100毫升咖啡碳排放
+      pointsPerOrder: 6
     },
     {
       ts: '苹果',
-      tsc: '#F44336', // 亮红（图标色，贴合水果属性）
-      bgc: '#C62828',  // 深红（背景圆）
-      img: $r('app.media.food_pingguo') // 苹果图标
+      tsc: '#F44336',
+      bgc: '#C62828',
+      img: $r('app.media.food_pingguo'),
+      carEmissionPer: 35, // 100克苹果碳排放
+      pointsPerOrder: 8
     },
     {
       ts: '豆制品',
-      tsc: '#FFEB3B', // 亮浅黄（图标色，贴合豆类属性）
-      bgc: '#F57F17',  // 深黄（背景圆）
-      img: $r('app.media.food_douzhipin') // 豆制品图标
+      tsc: '#FFEB3B',
+      bgc: '#F57F17',
+      img: $r('app.media.food_douzhipin'),
+      carEmissionPer: 20, // 100克豆制品碳排放
+      pointsPerOrder: 8
     },
     {
       ts: '鸡肉',
-      tsc: '#FFCCBC', // 亮浅橙（图标色，贴合禽类属性）
-      bgc: '#8D6E63',  // 深棕（背景圆）
-      img: $r('app.media.food_jirou') // 鸡肉图标
+      tsc: '#FFCCBC',
+      bgc: '#8D6E63',
+      img: $r('app.media.food_jirou'),
+      carEmissionPer: 440, // 100克鸡肉碳排放
+      pointsPerOrder: 4
     },
     {
       ts: '饮用水',
-      tsc: '#2196F3', // 亮蓝（图标色，贴合水属性）
-      bgc: '#0F4C81',  // 深蓝（背景圆）
-      img: $r('app.media.food_yinyongshui') // 饮用水图标
+      tsc: '#2196F3',
+      bgc: '#0F4C81',
+      img: $r('app.media.food_yinyongshui'),
+      carEmissionPer: 0.5, // 100毫升饮用水碳排放
+      pointsPerOrder: 10
     },
     {
       ts: '面包',
-      tsc: '#FF9800', // 亮橙（图标色，贴合主食属性）
-      bgc: '#E65100',  // 深橙（背景圆）
-      img: $r('app.media.food_mianbao') // 面包图标
+      tsc: '#FF9800',
+      bgc: '#E65100',
+      img: $r('app.media.food_mianbao'),
+      carEmissionPer: 80, // 100克面包碳排放
+      pointsPerOrder: 7
     },
     {
       ts: '更多',
-      tsc: '#9E9E9E', // 浅灰（通用图标色）
-      bgc: '#424242',  // 深灰（背景圆）
-      img: $r('app.media.func_add') // 更多通用图标
+      tsc: '#9E9E9E',
+      bgc: '#424242',
+      img: $r('app.media.func_add'),
+      carEmissionPer: 0, // 通用选项暂赋值0
+      pointsPerOrder: 1
     }
   ]
   @Trace title: string = '请选择你的饮食'

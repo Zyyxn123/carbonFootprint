@@ -1,6 +1,7 @@
 import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from "@ohos/customrouter"
-import { HealthyNewsPreference, HTTPForHealthyNews, UserRdbStore } from "@ohos/utils"
+import { CarEmiTransTable, HealthyNewsPreference, HTTPForHealthyNews, UserRdbStore } from "@ohos/utils"
 import { common } from "@kit.AbilityKit"
+
 
 @Component
 export struct logOrResView {
@@ -11,11 +12,14 @@ export struct logOrResView {
   private healthyNewsPre: HealthyNewsPreference = HealthyNewsPreference.getInstance()
   private httpForHN: HTTPForHealthyNews = HTTPForHealthyNews.getInstance()
   private userRdbStoreIns: UserRdbStore = UserRdbStore.getInstance()
+  private carEmiTransTableIns: CarEmiTransTable = CarEmiTransTable.getInstance()
   private context = this.getUIContext().getHostContext() as common.UIAbilityContext
   private isSelected: boolean = false
+  private carEmiTransTable: CarEmiTransTable = CarEmiTransTable.getInstance()
 
   build() {
     Column() {
+      // 账号
       Row() {
         Image($r('app.media.log_account'))
           .width(25)
@@ -33,6 +37,7 @@ export struct logOrResView {
       .border({ radius: 25, color: $r('app.color.logOrRes_button_border'), width: 2 })
       .padding({ left: 12 })
 
+      // 密码
       Row() {
         Image($r('app.media.log_password'))
           .width(25)
@@ -81,13 +86,16 @@ export struct logOrResView {
       Button('删除数据库')
         .onClick(() => {
           this.userRdbStoreIns.deleteMyTable()
+          this.carEmiTransTableIns.deleteMyTable()
         })
 
       Button('游客登陆')
         .onClick(async () => {
+          AppStorage.set('currLoginAcc', 'testDemo')
           const bol: Boolean = await this.userRdbStoreIns.hasAcc('testDemo')
           if (!bol) {
             this.userRdbStoreIns.setOriginalData('testDemo')
+            this.carEmiTransTableIns.setOriginalTotalData('testDemo')
           }
 
           this.loginProgressBol = true

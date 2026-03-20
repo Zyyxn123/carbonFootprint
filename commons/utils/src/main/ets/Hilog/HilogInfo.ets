@@ -39,3 +39,7 @@ export const HTTPLogger: Logger = new Logger('[utils_HTTPLogger_HN]')
 export const PreLogger_HN: Logger = new Logger('[utils_PreLogger_HN]')
 
 export const UserRdbLogger: Logger = new Logger('[utils_UserRdbLogger]')
+
+export const CarbonMsgRdbLogger: Logger = new Logger('[utils_CarbonMsgRdbLogger]')
+
+export const CarEmiTransLogger: Logger = new Logger('[utils_CarEmiTransLogger]')

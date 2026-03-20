@@ -3,6 +3,8 @@ export interface transportsTypeModel {
   tsc: string
   ts: string
   img: ResourceStr
+  carEmissionPer: number
+  pointsPerOrder: number
 }
 
 export interface popBoxDataTypeModel {

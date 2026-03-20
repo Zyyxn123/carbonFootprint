@@ -1,6 +1,6 @@
 import { relationalStore } from '@kit.ArkData';
 import { BusinessError } from '@kit.BasicServicesKit';
-import { UserSQLConstants } from '../Constants/UserRdbStoreSQL';
+import { UserSQLConstants } from '../Constants/UserSQL';
 import { UserRdbLogger } from '../Hilog/HilogInfo';
 import { UserBasicDataType } from '../Interface/UserBasicDataType';
 
@@ -22,7 +22,7 @@ export class UserRdbStore {
     return UserRdbStore.instance
   }
 
-  public getMyStore(context: Context) {
+  public initMyStore(context: Context) {
     relationalStore.getRdbStore(context, this.STORE_CONFIG,
       async (err: BusinessError, rdbStore: relationalStore.RdbStore) => {
         if (err) {
@@ -34,9 +34,9 @@ export class UserRdbStore {
 
         try {
           await this.userRdbStore.execute(UserSQLConstants.createUserStoreSQL(this.myTableName))
-          UserRdbLogger.info('UserBasicDataTable表创建成功')
+          UserRdbLogger.info('表创建成功')
         } catch (error) {
-          UserRdbLogger.error('UserBasicDataTable表创建失败：' + error)
+          UserRdbLogger.error('表创建失败：' + error)
         }
       })
   }
@@ -47,14 +47,13 @@ export class UserRdbStore {
       return
     }
     try {
-      await this.userRdbStore.execute(UserSQLConstants.deleteUserTableSql(this.myTableName))
-      UserRdbLogger.info('UserBasicDataTable表删除成功')
+      await this.userRdbStore.execute(UserSQLConstants.deleteUserTableSQL(this.myTableName))
+      UserRdbLogger.info('表删除成功')
     } catch (error) {
-      UserRdbLogger.error('UserBasicDataTable表删除失败：' + error)
+      UserRdbLogger.error('表删除失败：' + error)
     }
   }
 
-  // name: string, avatar: string, signature: string
   public async setOriginalData(acc: string) {
     if (!this.userRdbStore) {
       UserRdbLogger.error('数据库创建失败')
@@ -66,6 +65,7 @@ export class UserRdbStore {
       AVATAR: 'avatar_1th',
       SIGNATURE: '该用户还未设置签名'
     }
+
     try {
       const rowId = await this.userRdbStore.insert(this.myTableName, valueBucket)
       UserRdbLogger.info(acc + '初始化数据成功：' + `rowId:${rowId}`)

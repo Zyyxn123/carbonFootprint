@@ -1,0 +1,29 @@
+export class CarbonMsgSQLConstants {
+  static createTransItemSQL(tableName: string) {
+    return `CREATE TABLE IF NOT EXISTS ${tableName} (
+    USER_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    ACCOUNT TEXT NOT NULL,
+    TRANSPORT TEXT NOT NULL,
+    MILEAGE DOUBLE NOT NULL,
+    TRIP_TIME INTEGER,
+    TIME_TOKEN TEXT,
+    CARBON_EMISSION DOUBLE NOT NULL);`
+  }
+  static createTransTotalSQL(tableName: string) {
+    return `CREATE TABLE IF NOT EXISTS ${tableName} (
+    USER_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    ACCOUNT TEXT NOT NULL UNIQUE,
+    TOTAL_EMISSION DOUBLE NOT NULL,
+    TIME_TOKEN TEXT NOT NULL,
+    TOTAL_DAY INTEGER NOT NULL,
+    MONTHLY_EMISSION DOUBLE,
+    MONTHLY_ORDER INTEGER,
+    MONTHLY_DISTANCE DOUBLE,
+    POINT INTEGER,
+    MEDAL INTEGER);`
+  }
+
+  static deleteTransTableSQL(tableName: string) {
+    return `DROP TABLE IF EXISTS ${tableName};`
+  }
+}

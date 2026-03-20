@@ -1,18 +1,20 @@
 import { transportsTypeModel } from "../Model/ToDoItemsModel"
+import GreenTVM from "../ViewModel/GreenTravelViewModel"
 
 @Component
 export struct funcListsSelectedMap {
   @State isShow: boolean = false
   @State textFir: string = ''
   @State textSec: string = ''
+  @State predictReduce: number = 0
   @State currIndex: number = 0
   @Prop index_page: number
   @Prop funcList: transportsTypeModel[]
   @Prop title: string
-  private sheetHeight: number = 450
+  private sheetHeight: number = 800
 
   @Builder
-  bindSheet_first(index: number) {
+  bindSheet_first(index: number, item: transportsTypeModel) {
     Column({ space: 25 }) {
       Row({ space: 10 }) {
         Image($r('app.media.BS_fir_transport'))
@@ -40,6 +42,12 @@ export struct funcListsSelectedMap {
           .placeholderColor('#ccc')
           .fontColor('#000')
           .width(220)
+          .onChange(() => {
+            let mileage: number = parseFloat(this.textFir)
+            let totalCarEmi: number =  parseFloat((mileage * item.carEmissionPer / 1000).toFixed(1))
+            this.predictReduce = totalCarEmi
+            console.log('bindSheet_first: '+ `${mileage}//${item.carEmissionPer}//${this.predictReduce}`)
+          })
       }
 
       Row({ space: 10 }) {
@@ -62,6 +70,18 @@ export struct funcListsSelectedMap {
         .padding({ left: 10, right: 10 })
         .vertical(false)
 
+      Row({ space: 10 }) {
+        Image($r('app.media.icon_leave'))
+          .width(30)
+          .fillColor('#37800f')
+        Text('预估减排')
+          .fontColor('#000')
+          .fontSize(18)
+        Text(this.predictReduce.toString())
+          .fontColor('#000')
+          .width(220)
+      }
+
       Row({ space: 30 }) {
         Button('取消')
           .width('45%')
@@ -79,6 +99,18 @@ export struct funcListsSelectedMap {
           .backgroundColor('#37800f')
           .fontColor('#fff')
           .onClick(() => {
+            let acc: string = AppStorage.get('currLoginAcc') as string
+            let mileage: number = parseFloat(this.textFir)
+            let totalCarEmi: number = parseFloat((mileage * item.carEmissionPer / 1000).toFixed(1))
+            let tripTime: number = this.textSec === '' ? 0 : parseFloat(this.textSec)
+            GreenTVM.insertItemData(item.ts, totalCarEmi, mileage, tripTime)
+            GreenTVM.setCarEmiData(totalCarEmi)
+            GreenTVM.setCarEmiDay()
+            GreenTVM.setOutDistance(mileage)
+            GreenTVM.setPoint(item.pointsPerOrder)
+            setTimeout(() => {
+              GreenTVM.updateTotalData(acc)
+            }, 500)
             this.isShow = false
           })
       }
@@ -93,7 +125,7 @@ export struct funcListsSelectedMap {
   }
 
   @Builder
-  bindSheet_second(index: number) {
+  bindSheet_second(index: number, item: transportsTypeModel) {
     Column({ space: 25 }) {
       Row({ space: 10 }) {
         Image($r('app.media.BS_sec_appliance'))
@@ -143,6 +175,19 @@ export struct funcListsSelectedMap {
         .padding({ left: 10, right: 10 })
         .vertical(false)
 
+      Row({ space: 10 }) {
+        Image($r('app.media.icon_leave'))
+          .width(30)
+          .fillColor('#37800f')
+        Text('预估减排')
+          .fontColor('#000')
+          .fontSize(18)
+        TextInput({ placeholder: '单位：g/h', text: $$this.predictReduce })
+          .placeholderColor('#ccc')
+          .fontColor('#000')
+          .width(220)
+      }
+
       Row({ space: 30 }) {
         Button('取消')
           .width('45%')
@@ -174,7 +219,7 @@ export struct funcListsSelectedMap {
   }
 
   @Builder
-  bindSheet_third(index: number) {
+  bindSheet_third(index: number, item: transportsTypeModel) {
     Column({ space: 25 }) {
       Row({ space: 10 }) {
         Image($r('app.media.BS_ird_food'))
@@ -224,6 +269,19 @@ export struct funcListsSelectedMap {
         .padding({ left: 10, right: 10 })
         .vertical(false)
 
+      Row({ space: 10 }) {
+        Image($r('app.media.icon_leave'))
+          .width(30)
+          .fillColor('#37800f')
+        Text('预估减排')
+          .fontColor('#000')
+          .fontSize(18)
+        TextInput({ placeholder: '单位：g/g', text: $$this.predictReduce })
+          .placeholderColor('#ccc')
+          .fontColor('#000')
+          .width(220)
+      }
+
       Row({ space: 30 }) {
         Button('取消')
           .width('45%')
@@ -255,7 +313,7 @@ export struct funcListsSelectedMap {
   }
 
   @Builder
-  myBuilder(index: number) {
+  myBuilder(item: transportsTypeModel, index: number) {
     Column() {
       Row() {
         if (this.index_page === 1) {
@@ -293,11 +351,11 @@ export struct funcListsSelectedMap {
       })
 
       if (this.index_page === 1) {
-        this.bindSheet_first(index)
+        this.bindSheet_first(index, item)
       } else if (this.index_page === 2) {
-        this.bindSheet_second(index)
+        this.bindSheet_second(index, item)
       } else if (this.index_page === 3) {
-        this.bindSheet_third(index)
+        this.bindSheet_third(index, item)
       }
     }
   }
@@ -347,7 +405,7 @@ export struct funcListsSelectedMap {
       .rowsTemplate('1fr 1fr 1fr')
       .columnsGap(15)
       .rowsGap(10)
-      .bindSheet($$this.isShow, this.myBuilder(this.currIndex), {
+      .bindSheet($$this.isShow, this.myBuilder(this.funcList[this.currIndex], this.currIndex), {
         height: this.sheetHeight,
         backgroundColor: Color.White,
         showClose: false,
@@ -361,6 +419,9 @@ export struct funcListsSelectedMap {
         onWillDisappear: () => {
           console.info("BindSheet onWillDisappear.");
           this.isShow = false
+          this.textFir = ''
+          this.textSec = ''
+          this.predictReduce = 0
         },
         onDisappear: () => {
           console.info("BindSheet onDisappear.");

@@ -1,5 +1,5 @@
 import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstants } from '@ohos/customrouter';
-import { HealthyNewsPreference, HTTPForHealthyNews } from '@ohos/utils';
+import { CarEmiTransTable, HealthyNewsPreference, HTTPForHealthyNews } from '@ohos/utils';
 import { AdsPage } from './AdsPage';
 import { LogOrResPage } from './LogOrResPage';
 import { quickStart } from './quickStart';
@@ -14,6 +14,7 @@ let date = new Date()
 
 AppStorage.setOrCreate('isLoginState', false)
 AppStorage.setOrCreate('CurrentIndex', 0)
+AppStorage.setOrCreate('currLoginAcc', '')
 
 @Entry
 @Component
@@ -25,6 +26,7 @@ struct EntryHap {
   private httpForHN: HTTPForHealthyNews = HTTPForHealthyNews.getInstance()
   private context = this.getUIContext().getHostContext() as common.UIAbilityContext
   private tabCtrl: TabsController = new TabsController()
+  private carEmiTransTable: CarEmiTransTable = CarEmiTransTable.getInstance()
 
   async aboutToAppear() {
     this.healthyNewsPre.getMyPre(this.context)
@@ -32,8 +34,6 @@ struct EntryHap {
       this.entryHapRouter = new NavPathStack()
     }
     RouterModule.createRouter(RouterNameConstants.ENTRY_HAP, this.entryHapRouter)
-
-    // AppStorage.setOrCreate('entryHapRouter', this.entryHapRouter)
 
     if (this.healthyNewsPre.getTodayTime() === date.toLocaleDateString()) {
       if (this.healthyNewsPre.getTodayData_HN()) {
@@ -43,6 +43,10 @@ struct EntryHap {
       this.healthyNewsPre.setTodayTime()
       this.httpForHN.HTTPFunc()
     }
+
+    setTimeout(() => {
+      this.carEmiTransTable.initTable()
+    }, 500)
   }
 
   @Builder
@@ -100,11 +104,6 @@ struct EntryHap {
             this.currentIndex = index
           })
         }
-        // .onAppear(() => {
-        //   this.tabCtrl.preloadItems([0, 1, 2, 3])
-        //   this.tabCtrl.changeIndex(AppStorage.get('CurrentIndex') as number)
-        // })
-        // quickStart()
       }
       .title('NavIndex')
       .hideTitleBar(true)
