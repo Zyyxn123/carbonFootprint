@@ -1,5 +1,7 @@
 import { transportsTypeModel } from "../Model/ToDoItemsModel"
+import FoodDVM from "../ViewModel/FoodAndDrinkViewModel"
 import GreenTVM from "../ViewModel/GreenTravelViewModel"
+import HouseAPPVM from "../ViewModel/HouseApplicationViewModel"
 
 @Component
 export struct funcListsSelectedMap {
@@ -106,7 +108,7 @@ export struct funcListsSelectedMap {
             GreenTVM.insertItemData(item.ts, totalCarEmi, mileage, tripTime)
             GreenTVM.setCarEmiData(totalCarEmi)
             GreenTVM.setCarEmiDay()
-            GreenTVM.setOutDistance(mileage)
+            GreenTVM.setMonthlyDistance(mileage)
             GreenTVM.setPoint(item.pointsPerOrder)
             setTimeout(() => {
               GreenTVM.updateTotalData(acc)
@@ -153,6 +155,12 @@ export struct funcListsSelectedMap {
           .placeholderColor('#ccc')
           .fontColor('#000')
           .width(220)
+          .onChange(() => {
+            let use_time: number = parseFloat(this.textFir)
+            let totalCarEmi: number =  parseFloat((use_time * item.carEmissionPer / 1000).toFixed(1))
+            this.predictReduce = this.textFir === '' ? 0 : totalCarEmi
+            console.log('bindSheet_second: '+ `${use_time}//${item.carEmissionPer}//${this.predictReduce}`)
+          })
       }
 
       Row({ space: 10 }) {
@@ -162,7 +170,7 @@ export struct funcListsSelectedMap {
         Text('用电功率')
           .fontColor('#000')
           .fontSize(18)
-        TextInput({ placeholder: '选填，单位：瓦(W)', text: $$this.textSec })
+        TextInput({ placeholder: '选填，单位：瓦', text: $$this.textSec })
           .placeholderColor('#ccc')
           .fontColor('#000')
           .width(220)
@@ -182,8 +190,7 @@ export struct funcListsSelectedMap {
         Text('预估减排')
           .fontColor('#000')
           .fontSize(18)
-        TextInput({ placeholder: '单位：g/h', text: $$this.predictReduce })
-          .placeholderColor('#ccc')
+        Text(this.predictReduce.toString())
           .fontColor('#000')
           .width(220)
       }
@@ -205,6 +212,18 @@ export struct funcListsSelectedMap {
           .backgroundColor('#37800f')
           .fontColor('#fff')
           .onClick(() => {
+            let acc: string = AppStorage.get('currLoginAcc') as string
+            let use_time: number = parseFloat(this.textFir)
+            let totalCarEmi: number = parseFloat((use_time * item.carEmissionPer / 1000).toFixed(1))
+            let elect_power: number = this.textSec === '' ? 0 : parseFloat(this.textSec)
+            HouseAPPVM.insertItemData(item.ts, totalCarEmi, use_time, elect_power)
+            HouseAPPVM.setCarEmiData(totalCarEmi)
+            HouseAPPVM.setCarEmiDay()
+            HouseAPPVM.setMonthlyDegree(use_time)
+            HouseAPPVM.setPoint(item.pointsPerOrder)
+            setTimeout(() => {
+              HouseAPPVM.updateTotalData(acc)
+            }, 500)
             this.isShow = false
           })
       }
@@ -243,10 +262,16 @@ export struct funcListsSelectedMap {
         Text('食用份量')
           .fontColor('#000')
           .fontSize(18)
-        TextInput({ placeholder: '请输入份量(g/份)', text: $$this.textFir })
+        TextInput({ placeholder: '请输入份量(g)', text: $$this.textFir })
           .placeholderColor('#ccc')
           .fontColor('#000')
           .width(220)
+          .onChange(() => {
+            let eat_portion: number = parseFloat(this.textFir)
+            let totalCarEmi: number =  parseFloat((eat_portion * item.carEmissionPer / 1000).toFixed(1))
+            this.predictReduce = this.textFir === '' ? 0 : totalCarEmi
+            console.log('bindSheet_third: '+ `${eat_portion}//${item.carEmissionPer}//${this.predictReduce}`)
+          })
       }
 
       Row({ space: 10 }) {
@@ -276,8 +301,7 @@ export struct funcListsSelectedMap {
         Text('预估减排')
           .fontColor('#000')
           .fontSize(18)
-        TextInput({ placeholder: '单位：g/g', text: $$this.predictReduce })
-          .placeholderColor('#ccc')
+        Text(this.predictReduce.toString())
           .fontColor('#000')
           .width(220)
       }
@@ -299,6 +323,18 @@ export struct funcListsSelectedMap {
           .backgroundColor('#37800f')
           .fontColor('#fff')
           .onClick(() => {
+            let acc: string = AppStorage.get('currLoginAcc') as string
+            let eat_portion: number = parseFloat(this.textFir)
+            let totalCarEmi: number = parseFloat((eat_portion * item.carEmissionPer / 1000).toFixed(1))
+            let elect_power: number = this.textSec === '' ? 0 : parseFloat(this.textSec)
+            FoodDVM.insertItemData(item.ts, totalCarEmi, eat_portion, elect_power)
+            FoodDVM.setCarEmiData(totalCarEmi)
+            FoodDVM.setCarEmiDay()
+            FoodDVM.setMonthlyPortion(eat_portion)
+            FoodDVM.setPoint(item.pointsPerOrder)
+            setTimeout(() => {
+              FoodDVM.updateTotalData(acc)
+            }, 500)
             this.isShow = false
           })
       }

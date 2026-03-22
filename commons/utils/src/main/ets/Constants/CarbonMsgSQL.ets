@@ -9,6 +9,7 @@ export class CarbonMsgSQLConstants {
     TIME_TOKEN TEXT,
     CARBON_EMISSION DOUBLE NOT NULL);`
   }
+
   static createTransTotalSQL(tableName: string) {
     return `CREATE TABLE IF NOT EXISTS ${tableName} (
     USER_ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -23,7 +24,57 @@ export class CarbonMsgSQLConstants {
     MEDAL INTEGER);`
   }
 
-  static deleteTransTableSQL(tableName: string) {
+  static createApplianceItemSQL(tableName: string) {
+    return `CREATE TABLE IF NOT EXISTS ${tableName} (
+    USER_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    ACCOUNT TEXT NOT NULL,
+    APPLIANCE TEXT NOT NULL,
+    USE_TIME DOUBLE NOT NULL,
+    ELECT_POWER INTEGER,
+    TIME_TOKEN TEXT,
+    CARBON_EMISSION DOUBLE NOT NULL);`
+  }
+
+  static createApplianceTotalSQL(tableName: string) {
+    return `CREATE TABLE IF NOT EXISTS ${tableName} (
+    USER_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    ACCOUNT TEXT NOT NULL UNIQUE,
+    TOTAL_EMISSION DOUBLE NOT NULL,
+    TIME_TOKEN TEXT NOT NULL,
+    TOTAL_DAY INTEGER NOT NULL,
+    MONTHLY_EMISSION DOUBLE,
+    MONTHLY_ORDER INTEGER,
+    MONTHLY_DEGREE DOUBLE,
+    POINT INTEGER,
+    MEDAL INTEGER);`
+  }
+
+  static createFoodItemSQL(tableName: string) {
+    return `CREATE TABLE IF NOT EXISTS ${tableName} (
+    USER_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    ACCOUNT TEXT NOT NULL,
+    FOOD TEXT NOT NULL,
+    EAT_PORTION DOUBLE NOT NULL,
+    EAT_TIME INTEGER,
+    TIME_TOKEN TEXT,
+    CARBON_EMISSION DOUBLE NOT NULL);`
+  }
+
+  static createFoodTotalSQL(tableName: string) {
+    return `CREATE TABLE IF NOT EXISTS ${tableName} (
+    USER_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    ACCOUNT TEXT NOT NULL UNIQUE,
+    TOTAL_EMISSION DOUBLE NOT NULL,
+    TIME_TOKEN TEXT NOT NULL,
+    TOTAL_DAY INTEGER NOT NULL,
+    MONTHLY_EMISSION DOUBLE,
+    MONTHLY_ORDER INTEGER,
+    MONTHLY_PORTION DOUBLE,
+    POINT INTEGER,
+    MEDAL INTEGER);`
+  }
+
+  static deleteTableSQL(tableName: string) {
     return `DROP TABLE IF EXISTS ${tableName};`
   }
 }

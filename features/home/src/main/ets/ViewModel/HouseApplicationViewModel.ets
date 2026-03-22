@@ -1,51 +1,46 @@
+import { ApplianceTotalDataType } from "@ohos/utils"
+import { ApplianceDataModel } from "../Model/HouseApplicationModel"
 import { cardsDataTypeModel, popBoxDataTypeModel, transportsTypeModel } from "../Model/ToDoItemsModel"
 
 @ObservedV2
 class houseApplicationViewModel {
   @Trace cardsData: cardsDataTypeModel[] = [
-    // 上排左侧：总用电碳排放
     {
       text: '累计碳排',
-      num: 28.7,
-      unit: 'kgCO₂'
+      num: 0.0,
+      unit: 'kg'
     },
-    // 上排右侧：本月用电碳排放
     {
       text: '本月目标完成度 68%',
-      num: 12.4,
-      unit: 'kgCO₂'
+      num: 0.0,
+      unit: 'kg'
     },
-    // 下排左侧：低碳用电天数
     {
       text: '低碳用电',
-      num: 8,
+      num: 0,
       unit: '天',
-      img: $r('app.media.icon_bulb') // 节能灯泡图标
+      img: $r('app.media.icon_bulb')
     }
   ]
   @Trace popBoxData: popBoxDataTypeModel[] = [
-    // 展开后第一行左侧：本月用电次数
     {
       text: '本月用电次数',
-      num: 22,
+      num: 0,
       unit: ''
     },
-    // 展开后第一行右侧：本月总耗电量
     {
-      text: '本月总耗电',
-      num: 36.2,
-      unit: '度'
+      text: '本月总耗时',
+      num: 0,
+      unit: 'h'
     },
-    // 展开后第二行左侧：获得节能积分
     {
       text: '获得节能积分',
-      num: 98,
+      num: 0,
       unit: ''
     },
-    // 展开后第二行右侧：节能勋章
     {
       text: '节能勋章',
-      num: 2,
+      num: 1,
       unit: ''
     }
   ]
@@ -55,7 +50,7 @@ class houseApplicationViewModel {
       tsc: '#2196F3',
       bgc: '#0F4C81',
       img: $r('app.media.appliances_bingxiang'),
-      carEmissionPer: 120, // 每小时使用碳排放（克CO₂）
+      carEmissionPer: 120.7,
       pointsPerOrder: 7
     },
     {
@@ -63,7 +58,7 @@ class houseApplicationViewModel {
       tsc: '#03A9F4',
       bgc: '#0B699E',
       img: $r('app.media.appliances_kongtiao'),
-      carEmissionPer: 800, // 每小时使用碳排放
+      carEmissionPer: 800.2,
       pointsPerOrder: 3
     },
     {
@@ -71,7 +66,7 @@ class houseApplicationViewModel {
       tsc: '#FF9800',
       bgc: '#6B4423',
       img: $r('app.media.appliances_dianfanbao'),
-      carEmissionPer: 350, // 每小时使用碳排放
+      carEmissionPer: 350.6,
       pointsPerOrder: 5
     },
     {
@@ -79,7 +74,7 @@ class houseApplicationViewModel {
       tsc: '#009688',
       bgc: '#004D40',
       img: $r('app.media.appliances_xiyiji'),
-      carEmissionPer: 280, // 每小时使用碳排放
+      carEmissionPer: 280.4,
       pointsPerOrder: 6
     },
     {
@@ -87,7 +82,7 @@ class houseApplicationViewModel {
       tsc: '#9C27B0',
       bgc: '#4A148C',
       img: $r('app.media.appliances_dianshiji'),
-      carEmissionPer: 60, // 每小时使用碳排放
+      carEmissionPer: 60.3,
       pointsPerOrder: 8
     },
     {
@@ -95,7 +90,7 @@ class houseApplicationViewModel {
       tsc: '#607D8B',
       bgc: '#34495E',
       img: $r('app.media.appliances_diannao'),
-      carEmissionPer: 75, // 每小时使用碳排放
+      carEmissionPer: 75.5,
       pointsPerOrder: 8
     },
     {
@@ -103,7 +98,7 @@ class houseApplicationViewModel {
       tsc: '#F44336',
       bgc: '#B71C1C',
       img: $r('app.media.appliances_dianreshuiqi'),
-      carEmissionPer: 1500, // 每小时使用碳排放
+      carEmissionPer: 1500.8,
       pointsPerOrder: 2
     },
     {
@@ -111,7 +106,7 @@ class houseApplicationViewModel {
       tsc: '#4CAF50',
       bgc: '#2D5F2E',
       img: $r('app.media.appliances_dianfengshan'),
-      carEmissionPer: 15, // 每小时使用碳排放
+      carEmissionPer: 15.4,
       pointsPerOrder: 9
     },
     {
@@ -119,7 +114,7 @@ class houseApplicationViewModel {
       tsc: '#FF5722',
       bgc: '#5D4037',
       img: $r('app.media.appliances_weibolu'),
-      carEmissionPer: 420, // 每小时使用碳排放
+      carEmissionPer: 420.6,
       pointsPerOrder: 4
     },
     {
@@ -127,7 +122,7 @@ class houseApplicationViewModel {
       tsc: '#795548',
       bgc: '#3E2723',
       img: $r('app.media.appliances_diancilu'),
-      carEmissionPer: 650, // 每小时使用碳排放
+      carEmissionPer: 650.5,
       pointsPerOrder: 4
     },
     {
@@ -135,7 +130,7 @@ class houseApplicationViewModel {
       tsc: '#9E9E9E',
       bgc: '#424242',
       img: $r('app.media.appliances_xichenqi'),
-      carEmissionPer: 200, // 每小时使用碳排放
+      carEmissionPer: 200.2,
       pointsPerOrder: 6
     },
     {
@@ -143,13 +138,111 @@ class houseApplicationViewModel {
       tsc: '#9E9E9E',
       bgc: '#424242',
       img: $r('app.media.func_add'),
-      carEmissionPer: 0, // 通用选项暂赋值0
+      carEmissionPer: 0,
       pointsPerOrder: 1
     }
   ]
   @Trace title: string = '选择你使用的电器'
-  // @Trace subHeading: string = '出行足迹'
+  @Trace subHeading: string = '出行足迹'
+  @Trace id: number = -1
+  @Trace total_emission: number = 0.0
+  @Trace total_day: number = 0
+  @Trace monthly_emission: number = 0.0
+  @Trace monthly_order: number = 0
+  @Trace monthly_degree: number = 0
+  @Trace point: number = 0
+  @Trace medal: number = 0
+  @Trace time_token: string = ''
+  @Trace acc: string = AppStorage.get('currLoginAcc') as string
+
+  public async getTotalData(acc: string) {
+    const dataItem: ApplianceTotalDataType = await ApplianceDataModel.getTotalData(acc)
+    this.id = dataItem.id
+    this.total_emission = dataItem.total_emission
+    this.total_day = dataItem.total_day
+    this.monthly_emission = dataItem.monthly_emission
+    this.monthly_order = dataItem.monthly_order
+    this.monthly_degree = dataItem.monthly_degree
+    this.point = dataItem.point
+    this.medal = dataItem.medal
+    this.time_token = dataItem.time_token
+
+    this.cardsData[0] = { text: '累计碳排', num: this.total_emission, unit: 'kg' }
+    this.cardsData[1].num = this.monthly_emission
+    this.cardsData[2].num = this.total_day
+    this.popBoxData[0] = { text: '本月用电次数', num: this.monthly_order, unit: '' }
+    this.popBoxData[1].num = this.monthly_degree
+    this.popBoxData[2].num = this.point
+    this.popBoxData[3].num = this.medal
+  }
+
+  public async updateTotalData(acc: string) {
+    let data: ApplianceTotalDataType = {
+      id: this.id,
+      account: acc,
+      total_emission: this.total_emission,
+      total_day: this.total_day,
+      monthly_emission: this.monthly_emission,
+      monthly_order: this.monthly_order,
+      monthly_degree: this.monthly_degree,
+      point: this.point,
+      medal: this.medal,
+      time_token: this.time_token
+    }
+    await ApplianceDataModel.updateTotalData(data)
+  }
+
+  public insertItemData(appliance: string, totalCarEmi: number,
+    use_time: number, elect_power: number) {
+    let date = new Date().toLocaleDateString()
+
+    ApplianceDataModel.insertItemData(this.acc, appliance, use_time,
+      elect_power, date, totalCarEmi)
+  }
+
+  public setCarEmiData(emi: number) {
+    this.cardsData[0] = {
+      text: '累计碳排',
+      num: this.total_emission + emi,
+      unit: 'kg'
+    }
+    this.cardsData[1] = {
+      text: '本月碳排量 76%',
+      num: this.total_emission + emi,
+      unit: 'kg'
+    }
+    this.total_emission += emi
+    this.monthly_emission += emi
+  }
+
+  public setCarEmiDay() {
+    let date = new Date()
+    console.log('setCarEmiDay: ' + `${date.toLocaleDateString()}//${this.time_token}`)
+    if (date.toLocaleDateString() !== this.time_token) {
+      this.total_day += 1
+      this.monthly_order += 1
+      this.cardsData[2].num += 1
+      this.popBoxData[0].num += 1
+
+      this.time_token = date.toLocaleDateString()
+    } else {
+      this.monthly_order += 1
+      this.popBoxData[0].num += 1
+    }
+  }
+
+  public setMonthlyDegree(dis: number) {
+    this.monthly_degree += dis
+    this.popBoxData[1].num += dis
+  }
+
+  public setPoint(point: number) {
+    this.point += point
+    this.popBoxData[2].num += point
+  }
+
 }
 
-// 导出实例，方便页面调用
-export default new houseApplicationViewModel()
+const HouseAPPVM: houseApplicationViewModel = new houseApplicationViewModel()
+
+export default HouseAPPVM

@@ -50,7 +50,7 @@ class GreenTravelViewModel {
       tsc: '#4CAF50',
       bgc: '#2D5F2E',
       img: $r('app.media.transports_zixingche'),
-      carEmissionPer: 0.0, // 原carEmissionPerKilo，每公里碳排放
+      carEmissionPer: 0.0,
       pointsPerOrder: 10
     },
     {
@@ -193,8 +193,8 @@ class GreenTravelViewModel {
     await TransDataModel.updateTotalData(data)
   }
 
-  public insertItemData(transport: string, totalCarEmi: number, mileage: number,
-    tripTime: number) {
+  public insertItemData(transport: string, totalCarEmi: number,
+    mileage: number, tripTime: number) {
     let date = new Date().toLocaleDateString()
 
     TransDataModel.insertItemData(this.acc, transport, mileage,
@@ -232,7 +232,7 @@ class GreenTravelViewModel {
     }
   }
 
-  public setOutDistance(dis: number) {
+  public setMonthlyDistance(dis: number) {
     this.monthly_distance += dis
     this.popBoxData[1].num += dis
   }

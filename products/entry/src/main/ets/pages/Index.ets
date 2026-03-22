@@ -1,5 +1,7 @@
 import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstants } from '@ohos/customrouter';
-import { CarEmiTransTable, HealthyNewsPreference, HTTPForHealthyNews } from '@ohos/utils';
+import { CarEmiApplianceTable,
+  CarEmiFoodTable,
+  CarEmiTransTable, HealthyNewsPreference, HTTPForHealthyNews } from '@ohos/utils';
 import { AdsPage } from './AdsPage';
 import { LogOrResPage } from './LogOrResPage';
 import { quickStart } from './quickStart';
@@ -27,6 +29,8 @@ struct EntryHap {
   private context = this.getUIContext().getHostContext() as common.UIAbilityContext
   private tabCtrl: TabsController = new TabsController()
   private carEmiTransTable: CarEmiTransTable = CarEmiTransTable.getInstance()
+  private carEmiApplianceTable: CarEmiApplianceTable = CarEmiApplianceTable.getInstance()
+  private carEmiFoodTable: CarEmiFoodTable = CarEmiFoodTable.getInstance()
 
   async aboutToAppear() {
     this.healthyNewsPre.getMyPre(this.context)
@@ -46,6 +50,8 @@ struct EntryHap {
 
     setTimeout(() => {
       this.carEmiTransTable.initTable()
+      this.carEmiApplianceTable.initTable()
+      this.carEmiFoodTable.initTable()
     }, 500)
   }
 

@@ -2,12 +2,16 @@ import { BuilderNameConstants, RouterModule, RouterNameConstants } from "@ohos/c
 import { backButton } from "../Component/BackButton";
 import { funcListsCards } from "../Component/FuncListsCards";
 import { funcListsSelectedMap } from "../Component/FuncListsSelectedMap";
-import foodAndDrinkViewModel from "../ViewModel/FoodAndDrinkViewModel";
+import FoodDVM from "../ViewModel/FoodAndDrinkViewModel";
 
 @Component
 export struct foodAndDrinkPage {
   @State pageTitle: ResourceStr = $r('app.string.functionLists_recycling')
+  @StorageLink('currLoginAcc') acc: string = ''
 
+  async aboutToAppear(): Promise<void> {
+    await FoodDVM.getTotalData(this.acc)
+  }
   build() {
     Column() {
       backButton({ pageTitle: this.pageTitle })
@@ -15,16 +19,16 @@ export struct foodAndDrinkPage {
       List() {
         ListItem() {
           funcListsCards({
-            cardsDataList: foodAndDrinkViewModel.cardsData,
-            popBoxDataList: foodAndDrinkViewModel.popBoxData
+            cardsDataList: FoodDVM.cardsData,
+            popBoxDataList: FoodDVM.popBoxData
           })
         }
 
         ListItem() {
           funcListsSelectedMap({
             index_page: 3,
-            funcList: foodAndDrinkViewModel.foodAndDrinkLists,
-            title: foodAndDrinkViewModel.title })
+            funcList: FoodDVM.foodAndDrinkLists,
+            title: FoodDVM.title })
         }
 
       //   ListItem() {

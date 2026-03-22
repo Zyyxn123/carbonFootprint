@@ -2,13 +2,16 @@ import { BuilderNameConstants, RouterModule, RouterNameConstants } from "@ohos/c
 import { backButton } from "../Component/BackButton";
 import { funcListsCards } from "../Component/FuncListsCards";
 import { funcListsSelectedMap } from "../Component/FuncListsSelectedMap";
-import houseApplicationViewModel from "../ViewModel/HouseApplicationViewModel";
+import HouseAPPVM from "../ViewModel/HouseApplicationViewModel";
 
 @Component
 export struct houseApplicationPage {
   @State pageTitle: ResourceStr = $r('app.string.functionLists_garbageIdentification')
+  @StorageLink('currLoginAcc') acc: string = ''
 
-
+  async aboutToAppear(): Promise<void> {
+    await HouseAPPVM.getTotalData(this.acc)
+  }
 
   build() {
     Column() {
@@ -17,16 +20,16 @@ export struct houseApplicationPage {
       List() {
         ListItem() {
           funcListsCards({
-            cardsDataList: houseApplicationViewModel.cardsData,
-            popBoxDataList: houseApplicationViewModel.popBoxData
+            cardsDataList: HouseAPPVM.cardsData,
+            popBoxDataList: HouseAPPVM.popBoxData
           })
         }
 
         ListItem() {
           funcListsSelectedMap({
             index_page: 2,
-            funcList: houseApplicationViewModel.applicationsLists,
-            title: houseApplicationViewModel.title })
+            funcList: HouseAPPVM.applicationsLists,
+            title: HouseAPPVM.title })
         }
 
         // ListItem() {

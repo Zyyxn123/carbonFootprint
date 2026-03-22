@@ -1,5 +1,8 @@
 import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from "@ohos/customrouter"
-import { CarEmiTransTable, HealthyNewsPreference, HTTPForHealthyNews, UserRdbStore } from "@ohos/utils"
+import {
+  CarEmiApplianceTable,
+  CarEmiFoodTable,
+  CarEmiTransTable, HealthyNewsPreference, HTTPForHealthyNews, UserRdbStore } from "@ohos/utils"
 import { common } from "@kit.AbilityKit"
 
 
@@ -13,9 +16,10 @@ export struct logOrResView {
   private httpForHN: HTTPForHealthyNews = HTTPForHealthyNews.getInstance()
   private userRdbStoreIns: UserRdbStore = UserRdbStore.getInstance()
   private carEmiTransTableIns: CarEmiTransTable = CarEmiTransTable.getInstance()
+  private carEmiApplianceTable: CarEmiApplianceTable = CarEmiApplianceTable.getInstance()
+  private carEmiFoodTable: CarEmiFoodTable = CarEmiFoodTable.getInstance()
   private context = this.getUIContext().getHostContext() as common.UIAbilityContext
   private isSelected: boolean = false
-  private carEmiTransTable: CarEmiTransTable = CarEmiTransTable.getInstance()
 
   build() {
     Column() {
@@ -87,6 +91,8 @@ export struct logOrResView {
         .onClick(() => {
           this.userRdbStoreIns.deleteMyTable()
           this.carEmiTransTableIns.deleteMyTable()
+          this.carEmiApplianceTable.deleteMyTable()
+          this.carEmiFoodTable.deleteMyTable()
         })
 
       Button('游客登陆')
@@ -96,6 +102,8 @@ export struct logOrResView {
           if (!bol) {
             this.userRdbStoreIns.setOriginalData('testDemo')
             this.carEmiTransTableIns.setOriginalTotalData('testDemo')
+            this.carEmiApplianceTable.setOriginalTotalData('testDemo')
+            this.carEmiFoodTable.setOriginalTotalData('testDemo')
           }
 
           this.loginProgressBol = true

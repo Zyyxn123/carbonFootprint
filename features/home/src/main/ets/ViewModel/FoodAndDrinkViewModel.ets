@@ -1,51 +1,46 @@
+import { FoodTotalDataType } from '@ohos/utils'
+import { FoodDataModel } from '../Model/FoodAndDrinkModel'
 import { cardsDataTypeModel, popBoxDataTypeModel, transportsTypeModel } from '../Model/ToDoItemsModel'
 
 @ObservedV2
-class foodAndDrinkViewModel {
+class FoodAndDrinkViewModel {
   @Trace cardsData: cardsDataTypeModel[] = [
-    // 上排左侧：总饮食碳排（核心数据）
     {
       text: '累计碳排',
-      num: 45.2,
-      unit: 'kgCO₂'
+      num: 0,
+      unit: 'kg'
     },
-    // 上排右侧：本月饮食碳排 + 目标完成度
     {
       text: '本月目标完成度 82%',
-      num: 18.9,
-      unit: 'kgCO₂'
+      num: 0,
+      unit: 'kg'
     },
-    // 下排左侧：低碳饮食天数（带专属图标）
     {
       text: '低碳饮食',
-      num: 10,
+      num: 0,
       unit: '天',
-      img: $r('app.media.icon_vegetable') // 蔬菜/麦穗图标，适配饮食场景
+      img: $r('app.media.icon_vegetable')
     }
   ]
   @Trace popBoxData: popBoxDataTypeModel[] = [
-    // 展开后第一行左侧：本月饮食次数
     {
       text: '本月饮食次数',
-      num: 42,
+      num: 0,
       unit: ''
     },
-    // 展开后第一行右侧：本月本地食材占比
     {
-      text: '本地食材占比',
-      num: 65,
+      text: '食材份量',
+      num: 0,
       unit: '%'
     },
-    // 展开后第二行左侧：获得低碳饮食积分
     {
       text: '低碳饮食积分',
-      num: 156,
+      num: 0,
       unit: ''
     },
-    // 展开后第二行右侧：低碳饮食勋章
     {
       text: '低碳勋章',
-      num: 4,
+      num: 0,
       unit: ''
     }
   ]
@@ -55,7 +50,7 @@ class foodAndDrinkViewModel {
       tsc: '#8D6E63',
       bgc: '#5D4037',
       img: $r('app.media.food_mifan'),
-      carEmissionPer: 11, // 100克米饭碳排放（克CO₂）
+      carEmissionPer: 11.8,
       pointsPerOrder: 7
     },
     {
@@ -63,7 +58,7 @@ class foodAndDrinkViewModel {
       tsc: '#4CAF50',
       bgc: '#2D5F2E',
       img: $r('app.media.food_qingcai'),
-      carEmissionPer: 2, // 100克青菜碳排放
+      carEmissionPer: 2.5,
       pointsPerOrder: 9
     },
     {
@@ -71,7 +66,7 @@ class foodAndDrinkViewModel {
       tsc: '#E57373',
       bgc: '#B71C1C',
       img: $r('app.media.food_zhurou'),
-      carEmissionPer: 1280, // 100克猪肉碳排放
+      carEmissionPer: 1280.4,
       pointsPerOrder: 2
     },
     {
@@ -79,7 +74,7 @@ class foodAndDrinkViewModel {
       tsc: '#FFC107',
       bgc: '#6B5A1E',
       img: $r('app.media.food_jidan'),
-      carEmissionPer: 300, // 100克鸡蛋碳排放
+      carEmissionPer: 300.4,
       pointsPerOrder: 5
     },
     {
@@ -87,7 +82,7 @@ class foodAndDrinkViewModel {
       tsc: '#F5F5F5',
       bgc: '#9E9E9E',
       img: $r('app.media.food_niunai'),
-      carEmissionPer: 190, // 100毫升牛奶碳排放
+      carEmissionPer: 190.2,
       pointsPerOrder: 6
     },
     {
@@ -95,7 +90,7 @@ class foodAndDrinkViewModel {
       tsc: '#795548',
       bgc: '#3E2723',
       img: $r('app.media.food_kafei'),
-      carEmissionPer: 180, // 100毫升咖啡碳排放
+      carEmissionPer: 180.8,
       pointsPerOrder: 6
     },
     {
@@ -103,7 +98,7 @@ class foodAndDrinkViewModel {
       tsc: '#F44336',
       bgc: '#C62828',
       img: $r('app.media.food_pingguo'),
-      carEmissionPer: 35, // 100克苹果碳排放
+      carEmissionPer: 35.1,
       pointsPerOrder: 8
     },
     {
@@ -111,7 +106,7 @@ class foodAndDrinkViewModel {
       tsc: '#FFEB3B',
       bgc: '#F57F17',
       img: $r('app.media.food_douzhipin'),
-      carEmissionPer: 20, // 100克豆制品碳排放
+      carEmissionPer: 20.5,
       pointsPerOrder: 8
     },
     {
@@ -119,7 +114,7 @@ class foodAndDrinkViewModel {
       tsc: '#FFCCBC',
       bgc: '#8D6E63',
       img: $r('app.media.food_jirou'),
-      carEmissionPer: 440, // 100克鸡肉碳排放
+      carEmissionPer: 440.3,
       pointsPerOrder: 4
     },
     {
@@ -127,7 +122,7 @@ class foodAndDrinkViewModel {
       tsc: '#2196F3',
       bgc: '#0F4C81',
       img: $r('app.media.food_yinyongshui'),
-      carEmissionPer: 0.5, // 100毫升饮用水碳排放
+      carEmissionPer: 0.5,
       pointsPerOrder: 10
     },
     {
@@ -135,7 +130,7 @@ class foodAndDrinkViewModel {
       tsc: '#FF9800',
       bgc: '#E65100',
       img: $r('app.media.food_mianbao'),
-      carEmissionPer: 80, // 100克面包碳排放
+      carEmissionPer: 80.2,
       pointsPerOrder: 7
     },
     {
@@ -143,12 +138,111 @@ class foodAndDrinkViewModel {
       tsc: '#9E9E9E',
       bgc: '#424242',
       img: $r('app.media.func_add'),
-      carEmissionPer: 0, // 通用选项暂赋值0
+      carEmissionPer: 0.0,
       pointsPerOrder: 1
     }
   ]
   @Trace title: string = '请选择你的饮食'
-  // @Trace subHeading: string = '出行足迹'
+  @Trace subHeading: string = '出行足迹'
+  @Trace id: number = -1
+  @Trace total_emission: number = 0.0
+  @Trace total_day: number = 0
+  @Trace monthly_emission: number = 0.0
+  @Trace monthly_order: number = 0
+  @Trace monthly_portion: number = 0
+  @Trace point: number = 0
+  @Trace medal: number = 0
+  @Trace time_token: string = ''
+  @Trace acc: string = AppStorage.get('currLoginAcc') as string
+
+  public async getTotalData(acc: string) {
+    const dataItem: FoodTotalDataType = await FoodDataModel.getTotalData(acc)
+    console.log('setCarEmiDay: ' + this.time_token)
+    this.id = dataItem.id
+    this.total_emission = dataItem.total_emission
+    this.total_day = dataItem.total_day
+    this.monthly_emission = dataItem.monthly_emission
+    this.monthly_order = dataItem.monthly_order
+    this.monthly_portion = dataItem.monthly_portion
+    this.point = dataItem.point
+    this.medal = dataItem.medal
+    this.time_token = dataItem.time_token
+
+    this.cardsData[0] = { text: '累计碳排', num: this.total_emission, unit: 'kg' }
+    this.cardsData[1].num = this.monthly_emission
+    this.cardsData[2].num = this.total_day
+    this.popBoxData[0] = { text: '本月饮食次数', num: this.monthly_order, unit: '' }
+    this.popBoxData[1].num = this.monthly_portion
+    this.popBoxData[2].num = this.point
+    this.popBoxData[3].num = this.medal
+  }
+
+  public async updateTotalData(acc: string) {
+    let data: FoodTotalDataType = {
+      id: this.id,
+      account: acc,
+      total_emission: this.total_emission,
+      total_day: this.total_day,
+      monthly_emission: this.monthly_emission,
+      monthly_order: this.monthly_order,
+      monthly_portion: this.monthly_portion,
+      point: this.point,
+      medal: this.medal,
+      time_token: this.time_token
+    }
+    await FoodDataModel.updateTotalData(data)
+  }
+
+  public insertItemData(food: string, totalCarEmi: number,
+    eat_portion: number, eat_time: number) {
+    let date = new Date().toLocaleDateString()
+
+    FoodDataModel.insertItemData(this.acc, food, eat_portion,
+      eat_time, date, totalCarEmi)
+  }
+
+  public setCarEmiData(emi: number) {
+    this.cardsData[0] = {
+      text: '累计碳排',
+      num: this.total_emission + emi,
+      unit: 'kg'
+    }
+    this.cardsData[1] = {
+      text: '本月碳排量 76%',
+      num: this.total_emission + emi,
+      unit: 'kg'
+    }
+    this.total_emission += emi
+    this.monthly_emission += emi
+  }
+
+  public setCarEmiDay() {
+    let date = new Date()
+    console.log('setCarEmiDay: ' + `${date.toLocaleDateString()}//${this.time_token}`)
+    if (date.toLocaleDateString() !== this.time_token) {
+      this.total_day += 1
+      this.monthly_order += 1
+      this.cardsData[2].num += 1
+      this.popBoxData[0].num += 1
+
+      this.time_token = date.toLocaleDateString()
+    } else {
+      this.monthly_order += 1
+      this.popBoxData[0].num += 1
+    }
+  }
+
+  public setMonthlyPortion(dis: number) {
+    this.monthly_portion += dis
+    this.popBoxData[1].num += dis
+  }
+
+  public setPoint(point: number) {
+    this.point += point
+    this.popBoxData[2].num += point
+  }
 }
 
-export default new foodAndDrinkViewModel()
+const FoodDVM: FoodAndDrinkViewModel = new FoodAndDrinkViewModel()
+
+export default FoodDVM

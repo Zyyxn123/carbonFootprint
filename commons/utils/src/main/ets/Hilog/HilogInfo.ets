@@ -43,3 +43,7 @@ export const UserRdbLogger: Logger = new Logger('[utils_UserRdbLogger]')
 export const CarbonMsgRdbLogger: Logger = new Logger('[utils_CarbonMsgRdbLogger]')
 
 export const CarEmiTransLogger: Logger = new Logger('[utils_CarEmiTransLogger]')
+
+export const CarEmiApplianceLogger: Logger = new Logger('[utils_CarEmiApplianceLogger]')
+
+export const CarEmiFoodLogger: Logger = new Logger('[utils_CarEmiFoodLogger]')

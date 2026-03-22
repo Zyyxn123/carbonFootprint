@@ -19,6 +19,7 @@ export struct carbonLevelView {
           .backgroundColor($r('app.color.carbonLevelView_data_background'))
           .padding(3)
           .borderRadius(25)
+          .height(190)
       }
       .width('48%')
       .height('32%')
