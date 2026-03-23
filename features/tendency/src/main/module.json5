@@ -1,5 +1,18 @@
 {
   "module": {
+    "requestPermissions": [
+      {
+        "name": "ohos.permission.APPROXIMATELY_LOCATION",
+        "reason": '$string:getCurrent_Location'
+      },
+      {
+        "name": "ohos.permission.LOCATION",
+        "reason": '$string:getCurrent_Location'
+      },
+      {
+        "name": "ohos.permission.INTERNET"
+      }
+    ],
     "name": "tendency",
     "type": "har",
     "deviceTypes": [

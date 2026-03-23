@@ -59,6 +59,10 @@
     {
       "name": "lineChart_nowWeek",
       "value": "本周"
+    },
+    {
+      "name": "getCurrent_Location",
+      "value": "获取现在的位置信息"
     }
   ]
 }
