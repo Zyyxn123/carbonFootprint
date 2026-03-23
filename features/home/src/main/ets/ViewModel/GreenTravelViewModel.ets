@@ -44,13 +44,14 @@ class GreenTravelViewModel {
       unit: ''
     }
   ]
+  // kg/km
   @Trace transportLists: transportsTypeModel[] = [
     {
       ts: '骑行',
       tsc: '#4CAF50',
       bgc: '#2D5F2E',
       img: $r('app.media.transports_zixingche'),
-      carEmissionPer: 0.0,
+      carEmissionPer: 0.0, // 骑行：无直接碳排放
       pointsPerOrder: 10
     },
     {
@@ -58,7 +59,7 @@ class GreenTravelViewModel {
       tsc: '#FFC107',
       bgc: '#6B5A1E',
       img: $r('app.media.transports_buxing'),
-      carEmissionPer: 0.0,
+      carEmissionPer: 0.0, // 步行：无直接碳排放
       pointsPerOrder: 10
     },
     {
@@ -66,7 +67,7 @@ class GreenTravelViewModel {
       tsc: '#E91E63',
       bgc: '#4A235A',
       img: $r('app.media.transports_diandongche'),
-      carEmissionPer: 15.2,
+      carEmissionPer: 0.03, // 电动车：约0.03 kg/km（含电力生产碳排放）
       pointsPerOrder: 9
     },
     {
@@ -74,7 +75,7 @@ class GreenTravelViewModel {
       tsc: '#2196F3',
       bgc: '#0F4C81',
       img: $r('app.media.transports_gongjiaoche'),
-      carEmissionPer: 82.3,
+      carEmissionPer: 0.08, // 公交车（人均）：约0.08 kg/km（按30人满载核算）
       pointsPerOrder: 7
     },
     {
@@ -82,7 +83,7 @@ class GreenTravelViewModel {
       tsc: '#4CAF50',
       bgc: '#2D5F2E',
       img: $r('app.media.transports_ditie'),
-      carEmissionPer: 65.4,
+      carEmissionPer: 0.06, // 地铁（人均）：约0.06 kg/km（电力驱动，人均分摊）
       pointsPerOrder: 8
     },
     {
@@ -90,7 +91,7 @@ class GreenTravelViewModel {
       tsc: '#FF9800',
       bgc: '#6B4423',
       img: $r('app.media.transports_gaotie'),
-      carEmissionPer: 41.5,
+      carEmissionPer: 0.04, // 高铁（人均）：约0.04 kg/km（电力驱动，能耗效率高）
       pointsPerOrder: 9
     },
     {
@@ -98,7 +99,7 @@ class GreenTravelViewModel {
       tsc: '#795548',
       bgc: '#3E2723',
       img: $r('app.media.transports_huoche'),
-      carEmissionPer: 90.6,
+      carEmissionPer: 0.09, // 绿皮火车（人均）：约0.09 kg/km（内燃机车为主）
       pointsPerOrder: 6
     },
     {
@@ -106,7 +107,7 @@ class GreenTravelViewModel {
       tsc: '#3F51B5',
       bgc: '#1A237E',
       img: $r('app.media.transports_feiji'),
-      carEmissionPer: 250.7,
+      carEmissionPer: 0.25, // 飞机（人均）：约0.25 kg/km（短途航班更高）
       pointsPerOrder: 2
     },
     {
@@ -114,7 +115,7 @@ class GreenTravelViewModel {
       tsc: '#009688',
       bgc: '#004D40',
       img: $r('app.media.transports_youlun'),
-      carEmissionPer: 180.8,
+      carEmissionPer: 0.18, // 邮轮（人均）：约0.18 kg/km（燃油驱动，能耗高）
       pointsPerOrder: 3
     },
     {
@@ -122,7 +123,7 @@ class GreenTravelViewModel {
       tsc: '#FF5722',
       bgc: '#5D4037',
       img: $r('app.media.transports_sijiache'),
-      carEmissionPer: 171.9,
+      carEmissionPer: 0.17, // 私家车（汽油车）：约0.17 kg/km（1.6L排量）
       pointsPerOrder: 4
     },
     {
@@ -130,7 +131,7 @@ class GreenTravelViewModel {
       tsc: '#8BC34A',
       bgc: '#33691E',
       img: $r('app.media.transports_gongjiaoche'),
-      carEmissionPer: 105.1,
+      carEmissionPer: 0.11, // 长途大巴（人均）：约0.11 kg/km
       pointsPerOrder: 5
     },
     {
@@ -138,7 +139,7 @@ class GreenTravelViewModel {
       tsc: '#9E9E9E',
       bgc: '#424242',
       img: $r('app.media.func_add'),
-      carEmissionPer: 0,
+      carEmissionPer: 0.0, // 占位项保持0
       pointsPerOrder: 1
     }
   ]
@@ -218,7 +219,6 @@ class GreenTravelViewModel {
 
   public setCarEmiDay() {
     let date = new Date()
-    console.log('setCarEmiDay: ' + `${date.toLocaleDateString()}//${this.time_token}`)
     if (date.toLocaleDateString() !== this.time_token) {
       this.total_day += 1
       this.monthly_order += 1

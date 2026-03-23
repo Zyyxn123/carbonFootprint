@@ -31,7 +31,7 @@ class FoodAndDrinkViewModel {
     {
       text: '食材份量',
       num: 0,
-      unit: '%'
+      unit: 'g'
     },
     {
       text: '低碳饮食积分',
@@ -44,13 +44,14 @@ class FoodAndDrinkViewModel {
       unit: ''
     }
   ]
+  // g/g
   @Trace foodAndDrinkLists: transportsTypeModel[] = [
     {
       ts: '米饭',
       tsc: '#8D6E63',
       bgc: '#5D4037',
       img: $r('app.media.food_mifan'),
-      carEmissionPer: 11.8,
+      carEmissionPer: 0.85, // 米饭：约0.85 g/g（每克米饭碳排放0.85克）
       pointsPerOrder: 7
     },
     {
@@ -58,7 +59,7 @@ class FoodAndDrinkViewModel {
       tsc: '#4CAF50',
       bgc: '#2D5F2E',
       img: $r('app.media.food_qingcai'),
-      carEmissionPer: 2.5,
+      carEmissionPer: 0.18, // 青菜：约0.18 g/g（蔬菜碳排放极低）
       pointsPerOrder: 9
     },
     {
@@ -66,7 +67,7 @@ class FoodAndDrinkViewModel {
       tsc: '#E57373',
       bgc: '#B71C1C',
       img: $r('app.media.food_zhurou'),
-      carEmissionPer: 1280.4,
+      carEmissionPer: 12.8, // 猪肉：约12.8 g/g（红肉碳排放最高）
       pointsPerOrder: 2
     },
     {
@@ -74,7 +75,7 @@ class FoodAndDrinkViewModel {
       tsc: '#FFC107',
       bgc: '#6B5A1E',
       img: $r('app.media.food_jidan'),
-      carEmissionPer: 300.4,
+      carEmissionPer: 4.8, // 鸡蛋：约4.8 g/g
       pointsPerOrder: 5
     },
     {
@@ -82,7 +83,7 @@ class FoodAndDrinkViewModel {
       tsc: '#F5F5F5',
       bgc: '#9E9E9E',
       img: $r('app.media.food_niunai'),
-      carEmissionPer: 190.2,
+      carEmissionPer: 3.2, // 牛奶：约3.2 g/g
       pointsPerOrder: 6
     },
     {
@@ -90,7 +91,7 @@ class FoodAndDrinkViewModel {
       tsc: '#795548',
       bgc: '#3E2723',
       img: $r('app.media.food_kafei'),
-      carEmissionPer: 180.8,
+      carEmissionPer: 11.2, // 咖啡：约11.2 g/g（含种植/加工环节）
       pointsPerOrder: 6
     },
     {
@@ -98,7 +99,7 @@ class FoodAndDrinkViewModel {
       tsc: '#F44336',
       bgc: '#C62828',
       img: $r('app.media.food_pingguo'),
-      carEmissionPer: 35.1,
+      carEmissionPer: 0.42, // 苹果：约0.42 g/g
       pointsPerOrder: 8
     },
     {
@@ -106,7 +107,7 @@ class FoodAndDrinkViewModel {
       tsc: '#FFEB3B',
       bgc: '#F57F17',
       img: $r('app.media.food_douzhipin'),
-      carEmissionPer: 20.5,
+      carEmissionPer: 0.95, // 豆制品：约0.95 g/g
       pointsPerOrder: 8
     },
     {
@@ -114,7 +115,7 @@ class FoodAndDrinkViewModel {
       tsc: '#FFCCBC',
       bgc: '#8D6E63',
       img: $r('app.media.food_jirou'),
-      carEmissionPer: 440.3,
+      carEmissionPer: 6.9, // 鸡肉：约6.9 g/g（白肉低于红肉）
       pointsPerOrder: 4
     },
     {
@@ -122,7 +123,7 @@ class FoodAndDrinkViewModel {
       tsc: '#2196F3',
       bgc: '#0F4C81',
       img: $r('app.media.food_yinyongshui'),
-      carEmissionPer: 0.5,
+      carEmissionPer: 0.008, // 饮用水：约0.008 g/g（仅加工/运输环节）
       pointsPerOrder: 10
     },
     {
@@ -130,7 +131,7 @@ class FoodAndDrinkViewModel {
       tsc: '#FF9800',
       bgc: '#E65100',
       img: $r('app.media.food_mianbao'),
-      carEmissionPer: 80.2,
+      carEmissionPer: 1.15, // 面包：约1.15 g/g（含小麦种植/烘焙）
       pointsPerOrder: 7
     },
     {
@@ -138,7 +139,7 @@ class FoodAndDrinkViewModel {
       tsc: '#9E9E9E',
       bgc: '#424242',
       img: $r('app.media.func_add'),
-      carEmissionPer: 0.0,
+      carEmissionPer: 0.0, // 占位项保持0
       pointsPerOrder: 1
     }
   ]

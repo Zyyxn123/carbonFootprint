@@ -2,9 +2,11 @@ import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from "@oh
 import {
   CarEmiApplianceTable,
   CarEmiFoodTable,
-  CarEmiTransTable, HealthyNewsPreference, HTTPForHealthyNews, UserRdbStore } from "@ohos/utils"
+  CarEmiTotalWeeklyTable,
+  CarEmiTransTable, HealthyNewsPreference, HTTPForHealthyNews,
+  HTTPForLoginState,
+  UserRdbStore } from "@ohos/utils"
 import { common } from "@kit.AbilityKit"
-
 
 @Component
 export struct logOrResView {
@@ -18,6 +20,8 @@ export struct logOrResView {
   private carEmiTransTableIns: CarEmiTransTable = CarEmiTransTable.getInstance()
   private carEmiApplianceTable: CarEmiApplianceTable = CarEmiApplianceTable.getInstance()
   private carEmiFoodTable: CarEmiFoodTable = CarEmiFoodTable.getInstance()
+  private carEmiTotalWeeklyTable: CarEmiTotalWeeklyTable = CarEmiTotalWeeklyTable.getInstance()
+   private httpForLoginState: HTTPForLoginState = HTTPForLoginState.getInstance()
   private context = this.getUIContext().getHostContext() as common.UIAbilityContext
   private isSelected: boolean = false
 
@@ -78,14 +82,10 @@ export struct logOrResView {
         .height(50)
         .margin({ top: 30 })
         .borderRadius(25)
-        /*.onClick(async () => {
-          const bol: Boolean = await this.userRdbStoreIns.hasAcc(this.accountStr)
-          if (bol) {
-            // this.userRdbStoreIns.
-          } else {
-            this.userRdbStoreIns.setOriginalData(this.accountStr)
-          }
-        })*/
+        .onClick(async () => {
+          // this.httpForLoginState.setExtraData(this.accountStr, this.passwordStr, '1')
+          // await this.httpForLoginState.HTTPFunc()
+        })
 
       Button('删除数据库')
         .onClick(() => {
@@ -93,17 +93,25 @@ export struct logOrResView {
           this.carEmiTransTableIns.deleteMyTable()
           this.carEmiApplianceTable.deleteMyTable()
           this.carEmiFoodTable.deleteMyTable()
+          this.carEmiTotalWeeklyTable.deleteMyTable()
         })
 
       Button('游客登陆')
         .onClick(async () => {
+          let date = new Date().toLocaleDateString()
           AppStorage.set('currLoginAcc', 'testDemo')
-          const bol: Boolean = await this.userRdbStoreIns.hasAcc('testDemo')
-          if (!bol) {
+          const bol_acc: boolean = await this.userRdbStoreIns.hasAcc('testDemo')
+          const bol_totalData: boolean = await this.carEmiTotalWeeklyTable.hasTodayItem('testDemo', date)
+          if (!bol_acc) {
             this.userRdbStoreIns.setOriginalData('testDemo')
             this.carEmiTransTableIns.setOriginalTotalData('testDemo')
             this.carEmiApplianceTable.setOriginalTotalData('testDemo')
             this.carEmiFoodTable.setOriginalTotalData('testDemo')
+          }
+          if (!bol_totalData) {
+            this.carEmiTotalWeeklyTable.setOriginalTotalData('testDemo', date)
+          } else {
+            this.carEmiTotalWeeklyTable.getWeeklyTotalData('testDemo', date)
           }
 
           this.loginProgressBol = true

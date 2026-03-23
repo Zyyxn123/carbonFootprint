@@ -33,9 +33,9 @@ export class HealthyNewsPreference {
 
     try {
       if (!this.dataPreferences.hasSync(this.datePreName)) {
-        this.setTodayTime()
+        this.setTodayTime('1/1/1999')
       }
-      let time: string = this.dataPreferences.getSync(this.datePreName, '5/15/2000') as string
+      let time: string = this.dataPreferences.getSync(this.datePreName, '1/1/1999') as string
       PreLogger_HN.info('getTodayTime: ' + time)
       return time
     } catch (error) {
@@ -54,7 +54,7 @@ export class HealthyNewsPreference {
       // if (!this.dataPreferences.hasSync(this.dataPreName)) {
       //   this.setTodayData_HN()
       // }
-      let data: string = this.dataPreferences.getSync(this.dataPreName, 'empty') as string
+      let data: string = this.dataPreferences.getSync(this.dataPreName, '[{"uniquekey":"health_20260323_001","title":"春季养生：如何科学补充维生素","date":"2026-03-23 08:30:00","category":"养生科普","author_name":"健康养生专家","url":"https://example.com/health/001","thumbnail_pic_s":"https://example.com/images/health_001_s.jpg","thumbnail_pic_s02":"https://example.com/images/health_001_s02.jpg","thumbnail_pic_s03":"https://example.com/images/health_001_s03.jpg","is_content":"1"},{"uniquekey":"health_20260323_002","title":"每天8000步真的健康吗？运动专家给出答案","date":"2026-03-23 09:15:00","category":"运动健康","author_name":"运动医学博士","url":"https://example.com/health/002","thumbnail_pic_s":"https://example.com/images/health_002_s.jpg","is_content":"1"},{"uniquekey":"health_20260323_003","title":"熬夜对心血管的不可逆伤害","date":"2026-03-23 10:20:00","category":"心血管健康","author_name":"心内科主任医师","url":"https://example.com/health/003","thumbnail_pic_s02":"https://example.com/images/health_003_s02.jpg","is_content":"0"},{"uniquekey":"health_20260323_004","title":"膳食纤维摄入不足的5个信号","date":"2026-03-23 14:45:00","category":"营养饮食","author_name":"注册营养师","url":"https://example.com/health/004","is_content":"1"},{"uniquekey":"health_20260323_005","title":"正确的颈椎放松方法，远离办公室职业病","date":"2026-03-23 16:10:00","category":"骨骼健康","author_name":"康复理疗师","url":"https://example.com/health/005","thumbnail_pic_s":"https://example.com/images/health_005_s.jpg","thumbnail_pic_s03":"https://example.com/images/health_005_s03.jpg","is_content":"1"}]') as string
       PreLogger_HN.info('getTodayData_HN: ' + data)
       return data
     } catch (error) {
@@ -63,16 +63,14 @@ export class HealthyNewsPreference {
     }
   }
 
-  public setTodayTime() {
+  public setTodayTime(date: string) {
     if (!this.dataPreferences) {
       PreLogger_HN.error('getPreferencesSync error')
       return ''
     }
 
-    let date: Date = new Date()
-    let data: string = date.toLocaleDateString()
     try {
-      this.dataPreferences.putSync(this.datePreName, data)
+      this.dataPreferences.putSync(this.datePreName, date)
       this.dataPreferences.flush((err: BusinessError) => {
         if (err) {
           PreLogger_HN.error(`setTodayTime Failed to flush. Code:${err.code}, message:${err.message}`);

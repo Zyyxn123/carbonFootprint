@@ -7,11 +7,11 @@
         "material": {
           "certpath": "C:\\Users\\朱韵宇\\.ohos\\config\\default_carbonFootPrint_-9ebauaaAYHmwJiYal8sLu9b7NDgAN1I5Zr2ly9vyq8=.cer",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001B0F1C23290C782765D64E59F0377DD51B2C2C390D07D7A9A4033F043A833A4093CCFF21B7A7B84A",
+          "keyPassword": "0000001B44F6A030A08215833F2E7D7484CA88F8E2B16C0003F7FA78E88CC972750229413E38259BA14DDB",
           "profile": "C:\\Users\\朱韵宇\\.ohos\\config\\default_carbonFootPrint_-9ebauaaAYHmwJiYal8sLu9b7NDgAN1I5Zr2ly9vyq8=.p7b",
           "signAlg": "SHA256withECDSA",
           "storeFile": "C:\\Users\\朱韵宇\\.ohos\\config\\default_carbonFootPrint_-9ebauaaAYHmwJiYal8sLu9b7NDgAN1I5Zr2ly9vyq8=.p12",
-          "storePassword": "0000001B495C5BCC328213CC49712E7F978206EE4541D9FF85231F2549DECF4AB8BAAD65AE5E01A2ED2E31"
+          "storePassword": "0000001BB978A004077237D491BC5A5F89639AEA081041E5F0530E6042ED401D8C8D36593C2EFA6698A47E"
         }
       }
     ],
@@ -32,10 +32,21 @@
     ],
     "buildModeSet": [
       {
-        "name": "debug",
+        "name": "debug"
       },
       {
         "name": "release"
+      }
+    ],
+    "capabilities": [
+      {
+        "bundleName": "com.example.carbonfootprint",
+        "config": [
+          {
+            "name": "Map Kit",
+            "capability": "com.huawei.service.mapkit"
+          }
+        ]
       }
     ]
   },

@@ -1,8 +1,17 @@
 import { dataPanelComponent } from "../Component/dataPanelComponent"
 import { gaugeComponent } from "../Component/gaugeComponent"
+import CarLevVM from "../ViewModel/CarLevelViewModel"
+
+let date = new Date().toLocaleDateString()
 
 @Component
 export struct carbonLevelView {
+  @StorageLink('currLoginAcc') acc: string = ''
+
+  async aboutToAppear(): Promise<void> {
+    await CarLevVM.getTotalData(this.acc, date)
+  }
+
   build() {
     Row({ space: 15 }) {
       /**

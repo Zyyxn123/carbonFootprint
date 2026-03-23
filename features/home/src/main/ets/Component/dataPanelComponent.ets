@@ -1,3 +1,5 @@
+import CarLevVM from "../ViewModel/CarLevelViewModel"
+
 @Builder
 function buildDataPanel(config: DataPanelConfiguration) {
   Column() {
@@ -20,12 +22,20 @@ class DataPanelBuilder implements ContentModifier<DataPanelConfiguration> {
 
 @Component
 export struct dataPanelComponent {
+  @State vals: number[] = [CarLevVM.travel_carbon, CarLevVM.electric_carbon, CarLevVM.food_carbon]
+
+  dynamicMax(): number {
+    const max = Math.max(...CarLevVM.dataPanelVals)
+    return max * 3
+  }
+
   build() {
     Column() {
       Row() {
-        DataPanel({ values: [12.3,/* 21.1,*/ 13.4, 35.2], max: 160, type: DataPanelType.Circle })
-          .width(280)
-          .height(130)
+        DataPanel({ values: CarLevVM.dataPanelVals,
+          max: this.dynamicMax(), type: DataPanelType.Circle })
+          .width(290)
+          .height(135)
           .constraintSize({ maxWidth: '100%' })
           .padding({ top: 5 })
           .contentModifier(new DataPanelBuilder())
@@ -33,6 +43,9 @@ export struct dataPanelComponent {
       .margin({ left: 5, right: 5, bottom: 5 })
       .borderRadius(15)
       .backgroundColor('#fff5f5f5')
+      .onClick(() => {
+        this.vals = [CarLevVM.travel_carbon += 1, CarLevVM.electric_carbon += 2, CarLevVM.food_carbon]
+      })
     }
   }
 }
@@ -46,21 +59,23 @@ struct ChildItem {
   public color2: string = '#37800f'
   public color3: string = '#65ffe600'
   public color4: string = '#6595ff00'
-  public colorArray: Array<string> = [this.color2,/* this.color3,*/ this.color1, this.color4]
+  public colorArray: Array<string> = [this.color2, this.color1, this.color4]
 
   build() {
     RelativeContainer() {
       Row() {
         Rect()
           .height(25)
-          .width(this.item * 400 / this.max)
+          .width(this.item * 330 / this.max)
           .foregroundColor((this.index < 0 || this.index >= this.colorArray.length) ? this.colorArray[0] :
             this.colorArray[this.index])
           .radius(5)
           .align(Alignment.Start)
         Text(' ' + this.item)
           .fontSize(15)
+          .fontColor(Color.Black)
       }
+      .margin({ right: 5})
     }.height(28)
   }
 }

@@ -131,7 +131,7 @@ export class CarEmiTransTable {
   /**
    * 用户登录时返回总数据，供给 UI 渲染页面
    * @param acc：账号
-   * @returns ：返回总数据对象
+   * @returns：返回总数据对象
    */
   public async getTransTotalData(acc: string): Promise<TransTotalDataType> {
     let resultItem: TransTotalDataType = {

@@ -13,6 +13,7 @@ class ProtectionTipsViewModel {
   @Trace dataVM: HealthNewsItem[] | undefined = undefined
 
   getTipMsg() {
+    console.log('EntryHap_aboutToAppear2: ' + this.healthyNewsPre.getTodayData_HN())
     let myData = JSON.parse(this.healthyNewsPre.getTodayData_HN()) as HealthNewsItem[]
     this.dataList = myData
     this.dataVM = myData

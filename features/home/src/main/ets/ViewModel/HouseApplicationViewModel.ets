@@ -44,13 +44,14 @@ class houseApplicationViewModel {
       unit: ''
     }
   ]
+  // kg/h
   @Trace applicationsLists: transportsTypeModel[] = [
     {
       ts: '冰箱',
       tsc: '#2196F3',
       bgc: '#0F4C81',
       img: $r('app.media.appliances_bingxiang'),
-      carEmissionPer: 120.7,
+      carEmissionPer: 0.015, // 冰箱：约0.015 kg/h（24小时运行，日均0.36kg）
       pointsPerOrder: 7
     },
     {
@@ -58,7 +59,7 @@ class houseApplicationViewModel {
       tsc: '#03A9F4',
       bgc: '#0B699E',
       img: $r('app.media.appliances_kongtiao'),
-      carEmissionPer: 800.2,
+      carEmissionPer: 0.85, // 空调（1.5匹）：约0.85 kg/h（制冷工况）
       pointsPerOrder: 3
     },
     {
@@ -66,7 +67,7 @@ class houseApplicationViewModel {
       tsc: '#FF9800',
       bgc: '#6B4423',
       img: $r('app.media.appliances_dianfanbao'),
-      carEmissionPer: 350.6,
+      carEmissionPer: 0.38, // 电饭煲（800W）：约0.38 kg/h
       pointsPerOrder: 5
     },
     {
@@ -74,7 +75,7 @@ class houseApplicationViewModel {
       tsc: '#009688',
       bgc: '#004D40',
       img: $r('app.media.appliances_xiyiji'),
-      carEmissionPer: 280.4,
+      carEmissionPer: 0.31, // 波轮洗衣机：约0.31 kg/h
       pointsPerOrder: 6
     },
     {
@@ -82,7 +83,7 @@ class houseApplicationViewModel {
       tsc: '#9C27B0',
       bgc: '#4A148C',
       img: $r('app.media.appliances_dianshiji'),
-      carEmissionPer: 60.3,
+      carEmissionPer: 0.068, // 55寸智能电视：约0.068 kg/h
       pointsPerOrder: 8
     },
     {
@@ -90,7 +91,7 @@ class houseApplicationViewModel {
       tsc: '#607D8B',
       bgc: '#34495E',
       img: $r('app.media.appliances_diannao'),
-      carEmissionPer: 75.5,
+      carEmissionPer: 0.085, // 台式电脑（含显示器）：约0.085 kg/h
       pointsPerOrder: 8
     },
     {
@@ -98,7 +99,7 @@ class houseApplicationViewModel {
       tsc: '#F44336',
       bgc: '#B71C1C',
       img: $r('app.media.appliances_dianreshuiqi'),
-      carEmissionPer: 1500.8,
+      carEmissionPer: 1.65, // 2000W电热水器：约1.65 kg/h
       pointsPerOrder: 2
     },
     {
@@ -106,7 +107,7 @@ class houseApplicationViewModel {
       tsc: '#4CAF50',
       bgc: '#2D5F2E',
       img: $r('app.media.appliances_dianfengshan'),
-      carEmissionPer: 15.4,
+      carEmissionPer: 0.017, // 落地扇（40W）：约0.017 kg/h
       pointsPerOrder: 9
     },
     {
@@ -114,7 +115,7 @@ class houseApplicationViewModel {
       tsc: '#FF5722',
       bgc: '#5D4037',
       img: $r('app.media.appliances_weibolu'),
-      carEmissionPer: 420.6,
+      carEmissionPer: 0.45, // 1000W微波炉：约0.45 kg/h
       pointsPerOrder: 4
     },
     {
@@ -122,7 +123,7 @@ class houseApplicationViewModel {
       tsc: '#795548',
       bgc: '#3E2723',
       img: $r('app.media.appliances_diancilu'),
-      carEmissionPer: 650.5,
+      carEmissionPer: 0.70, // 2000W电磁炉：约0.70 kg/h
       pointsPerOrder: 4
     },
     {
@@ -130,7 +131,7 @@ class houseApplicationViewModel {
       tsc: '#9E9E9E',
       bgc: '#424242',
       img: $r('app.media.appliances_xichenqi'),
-      carEmissionPer: 200.2,
+      carEmissionPer: 0.22, // 手持式吸尘器：约0.22 kg/h
       pointsPerOrder: 6
     },
     {
@@ -138,7 +139,7 @@ class houseApplicationViewModel {
       tsc: '#9E9E9E',
       bgc: '#424242',
       img: $r('app.media.func_add'),
-      carEmissionPer: 0,
+      carEmissionPer: 0, // 占位项保持0
       pointsPerOrder: 1
     }
   ]

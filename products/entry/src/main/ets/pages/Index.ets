@@ -1,6 +1,7 @@
 import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstants } from '@ohos/customrouter';
 import { CarEmiApplianceTable,
   CarEmiFoodTable,
+  CarEmiTotalWeeklyTable,
   CarEmiTransTable, HealthyNewsPreference, HTTPForHealthyNews } from '@ohos/utils';
 import { AdsPage } from './AdsPage';
 import { LogOrResPage } from './LogOrResPage';
@@ -20,7 +21,7 @@ AppStorage.setOrCreate('currLoginAcc', '')
 
 @Entry
 @Component
-struct EntryHap {
+struct c {
   @StorageLink('CurrentIndex') currentIndex: number = 0
   @State entryHapRouter: NavPathStack = new NavPathStack()
   @StorageLink('isLoginState') isLogin: boolean = false
@@ -31,6 +32,7 @@ struct EntryHap {
   private carEmiTransTable: CarEmiTransTable = CarEmiTransTable.getInstance()
   private carEmiApplianceTable: CarEmiApplianceTable = CarEmiApplianceTable.getInstance()
   private carEmiFoodTable: CarEmiFoodTable = CarEmiFoodTable.getInstance()
+  private carEmiTotalWeeklyTable: CarEmiTotalWeeklyTable = CarEmiTotalWeeklyTable.getInstance()
 
   async aboutToAppear() {
     this.healthyNewsPre.getMyPre(this.context)
@@ -39,12 +41,17 @@ struct EntryHap {
     }
     RouterModule.createRouter(RouterNameConstants.ENTRY_HAP, this.entryHapRouter)
 
+    console.log('EntryHap_aboutToAppear: ' +  this.healthyNewsPre.getTodayTime())
+    console.log('EntryHap_aboutToAppear: ' +  date.toLocaleDateString())
+
     if (this.healthyNewsPre.getTodayTime() === date.toLocaleDateString()) {
+      console.log('EntryHap_aboutToAppear: 1')
       if (this.healthyNewsPre.getTodayData_HN()) {
         this.httpForHN.data = this.healthyNewsPre.getTodayData_HN()
       }
     } else {
-      this.healthyNewsPre.setTodayTime()
+      console.log('EntryHap_aboutToAppear: 2')
+      this.healthyNewsPre.setTodayTime(date.toLocaleDateString())
       this.httpForHN.HTTPFunc()
     }
 
@@ -52,6 +59,7 @@ struct EntryHap {
       this.carEmiTransTable.initTable()
       this.carEmiApplianceTable.initTable()
       this.carEmiFoodTable.initTable()
+      this.carEmiTotalWeeklyTable.initTable()
     }, 500)
   }
 
@@ -132,7 +140,6 @@ struct EntryHap {
   }
 }
 
-// let date = new Date()
 // console.log('dateTextOnly ', date)
 // console.log('dateTextOnly toString', date.toString())
 // console.log('dateTextOnly toDateString', date.toDateString())

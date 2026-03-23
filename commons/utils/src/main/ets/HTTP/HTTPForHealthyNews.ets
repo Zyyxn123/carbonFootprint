@@ -1,6 +1,5 @@
 import { http } from '@kit.NetworkKit';
 import { BusinessError } from '@kit.BasicServicesKit';
-import { common } from '@kit.AbilityKit';
 import { HTTPLogger } from '../Hilog/HilogInfo';
 import { JSON } from '@kit.ArkTS';
 // import { HealthNewsResponse, HealthNewsResult } from '../Interface/HealthyNewsInterface';

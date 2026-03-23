@@ -1,6 +1,7 @@
+import CarLevVM from "../ViewModel/CarLevelViewModel"
+
 @Component
 export struct gaugeComponent {
-  @State totalCarbonConsumption: number = 5
 
   build() {
     Column() {
@@ -8,16 +9,15 @@ export struct gaugeComponent {
        *  等级：模范 良好 基准 偏高 高碳
        *  颜色：059669 10B981 D97706 EA580C DC2626
        */
-      Gauge({ value: this.totalCarbonConsumption, min: 1, max: 99 }) {
+      Gauge({ value: CarLevVM.total_carbon, min: 1, max: 99 }) {
         Column() {
-          Text(this.totalCarbonConsumption.toString())
+          Text(CarLevVM.total_carbon.toFixed(0))
             .fontWeight(FontWeight.Medium)
-            .width('50%')
+            .width('50%') // 动态宽度占比
             .fontColor('#000000')
-            .maxFontSize('60.0vp')
-            .minFontSize('30.0vp')
+            .fontSize(35) // 动态字体大小（替代max/minFontSize）
             .textAlign(TextAlign.Center)
-            .margin({ top: 25 })
+            .margin({ top: 25, bottom: 3 })
             .textOverflow({ overflow: TextOverflow.Ellipsis })
             .maxLines(1)
           Text('先锋')
@@ -25,8 +25,8 @@ export struct gaugeComponent {
             .minFontSize('10.0vp')
             .fontColor('#059669')
             .fontWeight(FontWeight.Regular)
-            .width('67.4%')
-            .height('9.5%')
+            .width('70%')
+            .height('12%')
             .textAlign(TextAlign.Center)
         }
         .width('100%')

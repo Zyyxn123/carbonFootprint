@@ -36,6 +36,8 @@ class Logger {
 
 export const HTTPLogger: Logger = new Logger('[utils_HTTPLogger_HN]')
 
+export const HTTPForLoginLogger: Logger = new Logger('[utils_HTTPForLoginLogger]')
+
 export const PreLogger_HN: Logger = new Logger('[utils_PreLogger_HN]')
 
 export const UserRdbLogger: Logger = new Logger('[utils_UserRdbLogger]')
@@ -47,3 +49,5 @@ export const CarEmiTransLogger: Logger = new Logger('[utils_CarEmiTransLogger]')
 export const CarEmiApplianceLogger: Logger = new Logger('[utils_CarEmiApplianceLogger]')
 
 export const CarEmiFoodLogger: Logger = new Logger('[utils_CarEmiFoodLogger]')
+
+export const CarEmiTotalWeeklyLogger: Logger = new Logger('[utils_CarEmiTotalWeeklyLogger]')
