@@ -1,7 +1,7 @@
 import { AbilityConstant, ConfigurationConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
-import { CarbonMsgDBManager, CarEmiTransTable, UserRdbStore } from '@ohos/utils';
+import { CarbonMsgDBManager, CarEmiTransTable, TendencyDBManager, UserRdbStore } from '@ohos/utils';
 
 const DOMAIN = 0x0000;
 
@@ -9,8 +9,10 @@ export default class EntryAbility extends UIAbility {
   async onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): Promise<void> {
     const userRdbStoreIns: UserRdbStore = UserRdbStore.getInstance()
     const carbonMsgDBManager: CarbonMsgDBManager = CarbonMsgDBManager.getInstance()
+    const tendencyDBManager: TendencyDBManager = TendencyDBManager.getInstance()
     userRdbStoreIns.initMyStore(this.context)
     await carbonMsgDBManager.initDB(this.context)
+    await tendencyDBManager.initDB(this.context)
 
 
     try {

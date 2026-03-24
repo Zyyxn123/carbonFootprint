@@ -2,7 +2,8 @@ import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstan
 import { CarEmiApplianceTable,
   CarEmiFoodTable,
   CarEmiTotalWeeklyTable,
-  CarEmiTransTable, HealthyNewsPreference, HTTPForHealthyNews } from '@ohos/utils';
+  CarEmiTransTable, HealthyNewsPreference, HTTPForHealthyNews,
+  TendTasksTable } from '@ohos/utils';
 import { AdsPage } from './AdsPage';
 import { LogOrResPage } from './LogOrResPage';
 import { quickStart } from './quickStart';
@@ -33,6 +34,7 @@ struct c {
   private carEmiApplianceTable: CarEmiApplianceTable = CarEmiApplianceTable.getInstance()
   private carEmiFoodTable: CarEmiFoodTable = CarEmiFoodTable.getInstance()
   private carEmiTotalWeeklyTable: CarEmiTotalWeeklyTable = CarEmiTotalWeeklyTable.getInstance()
+  private tendTasksTable: TendTasksTable = TendTasksTable.getInstance()
 
   async aboutToAppear() {
     this.healthyNewsPre.getMyPre(this.context)
@@ -41,16 +43,11 @@ struct c {
     }
     RouterModule.createRouter(RouterNameConstants.ENTRY_HAP, this.entryHapRouter)
 
-    console.log('EntryHap_aboutToAppear: ' +  this.healthyNewsPre.getTodayTime())
-    console.log('EntryHap_aboutToAppear: ' +  date.toLocaleDateString())
-
     if (this.healthyNewsPre.getTodayTime() === date.toLocaleDateString()) {
-      console.log('EntryHap_aboutToAppear: 1')
       if (this.healthyNewsPre.getTodayData_HN()) {
         this.httpForHN.data = this.healthyNewsPre.getTodayData_HN()
       }
     } else {
-      console.log('EntryHap_aboutToAppear: 2')
       this.healthyNewsPre.setTodayTime(date.toLocaleDateString())
       this.httpForHN.HTTPFunc()
     }
@@ -60,6 +57,7 @@ struct c {
       this.carEmiApplianceTable.initTable()
       this.carEmiFoodTable.initTable()
       this.carEmiTotalWeeklyTable.initTable()
+      this.tendTasksTable.initTable()
     }, 500)
   }
 

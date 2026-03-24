@@ -1,10 +1,12 @@
 import { WeeklyTotalDataType } from "@ohos/utils"
 import { CarLevelModel } from "../Model/CarLevelModel"
+import { CarLevConfigType } from "../Type/CarLevConfigType"
 import { CarLevelArrayType } from "../Type/CarLevelArrayType"
 
 @ObservedV2
 class CarLevelViewModel {
   @Trace dataPanelVals: number[] = [0, 0, 0]
+  @Trace showConfig: CarLevConfigType | undefined = undefined
   @Trace id: number = -1
   @Trace account: string = ''
   @Trace record_date: string = ''
@@ -15,6 +17,55 @@ class CarLevelViewModel {
   @Trace current_week_daily_carbon: string = '[0,0,0,0,0,0,0]'
   @Trace last_week_daily_carbon: string = '[0,0,0,0,0,0,0]'
   @Trace acc: string = AppStorage.get('currLoginAcc') as string
+  private carbonLevelConfigs: CarLevConfigType[] = [
+    {
+      min: 0,
+      max: 12,
+      name: "低碳先锋",
+      text: "低碳标兵，环保生活",
+      color: "#059669"
+    },
+    {
+      min: 12,
+      max: 20,
+      name: "低碳良好",
+      text: "习惯优秀，持续环保",
+      color: "#10B981"
+    },
+    {
+      min: 20,
+      max: 28,
+      name: "基准正常",
+      text: "水平正常，仍可优化",
+      color: "#D97706"
+    },
+    {
+      min: 28,
+      max: 36,
+      name: "排放偏高",
+      text: "排放偏高，注意减排",
+      color: "#EA580C"
+    },
+    {
+      min: 36,
+      max: 999,
+      name: "高碳过量",
+      text: "排放过量，急需改善",
+      color: "#DC2626"
+    }
+  ]
+
+  public getCurrentCarbonLevel() {
+    const value = CarLevVM.total_carbon
+    for (let config of this.carbonLevelConfigs) {
+      if (value >= config.min && value < config.max) {
+        this.showConfig = config
+        return true
+      }
+    }
+    this.showConfig = this.carbonLevelConfigs[0]
+    return false
+  }
 
   public async getTotalData(acc: string, date: string) {
     const dataItem: WeeklyTotalDataType = await CarLevelModel.getTodayData(acc, date)
@@ -34,6 +85,7 @@ class CarLevelViewModel {
       Number(this.food_carbon.toFixed(2))
     ]
 
+    this.getCurrentCarbonLevel()
     // 首次加载时，先检查是否需要周切换
     this.checkWeekSwitch()
   }
@@ -45,7 +97,9 @@ class CarLevelViewModel {
   private checkWeekSwitch() {
     const date = new Date().toLocaleDateString()
     const weekData = this.getWeekdayFromMDY(date)
-    if (!weekData) return
+    if (!weekData) {
+      return
+    }
     console.log('CarLevelViewModel: ' + this.last_week_daily_carbon)
     console.log('CarLevelViewModel: ' + this.current_week_daily_carbon)
     console.log('CarLevelViewModel: ' + weekData.weekIndex)
@@ -74,6 +128,8 @@ class CarLevelViewModel {
       this.food_carbon = Number((this.food_carbon + fixedCarEmi).toFixed(2))
     }
     this.total_carbon = Number((this.total_carbon + fixedCarEmi).toFixed(2))
+
+    this.getCurrentCarbonLevel()
 
     this.updatePanelVals(index, fixedCarEmi)
 
@@ -114,7 +170,9 @@ class CarLevelViewModel {
     // 1. 解析当前日期，获取本周索引
     const date = new Date().toLocaleDateString()
     const weekData = this.getWeekdayFromMDY(date)
-    if (!weekData) return
+    if (!weekData) {
+      return
+    }
 
     // 2. 先检查是否需要周切换（比如周一，要把上周数据归档）
     this.checkWeekSwitch()
@@ -123,7 +181,7 @@ class CarLevelViewModel {
     let currentWeekArr: number[] = JSON.parse(this.current_week_daily_carbon) as number[]
     // 确保数组长度为7（容错）
     if (currentWeekArr.length !== 7) {
-      currentWeekArr = [0,0,0,0,0,0,0]
+      currentWeekArr = [0, 0, 0, 0, 0, 0, 0]
     }
     // 更新当日碳排量到数组对应位置
     currentWeekArr[weekData.weekIndex] = carEmi

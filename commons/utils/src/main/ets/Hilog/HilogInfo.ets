@@ -34,20 +34,24 @@ class Logger {
   }
 }
 
-export const HTTPLogger: Logger = new Logger('[utils_HTTPLogger_HN]')
+export const HTTPLogger: Logger = new Logger('[HTTPLogger_HN]')
 
-export const HTTPForLoginLogger: Logger = new Logger('[utils_HTTPForLoginLogger]')
+export const HTTPForLoginLogger: Logger = new Logger('[HTTPForLoginLogger]')
 
-export const PreLogger_HN: Logger = new Logger('[utils_PreLogger_HN]')
+export const PreLogger_HN: Logger = new Logger('[PreLogger_HN]')
 
-export const UserRdbLogger: Logger = new Logger('[utils_UserRdbLogger]')
+export const UserRdbLogger: Logger = new Logger('[UserRdbLogger]')
 
-export const CarbonMsgRdbLogger: Logger = new Logger('[utils_CarbonMsgRdbLogger]')
+export const CarbonMsgRdbLogger: Logger = new Logger('[CarbonMsgRdbLogger]')
 
-export const CarEmiTransLogger: Logger = new Logger('[utils_CarEmiTransLogger]')
+export const TendencyRdbLogger: Logger = new Logger('[TendencyRdbLogger]')
 
-export const CarEmiApplianceLogger: Logger = new Logger('[utils_CarEmiApplianceLogger]')
+export const CarEmiTransLogger: Logger = new Logger('[CarEmiTransLogger]')
 
-export const CarEmiFoodLogger: Logger = new Logger('[utils_CarEmiFoodLogger]')
+export const CarEmiApplianceLogger: Logger = new Logger('[CarEmiApplianceLogger]')
 
-export const CarEmiTotalWeeklyLogger: Logger = new Logger('[utils_CarEmiTotalWeeklyLogger]')
+export const CarEmiFoodLogger: Logger = new Logger('[CarEmiFoodLogger]')
+
+export const CarEmiTotalWeeklyLogger: Logger = new Logger('[CarEmiTotalWeeklyLogger]')
+
+export const TendTasksLogger: Logger = new Logger('[TendTasksLogger]')

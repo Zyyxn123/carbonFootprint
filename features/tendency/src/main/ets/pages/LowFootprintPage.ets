@@ -120,9 +120,22 @@ export struct lowFootprintPage {
     Stack({ alignContent: Alignment.Top }) {
       if (this.bol) {
         MapComponent({ mapOptions: this.mapOptions, mapCallback: this.callback }).width('100%').height('100%')
+      } else {
+        Column({ space: 5}) {
+          LoadingProgress()
+            .width(45)
+            .color('#37800f')
+          Text('地图正在加载中...')
+            .fontSize(20)
+            .fontColor('#000')
+        }
+        .width('100%')
+        .height('100%')
+        .alignItems(HorizontalAlign.Center)
+        .justifyContent(FlexAlign.Center)
       }
 
-      backButton({ pageTitle: '碳足迹' })
+      backButton({ pageTitle: '碳足迹', bol: this.bol })
     }
     .height('100%')
     .width('100%')

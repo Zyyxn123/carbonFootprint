@@ -3,6 +3,7 @@ import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstan
 @Component
 export struct backButton {
   @Prop pageTitle: ResourceStr | string = ''
+  @Link bol: boolean
 
   build() {
     Row({ space: 10 }) {
@@ -14,6 +15,7 @@ export struct backButton {
         .padding(10)
         .borderRadius(25)
         .onClick(() => {
+          this.bol = false
           RouterModule.pop(RouterNameConstants.ENTRY_HAP)
         })
 

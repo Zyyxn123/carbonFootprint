@@ -3,9 +3,13 @@ import {
   CarEmiApplianceTable,
   CarEmiFoodTable,
   CarEmiTotalWeeklyTable,
-  CarEmiTransTable, HealthyNewsPreference, HTTPForHealthyNews,
+  CarEmiTransTable,
+  HealthyNewsPreference,
+  HTTPForHealthyNews,
   HTTPForLoginState,
-  UserRdbStore } from "@ohos/utils"
+  TendTasksTable,
+  UserRdbStore
+} from "@ohos/utils"
 import { common } from "@kit.AbilityKit"
 
 @Component
@@ -21,7 +25,8 @@ export struct logOrResView {
   private carEmiApplianceTable: CarEmiApplianceTable = CarEmiApplianceTable.getInstance()
   private carEmiFoodTable: CarEmiFoodTable = CarEmiFoodTable.getInstance()
   private carEmiTotalWeeklyTable: CarEmiTotalWeeklyTable = CarEmiTotalWeeklyTable.getInstance()
-   private httpForLoginState: HTTPForLoginState = HTTPForLoginState.getInstance()
+  private tendTasksTable: TendTasksTable = TendTasksTable.getInstance()
+  private httpForLoginState: HTTPForLoginState = HTTPForLoginState.getInstance()
   private context = this.getUIContext().getHostContext() as common.UIAbilityContext
   private isSelected: boolean = false
 
@@ -94,6 +99,7 @@ export struct logOrResView {
           this.carEmiApplianceTable.deleteMyTable()
           this.carEmiFoodTable.deleteMyTable()
           this.carEmiTotalWeeklyTable.deleteMyTable()
+          this.tendTasksTable.deleteMyTable()
         })
 
       Button('游客登陆')
@@ -102,6 +108,7 @@ export struct logOrResView {
           AppStorage.set('currLoginAcc', 'testDemo')
           const bol_acc: boolean = await this.userRdbStoreIns.hasAcc('testDemo')
           const bol_totalData: boolean = await this.carEmiTotalWeeklyTable.hasTodayItem('testDemo', date)
+          const bol_TaskData: boolean = await this.tendTasksTable.hasTodayItem('testDemo', date)
           if (!bol_acc) {
             this.userRdbStoreIns.setOriginalData('testDemo')
             this.carEmiTransTableIns.setOriginalTotalData('testDemo')
@@ -110,10 +117,10 @@ export struct logOrResView {
           }
           if (!bol_totalData) {
             this.carEmiTotalWeeklyTable.setOriginalTotalData('testDemo', date)
-          } else {
-            this.carEmiTotalWeeklyTable.getWeeklyTotalData('testDemo', date)
           }
-
+          if (!bol_TaskData) {
+            this.tendTasksTable.setOriginalTotalData('testDemo', date)
+          }
           this.loginProgressBol = true
           setTimeout(() => {
             this.isLogin = true

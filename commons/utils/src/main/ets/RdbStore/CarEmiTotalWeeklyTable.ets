@@ -11,6 +11,32 @@ export class CarEmiTotalWeeklyTable {
   public totalWeeklyStore: relationalStore.RdbStore | undefined = undefined
   private DBManager: CarbonMsgDBManager = CarbonMsgDBManager.getInstance()
 
+  /**
+   * 获取昨天的日期字符串，格式：MM/DD/YYYY
+   * 自动处理：月末(31/30/28/29)、跨月、跨年
+   * @param todayStr 今天日期，例如 '3/24/2025'
+   * @returns 昨天日期，例如 '3/23/2025'
+   */
+  private getYesterdayDate(todayStr: string): string {
+    // 解析输入日期（去掉解构赋值，兼容 ArkTS）
+    const dateParts = todayStr.split('/').map(Number);
+    const month = dateParts[0];
+    const day = dateParts[1];
+    const year = dateParts[2];
+
+    const today = new Date(year, month - 1, day);
+
+    // 减去 1 天（自动处理跨月、跨年）
+    const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
+
+    // 格式化为 M/D/YYYY（不带前导零，和你数据库完全一致）
+    const yMonth = yesterday.getMonth() + 1;
+    const yDay = yesterday.getDate();
+    const yYear = yesterday.getFullYear();
+
+    return `${yMonth}/${yDay}/${yYear}`;
+  }
+
   public static getInstance(): CarEmiTotalWeeklyTable {
     if (!CarEmiTotalWeeklyTable.instance) {
       CarEmiTotalWeeklyTable.instance = new CarEmiTotalWeeklyTable()
@@ -55,6 +81,13 @@ export class CarEmiTotalWeeklyTable {
       CarEmiTotalWeeklyLogger.error('数据库创建失败')
       return
     }
+
+    const today = new Date().toLocaleDateString()
+    const yesterday = CarEmiTotalWeeklyTable.getInstance().getYesterdayDate(today)
+    console.log('getYesterdayDate: ' + yesterday)
+    let yesterdayData: WeeklyTotalDataType = await CarEmiTotalWeeklyTable.getInstance().getWeeklyTotalData(acc, yesterday)
+    console.log('getYesterdayDate: ' + yesterdayData.current_week_daily_carbon)
+
     const valueBucket: relationalStore.ValuesBucket = {
       account: acc,
       record_date: date,
@@ -62,7 +95,7 @@ export class CarEmiTotalWeeklyTable {
       electric_carbon: 0.0,
       food_carbon: 0.0,
       total_carbon: 0.0,
-      current_week_daily_carbon: '[0,0,0,0,0,0,0]',
+      current_week_daily_carbon: yesterdayData.current_week_daily_carbon,
       last_week_daily_carbon: '[0,0,0,0,0,0,0]',
     }
     try {
@@ -151,6 +184,7 @@ export class CarEmiTotalWeeklyTable {
           } finally {
             resultSet.close()
           }
+
           if (isExist) {
             resolve(resultItem)
           } else {

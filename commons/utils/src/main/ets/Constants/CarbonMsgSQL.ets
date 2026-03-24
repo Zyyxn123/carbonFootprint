@@ -78,13 +78,14 @@ export class CarbonMsgSQLConstants {
     return `CREATE TABLE IF NOT EXISTS ${tableName} (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     account TEXT NOT NULL,
-    record_date TEXT NOT NULL UNIQUE,
+    record_date TEXT NOT NULL,
     travel_carbon DOUBLE DEFAULT 0.0,
     electric_carbon DOUBLE DEFAULT 0.0,
     food_carbon DOUBLE DEFAULT 0.0,
     total_carbon DOUBLE DEFAULT 0.0,
     current_week_daily_carbon TEXT DEFAULT '[]',
-    last_week_daily_carbon TEXT DEFAULT '[]');`
+    last_week_daily_carbon TEXT DEFAULT '[]',
+    UNIQUE(account, record_date));`
   }
 
   static deleteTableSQL(tableName: string) {

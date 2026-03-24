@@ -1,9 +1,40 @@
 import { BuilderNameConstants, RouterModule, RouterNameConstants } from "@ohos/customrouter"
+import { backButton } from "../Component/BackButton"
+import { reduceEmiTarget } from "../View/ReduceEmiTarget"
+import { toDoTasksList } from "../View/ToDoTasksList"
 
 @Component
 export struct lowTaskPage {
-  build() {
+  @State bol: boolean = false
 
+  build() {
+    Column() {
+      backButton({ pageTitle: '碳挑战', bol: this.bol })
+
+      List({ space: 10 }) {
+        reduceEmiTarget()
+
+        toDoTasksList()
+
+        ListItem() {}
+        .width(10)
+        .height(50)
+      }
+      .padding({ left: 10, right: 10 })
+      .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: true })
+      .width('100%')
+      // .height('100%')
+    }
+    // .height('100%')
+    .width('100%')
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
+    .backgroundColor('#edffdd')
+    .linearGradient({
+      direction: GradientDirection.Bottom,
+      repeating: false,
+      colors: [['#e7fdff', 0],
+        ['#edffdd', 1]]
+    })
   }
 }
 
@@ -13,10 +44,9 @@ export function harBuilder(value: object) {
   NavDestination() {
     lowTaskPage()
   }
+  .hideTitleBar(true)
   .title('lowTaskPage')
   .onBackPressed(() => {
-    // (AppStorage.get('entryHapRouter') as NavPathStack).replacePathByName('quickStart', null, false)
-    // AppStorage.set('CurrentIndex', 1)
     RouterModule.pop(RouterNameConstants.ENTRY_HAP)
     return true
   })
