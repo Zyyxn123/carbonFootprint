@@ -75,6 +75,10 @@
     {
       "name": "greenTravelPage_title",
       "value": "低碳出行"
+    },
+    {
+      "name": "reduceEmissionMethodPage_title",
+      "value": "减排推荐"
     }
   ]
 }

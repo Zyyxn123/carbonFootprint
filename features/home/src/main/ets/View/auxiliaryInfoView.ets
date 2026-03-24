@@ -39,15 +39,15 @@ export struct auxiliaryInfoView {
           .width(20)
           .fillColor($r('app.color.auxiliaryInfoView_onwards'))
           .margin({ right: 10 })
-          .onClick(() => {
-            buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_home_reduceCarbonEmissionMethod)
-          })
       }
       .height(65)
       .width('100%')
       .borderRadius(25)
       .border({ width: { left: 2, bottom: 1 }, color: $r('app.color.auxiliaryInfoView_border') })
       .justifyContent(FlexAlign.SpaceBetween)
+      .onClick(() => {
+        buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_home_reduceCarbonEmissionMethod)
+      })
 
       // ToDo: 只用记录碳排放的因子，计算公式一些简单数据
       Row({ space: 10 }) {
@@ -74,15 +74,15 @@ export struct auxiliaryInfoView {
           .width(20)
           .fillColor($r('app.color.auxiliaryInfoView_onwards'))
           .margin({ right: 10 })
-          .onClick(() => {
-            buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_home_detailCarbonEmission)
-          })
       }
       .height(65)
       .width('100%')
       .borderRadius(25)
       .border({ width: { left: 2, bottom: 1 }, color: $r('app.color.auxiliaryInfoView_border') })
       .justifyContent(FlexAlign.SpaceBetween)
+      .onClick(() => {
+        buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_home_detailCarbonEmission)
+      })
     }
     .alignItems(HorizontalAlign.Start)
     .justifyContent(FlexAlign.Start)
