@@ -132,14 +132,14 @@ export struct carbonLineChart {
           }
         })
           .width("100%")
-          .height(180)// +20
+          .height(160)// +20
       } else {
         LoadingProgress()
           .width(40)
           .color('#37800f')
       }
     }
-    .height(230)
+    .height(210)
     .border({ width: 1, color: '#ccc', radius: 15 })
     .padding(5)
     .alignItems(HorizontalAlign.Center)
