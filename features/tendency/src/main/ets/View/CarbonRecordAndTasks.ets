@@ -2,6 +2,9 @@ import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from "@oh
 import { RecordAndTaskTypeModel } from "../Model/RecordAndTaskModel"
 import lowTVM from "../ViewModel/LowTaskViewModel"
 import RecordAndTaskViewModel from "../ViewModel/RecordAndTaskViewModel"
+import { abilityAccessCtrl, common, Permissions } from '@kit.AbilityKit';
+import { BusinessError } from '@kit.BasicServicesKit';
+import { bundleManager } from "@kit.AbilityKit";
 
 let date = new Date().toLocaleDateString()
 AppStorage.setOrCreate('tasksBol', true)
@@ -12,6 +15,8 @@ export struct carbonRecordAndTasks {
   @State acc: string = AppStorage.get('currLoginAcc') as string
   @StorageLink('showIndex') showIndex: number = -1
   @StorageLink('tasksBol') isShown: boolean = true
+  private context: common.UIAbilityContext = this.getUIContext().getHostContext() as common.UIAbilityContext
+  @State bol: boolean = false
 
   async aboutToAppear(): Promise<void> {
     await lowTVM.getTotalData(this.acc, date)
@@ -19,6 +24,9 @@ export struct carbonRecordAndTasks {
     setTimeout(() => {
       this.isShown = false
     }, 1000)
+
+    this.bol = await checkPermissions()
+    console.info('lowFootprintPage1: ' + this.bol)
   }
 
   getBgColor(category: string): string {
@@ -178,7 +186,15 @@ export struct carbonRecordAndTasks {
         colors: [[item.backgroundColor, 0.4], ['#ffffff', 0.6]]
       })
       .onClick(() => {
-        buildRouterModel(RouterNameConstants.ENTRY_HAP, item.uri)
+        if (index === 0) {
+          buildRouterModel(RouterNameConstants.ENTRY_HAP, item.uri, new Object({
+            val: this.bol
+          }))
+          console.info('lowFootprintPage2: ' + 0)
+        } else if (index === 1) {
+          buildRouterModel(RouterNameConstants.ENTRY_HAP, item.uri)
+          console.info('lowFootprintPage2: ' + 1)
+        }
       })
 
       Column({ space: 15 }) {
@@ -221,4 +237,53 @@ export struct carbonRecordAndTasks {
     .width('100%')
     .alignItems(HorizontalAlign.Start)
   }
+}
+
+async function checkPermissionGrant(permission: Permissions): Promise<abilityAccessCtrl.GrantStatus> {
+  let atManager: abilityAccessCtrl.AtManager = abilityAccessCtrl.createAtManager()
+  let grantStatus: abilityAccessCtrl.GrantStatus = abilityAccessCtrl.GrantStatus.PERMISSION_DENIED
+
+  let tokenId: number = 0
+  try {
+    let bundleInfo: bundleManager.BundleInfo =
+      await bundleManager.getBundleInfoForSelf(bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION)
+    let appInfo: bundleManager.ApplicationInfo = bundleInfo.appInfo
+    tokenId = appInfo.accessTokenId
+  } catch (error) {
+    const err: BusinessError = error as BusinessError
+    console.error(`Failed to get bundle info for self, code: ${err.code}, message: ${err.message}`)
+  }
+
+  try {
+    grantStatus = await atManager.checkAccessToken(tokenId, permission)
+  } catch (error) {
+    const err: BusinessError = error as BusinessError
+    console.error(`Failed to check access token, code: ${err.code}, message: ${err.message}`)
+  }
+
+  return grantStatus
+}
+
+async function checkPermissions(): Promise<boolean> {
+  let grantStatus1: boolean =
+    await checkPermissionGrant('ohos.permission.LOCATION') ===
+    abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED
+  let grantStatus2: boolean =
+    await checkPermissionGrant('ohos.permission.APPROXIMATELY_LOCATION') ===
+    abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED
+  let bol: boolean = false
+
+  return new Promise((resolve) => {
+    // 精确定位权限只能跟模糊定位权限一起申请，或者已经有模糊定位权限才能申请精确定位权限。
+    if (grantStatus2 && !grantStatus1) {
+      // 申请精确定位权限。
+      resolve(false)
+    } else if (!grantStatus1 && !grantStatus2) {
+      // 申请模糊定位权限与精确定位权限或单独申请模糊定位权限。
+      resolve(false)
+    } else {
+      resolve(true)
+    }
+    resolve(bol)
+  })
 }

@@ -5,8 +5,12 @@ import { backButton } from "../Component/BackButton";
 import { geoLocationManager } from '@kit.LocationKit';
 import { abilityAccessCtrl, common, Permissions } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
+import { bundleManager } from "@kit.AbilityKit";
+import { JSON } from "@kit.ArkTS";
 
 const permissions: Permissions[] = ['ohos.permission.LOCATION', 'ohos.permission.APPROXIMATELY_LOCATION'];
+// const twoPermissions: Permissions[] = ['ohos.permission.LOCATION', 'ohos.permission.APPROXIMATELY_LOCATION']
+// const onePermissions: Permissions[] = ['ohos.permission.APPROXIMATELY_LOCATION']
 
 function reqPermissionsFromUser(permissions: Array<Permissions>, context: common.UIAbilityContext): Promise<boolean> {
   return new Promise((resolve) => {
@@ -35,6 +39,8 @@ function reqPermissionsFromUser(permissions: Array<Permissions>, context: common
 @Component
 export struct lowFootprintPage {
   @State bol: boolean = false
+  @State permissionAllow: boolean = false
+  @Prop val: object
   private TAG = "HuaweiMapDemo";
   private mapOptions?: mapCommon.MapOptions;
   private callback?: AsyncCallback<map.MapComponentController>;
@@ -59,20 +65,37 @@ export struct lowFootprintPage {
   }
 
   async aboutToAppear(): Promise<void> {
-    reqPermissionsFromUser(permissions, this.context).then((value) => {
-      console.info(`asd: ` + value)
-      if (value === true) {
-        geoLocationManager.getCurrentLocation().then((result) => {
-          this.latitude = result.latitude
-          this.longitude = result.longitude
-          console.info('asd current location latitude: ' + result.latitude)
-          console.info('asd current location longitude: ' + result.longitude)
-          this.mapConfig()
-        }).catch((err: BusinessError) => {
-          console.error(`getCurrentLocation failed. Code: ${err.code}, message: ${err.message}`)
-        })
-      }
-    })
+    let data = (JSON.parse(JSON.stringify(this.val)) as Type).val
+    console.info('lowFootprintPage3: ' + data)
+
+    if (data) {
+      this.permissionAllow = true
+      geoLocationManager.getCurrentLocation().then((result) => {
+        this.latitude = result.latitude
+        this.longitude = result.longitude
+        console.info('asd current location latitude: ' + result.latitude)
+        console.info('asd current location longitude: ' + result.longitude)
+        this.mapConfig()
+      }).catch((err: BusinessError) => {
+        console.error(`getCurrentLocation failed. Code: ${err.code}, message: ${err.message}`)
+      })
+    } else {
+      reqPermissionsFromUser(permissions, this.context).then((value) => {
+        console.info(`asd: ` + value)
+        if (value === true) {
+          this.permissionAllow = true
+          geoLocationManager.getCurrentLocation().then((result) => {
+            this.latitude = result.latitude
+            this.longitude = result.longitude
+            console.info('asd current location latitude: ' + result.latitude)
+            console.info('asd current location longitude: ' + result.longitude)
+            this.mapConfig()
+          }).catch((err: BusinessError) => {
+            console.error(`getCurrentLocation failed. Code: ${err.code}, message: ${err.message}`)
+          })
+        }
+      })
+    }
 
     this.mapOptions = {
       position: {
@@ -100,17 +123,13 @@ export struct lowFootprintPage {
     }
   }
 
-  // 页面每次显示时触发一次，包括路由过程、应用进入前台等场景，仅@Entry装饰的自定义组件生效
   onPageShow(): void {
-    // 将地图切换到前台
     if (this.mapController) {
       this.mapController.show();
     }
   }
 
-  // 页面每次隐藏时触发一次，包括路由过程、应用进入后台等场景，仅@Entry装饰的自定义组件生效
   onPageHide(): void {
-    // 将地图切换到后台
     if (this.mapController) {
       this.mapController.hide();
     }
@@ -121,18 +140,30 @@ export struct lowFootprintPage {
       if (this.bol) {
         MapComponent({ mapOptions: this.mapOptions, mapCallback: this.callback }).width('100%').height('100%')
       } else {
-        Column({ space: 5}) {
-          LoadingProgress()
-            .width(45)
-            .color('#37800f')
-          Text('地图正在加载中...')
-            .fontSize(20)
-            .fontColor('#000')
+        if (this.permissionAllow) {
+          Column({ space: 5 }) {
+            LoadingProgress()
+              .width(45)
+              .color('#37800f')
+            Text('地图正在加载中...')
+              .fontSize(20)
+              .fontColor('#000')
+          }
+          .width('100%')
+          .height('100%')
+          .alignItems(HorizontalAlign.Center)
+          .justifyContent(FlexAlign.Center)
+        } else {
+          Column({ space: 5 }) {
+            Text('请前往设置开启精确位置权限')
+              .fontSize(20)
+              .fontColor('#000')
+          }
+          .width('100%')
+          .height('100%')
+          .alignItems(HorizontalAlign.Center)
+          .justifyContent(FlexAlign.Center)
         }
-        .width('100%')
-        .height('100%')
-        .alignItems(HorizontalAlign.Center)
-        .justifyContent(FlexAlign.Center)
       }
 
       backButton({ pageTitle: '碳足迹', bol: this.bol })
@@ -145,7 +176,7 @@ export struct lowFootprintPage {
 @Builder
 export function harBuilder(value: object) {
   NavDestination() {
-    lowFootprintPage()
+    lowFootprintPage({ val: value })
   }
   .hideTitleBar(true)
   .title('碳足迹')
@@ -160,4 +191,8 @@ const builderName = BuilderNameConstants.HAR_tendency_lowFootprint
 if (!RouterModule.getBuilder(builderName)) {
   const builder: WrappedBuilder<[object]> = wrapBuilder(harBuilder)
   RouterModule.registerBuilder(builderName, builder)
+}
+
+interface Type {
+  val: boolean
 }
