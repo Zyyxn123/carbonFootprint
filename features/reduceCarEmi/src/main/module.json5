@@ -1,0 +1,9 @@
+{
+  "module": {
+    "name": "reduceCarEmi",
+    "type": "har",
+    "deviceTypes": [
+      "default"
+    ]
+  }
+}

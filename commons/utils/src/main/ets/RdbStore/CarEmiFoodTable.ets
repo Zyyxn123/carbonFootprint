@@ -2,7 +2,7 @@ import { CarbonMsgDBManager } from "./CarbonMsgDBManager"
 import { relationalStore } from "@kit.ArkData"
 import { CarbonMsgSQLConstants } from "../Constants/CarbonMsgSQL"
 import { CarEmiFoodLogger } from "../Hilog/HilogInfo"
-import { FoodTotalDataType } from "../Interface/FoodDataType"
+import { FoodItemDataType, FoodTotalDataType } from "../Interface/FoodDataType"
 
 export class CarEmiFoodTable {
   private static instance: CarEmiFoodTable
@@ -124,6 +124,63 @@ export class CarEmiFoodTable {
     } catch (error) {
       CarEmiFoodLogger.error(acc + 'Total初始化数据失败：' + error)
     }
+  }
+
+  public async getFoodItemData(acc: string): Promise<FoodItemDataType[]> {
+    let resultItem: FoodItemDataType[] = []
+
+    return new Promise((resolve) => {
+      if (!this.foodStore) {
+        CarEmiFoodLogger.error('数据库创建失败')
+        resolve(resultItem)
+        return
+      }
+
+      const predicates = new relationalStore.RdbPredicates(this.foodItemName)
+      predicates.equalTo('ACCOUNT', acc)
+
+      this.foodStore.query(predicates,
+        ['USER_ID', 'ACCOUNT', 'FOOD', 'EAT_PORTION', 'EAT_TIME', 'TIME_TOKEN', 'CARBON_EMISSION'],
+        (err: BusinessError, resultSet) => {
+          if (err) {
+            CarEmiFoodLogger.error('饮食Item查询失败：' + `code=${err.code},message=${err.message}`)
+            resultSet?.close()
+            resolve(resultItem)
+            return
+          }
+
+          try {
+            while (resultSet.goToNextRow()) {
+              const id = resultSet.getLong(resultSet.getColumnIndex('USER_ID'))
+              const account = resultSet.getString(resultSet.getColumnIndex('ACCOUNT'))
+              const food = resultSet.getString(resultSet.getColumnIndex('FOOD'))
+              const eat_portion = resultSet.getDouble(resultSet.getColumnIndex('EAT_PORTION'))
+              const eat_time = resultSet.getLong(resultSet.getColumnIndex('EAT_TIME'))
+              const time_token = resultSet.getString(resultSet.getColumnIndex('TIME_TOKEN'))
+              const carbon_emission = resultSet.getDouble(resultSet.getColumnIndex('CARBON_EMISSION'))
+
+              const item: FoodItemDataType = {
+                id: id,
+                account: account,
+                food: food,
+                eat_portion: eat_portion,
+                eat_time: eat_time,
+                time_token: time_token,
+                carbon_emission: carbon_emission
+              }
+              resultItem.push(item)
+              CarEmiFoodLogger.info('查询到饮食Item：' + JSON.stringify(item))
+            }
+          } catch (error) {
+            CarEmiFoodLogger.error('饮食Item遍历失败：' + error)
+          } finally {
+            resultSet.close()
+          }
+
+          CarEmiFoodLogger.info(acc + ' 饮食Item总条数：' + resultItem.length)
+          resolve(resultItem)
+        })
+    })
   }
 
   /**

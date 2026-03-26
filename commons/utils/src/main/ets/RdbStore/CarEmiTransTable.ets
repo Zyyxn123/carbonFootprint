@@ -2,7 +2,7 @@ import { relationalStore } from '@kit.ArkData';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { CarbonMsgSQLConstants } from '../Constants/CarbonMsgSQL';
 import { CarEmiTransLogger } from '../Hilog/HilogInfo';
-import { TransTotalDataType } from '../Interface/TransDataType';
+import { TransItemDataType, TransTotalDataType } from '../Interface/TransDataType';
 import { CarbonMsgDBManager } from './CarbonMsgDBManager';
 
 export class CarEmiTransTable {
@@ -126,6 +126,63 @@ export class CarEmiTransTable {
     } catch (error) {
       CarEmiTransLogger.error(acc + 'Total初始化数据失败：' + error)
     }
+  }
+
+  public async getTransItemData(acc: string): Promise<TransItemDataType[]> {
+    let resultItem: TransItemDataType[] = []
+
+    return new Promise((resolve) => {
+      if (!this.transStore) {
+        CarEmiTransLogger.error('数据库创建失败')
+        resolve(resultItem)
+        return
+      }
+
+      const predicates = new relationalStore.RdbPredicates(this.transItemName)
+      predicates.equalTo('ACCOUNT', acc)
+
+      this.transStore.query(predicates,
+        ['USER_ID', 'ACCOUNT', 'TRANSPORT', 'MILEAGE', 'TRIP_TIME', 'TIME_TOKEN', 'CARBON_EMISSION'],
+        (err: BusinessError, resultSet) => {
+          if (err) {
+            CarEmiTransLogger.error('Item表查询失败：' + `code=${err.code},message=${err.message}`)
+            resultSet?.close()
+            resolve(resultItem)
+            return
+          }
+
+          try {
+            while (resultSet.goToNextRow()) {
+              const id = resultSet.getLong(resultSet.getColumnIndex('USER_ID'))
+              const account = resultSet.getString(resultSet.getColumnIndex('ACCOUNT'))
+              const transport = resultSet.getString(resultSet.getColumnIndex('TRANSPORT'))
+              const mileage = resultSet.getDouble(resultSet.getColumnIndex('MILEAGE'))
+              const trip_time = resultSet.getLong(resultSet.getColumnIndex('TRIP_TIME'))
+              const time_token = resultSet.getString(resultSet.getColumnIndex('TIME_TOKEN'))
+              const carbon_emission = resultSet.getDouble(resultSet.getColumnIndex('CARBON_EMISSION'))
+
+              const item: TransItemDataType = {
+                id: id,
+                account: account,
+                transport: transport,
+                mileage: mileage,
+                trip_time: trip_time,
+                time_token: time_token,
+                carbon_emission: carbon_emission
+              }
+
+              resultItem.push(item)
+              CarEmiTransLogger.info('查询到Item数据：' + JSON.stringify(item))
+            }
+          } catch (error) {
+            CarEmiTransLogger.error('Item表遍历数据失败：' + error)
+          } finally {
+            resultSet.close()
+          }
+          CarEmiTransLogger.info(acc + ' 查询到Item总条数：' + resultItem.length)
+          resolve(resultItem)
+        })
+    })
   }
 
   /**

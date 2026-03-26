@@ -1,4 +1,5 @@
 import { BuilderNameConstants, RouterModule, RouterNameConstants } from "@ohos/customrouter";
+import { ReduceEmiPage } from "@ohos/reducecaremi";
 import { backButton } from "../Component/BackButton";
 
 @Component
@@ -9,6 +10,8 @@ export struct reduceEmissionMethodPage {
   build() {
     Column() {
       backButton({ pageTitle: this.pageTitle })
+
+      ReduceEmiPage()
     }
     .width('100%')
     .height('100%')

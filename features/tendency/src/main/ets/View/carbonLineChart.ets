@@ -7,6 +7,7 @@ let date = new Date().toLocaleDateString()
 export struct carbonLineChart {
   @State xLabels: string[] = ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
   @State yData: number[] = []
+  @State maxY: number = 50
   @State tempPieChartTimeout: number = 100
   @State selectedCrossHairX: number = -1
   @State selectedCrossHairY: number = -1
@@ -17,13 +18,44 @@ export struct carbonLineChart {
   async aboutToAppear(): Promise<void> {
     await LineCVM.getTotalData(this.acc, date)
     this.yData = LineCVM.currTotalWeeklyCarbon as number[]
+    this.updateDynamicMaxY()
+  }
+
+  private updateDynamicMaxY(): void {
+    if (this.yData.length === 0) {
+      this.maxY = 50
+      console.log('updateDynamicMaxY1: ')
+      return
+    }
+
+    // 1. 获取数据中的最大值
+    const maxVal = Math.max(...this.yData)
+
+    // 无数据兜底
+    if (maxVal === 0) {
+      this.maxY = 50
+      console.log('updateDynamicMaxY2: ')
+      return
+    }
+
+    // 2. 按照你的规则：数据最大值的 5/4 倍（÷ 4/5 = ×1.25）
+    let calculatedMax = maxVal * 1.25
+
+    // 3. 个位不为0 → 向上取整到最近的10的倍数
+    if (calculatedMax % 10 !== 0) {
+      calculatedMax = Math.ceil(calculatedMax / 10) * 10
+    }
+
+    // 4. 最终赋值（保证是整数）
+    this.maxY = Math.round(calculatedMax)
+    console.log('updateDynamicMaxY3: ' + this.maxY)
   }
 
   build() {
     Column({ space: 10 }) {
       Row() {
         Row() {
-          Text('均值趋势')
+          Text('碳排均值趋势')
             .fontColor($r('app.color.carbonFootprintTitle_color'))
             .fontSize(16)
             .fontWeight(FontWeight.Bold)
@@ -39,29 +71,15 @@ export struct carbonLineChart {
             .borderRadius(4)
         }
 
-        // Row() {
-        //   Text('本周')
-        //     .fontColor($r('app.color.carbonFootprintTitle_color'))
-        //     .fontSize(10)
-        //     .margin({ right: 15 })
-        //   Text('上周')
-        //     .fontColor($r('app.color.carbonFootprintTitle_color'))
-        //     .fontSize(10)
-        // }
-        // .padding(6)
-        // .backgroundColor('#ccf493')
-        // .borderRadius(15)
-        // .margin({ right: 6 })
-
         Image($r('app.media.icon_update'))
           .fillColor(Color.Black)
-          .width(35)
+          .width(40)
           .margin({ left: 8, top: 5 })
           .onClick(async () => {
             this.yData = []
             await LineCVM.getTotalData(this.acc, date)
             this.yData = LineCVM.currTotalWeeklyCarbon as number[]
-            console.log('carbonLineChart1', this.yData)
+            this.updateDynamicMaxY()
           })
       }
       .width('100%')
@@ -74,7 +92,7 @@ export struct carbonLineChart {
           xLabels: this.xLabels,
           data: this.yData,
           minY: 0,
-          maxY: 100,
+          maxY: this.maxY,
           axisLabelsPosition: AxisLabelsPosition.scale,
           // 十字光标配置
           onCrossHairData: (hair) => {
@@ -132,7 +150,7 @@ export struct carbonLineChart {
           }
         })
           .width("100%")
-          .height(160)// +20
+          .height(160)
       } else {
         LoadingProgress()
           .width(40)

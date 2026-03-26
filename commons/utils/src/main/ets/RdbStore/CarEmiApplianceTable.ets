@@ -1,7 +1,7 @@
 import { relationalStore } from "@kit.ArkData"
 import { CarbonMsgSQLConstants } from "../Constants/CarbonMsgSQL"
 import { CarEmiApplianceLogger } from "../Hilog/HilogInfo"
-import { ApplianceTotalDataType } from "../Interface/ApplianceDataType"
+import { ApplianceItemDataType, ApplianceTotalDataType } from "../Interface/ApplianceDataType"
 import { CarbonMsgDBManager } from "./CarbonMsgDBManager"
 
 export class CarEmiApplianceTable {
@@ -124,6 +124,63 @@ export class CarEmiApplianceTable {
     } catch (error) {
       CarEmiApplianceLogger.error(acc + 'Total初始化数据失败：' + error)
     }
+  }
+
+  public async getApplianceItemData(acc: string): Promise<ApplianceItemDataType[]> {
+    let resultItem: ApplianceItemDataType[] = []
+
+    return new Promise((resolve) => {
+      if (!this.applianceStore) {
+        CarEmiApplianceLogger.error('数据库创建失败')
+        resolve(resultItem)
+        return
+      }
+
+      const predicates = new relationalStore.RdbPredicates(this.applianceItemName)
+      predicates.equalTo('ACCOUNT', acc)
+
+      this.applianceStore.query(predicates,
+        ['USER_ID', 'ACCOUNT', 'APPLIANCE', 'USE_TIME', 'ELECT_POWER', 'TIME_TOKEN', 'CARBON_EMISSION'],
+        (err: BusinessError, resultSet) => {
+          if (err) {
+            CarEmiApplianceLogger.error('电器Item查询失败：' + `code=${err.code},message=${err.message}`)
+            resultSet?.close()
+            resolve(resultItem)
+            return
+          }
+
+          try {
+            while (resultSet.goToNextRow()) {
+              const id = resultSet.getLong(resultSet.getColumnIndex('USER_ID'))
+              const account = resultSet.getString(resultSet.getColumnIndex('ACCOUNT'))
+              const appliance = resultSet.getString(resultSet.getColumnIndex('APPLIANCE'))
+              const use_time = resultSet.getDouble(resultSet.getColumnIndex('USE_TIME'))
+              const elect_power = resultSet.getLong(resultSet.getColumnIndex('ELECT_POWER'))
+              const time_token = resultSet.getString(resultSet.getColumnIndex('TIME_TOKEN'))
+              const carbon_emission = resultSet.getDouble(resultSet.getColumnIndex('CARBON_EMISSION'))
+
+              const item: ApplianceItemDataType = {
+                id: id,
+                account: account,
+                appliance: appliance,
+                use_time: use_time,
+                elect_power: elect_power,
+                time_token: time_token,
+                carbon_emission: carbon_emission
+              }
+              resultItem.push(item)
+              CarEmiApplianceLogger.info('查询到电器Item：' + JSON.stringify(item))
+            }
+          } catch (error) {
+            CarEmiApplianceLogger.error('电器Item遍历失败：' + error)
+          } finally {
+            resultSet.close()
+          }
+
+          CarEmiApplianceLogger.info(acc + ' 电器Item总条数：' + resultItem.length)
+          resolve(resultItem)
+        })
+    })
   }
 
   /**

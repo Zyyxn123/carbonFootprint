@@ -2,7 +2,9 @@
   "modelVersion": "6.0.1",
   "description": "Please describe the basic information.",
   "dependencies": {
-    "@abner/polyline": "^1.0.0"
+    "@abner/polyline": "^1.0.0",
+    "@mcui/mccharts": "^2.8.9",
+    "@abner/pie": "^1.0.0"
   },
   "devDependencies": {
     "@ohos/hypium": "1.0.24",
