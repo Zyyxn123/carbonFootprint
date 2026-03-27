@@ -24,7 +24,7 @@ export struct backButton {
     }
     .width('100%')
     .justifyContent(FlexAlign.Start)
-    .padding({ left: 20 })
+    .padding({ top: 35, left: 20 })
     .margin({ bottom: 5 })
   }
 }

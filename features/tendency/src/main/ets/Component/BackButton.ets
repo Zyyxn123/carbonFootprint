@@ -15,6 +15,7 @@ export struct backButton {
         .padding(10)
         .borderRadius(25)
         .onClick(() => {
+          AppStorage.set('expandSafeArea', false)
           this.bol = false
           RouterModule.pop(RouterNameConstants.ENTRY_HAP)
         })
@@ -26,7 +27,7 @@ export struct backButton {
     }
     .width('100%')
     .justifyContent(FlexAlign.Start)
-    .padding({ left: 20, bottom: 10})
+    .padding({ top: 35, left: 20, bottom: 10})
     .margin({ bottom: 5 })
     .backgroundBlurStyle(BlurStyle.Thin,
       { colorMode: ThemeColorMode.LIGHT, adaptiveColor: AdaptiveColor.DEFAULT, scale: 1.0 })

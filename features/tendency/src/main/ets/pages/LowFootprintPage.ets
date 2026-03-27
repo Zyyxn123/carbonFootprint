@@ -65,6 +65,7 @@ export struct lowFootprintPage {
   }
 
   async aboutToAppear(): Promise<void> {
+    AppStorage.set('expandSafeArea', true)
     let data = (JSON.parse(JSON.stringify(this.val)) as Type).val
     console.info('lowFootprintPage3: ' + data)
 
@@ -137,34 +138,48 @@ export struct lowFootprintPage {
 
   build() {
     Stack({ alignContent: Alignment.Top }) {
-      if (this.bol) {
-        MapComponent({ mapOptions: this.mapOptions, mapCallback: this.callback }).width('100%').height('100%')
-      } else {
-        if (this.permissionAllow) {
-          Column({ space: 5 }) {
-            LoadingProgress()
-              .width(45)
-              .color('#37800f')
-            Text('地图正在加载中...')
-              .fontSize(20)
-              .fontColor('#000')
-          }
-          .width('100%')
-          .height('100%')
-          .alignItems(HorizontalAlign.Center)
-          .justifyContent(FlexAlign.Center)
+      Stack({ alignContent: Alignment.Bottom }) {
+        if (this.bol) {
+          MapComponent({ mapOptions: this.mapOptions, mapCallback: this.callback }).width('100%').height('100%')
         } else {
-          Column({ space: 5 }) {
-            Text('请前往设置开启精确位置权限')
-              .fontSize(20)
-              .fontColor('#000')
+          if (this.permissionAllow) {
+            Column({ space: 5 }) {
+              LoadingProgress()
+                .width(45)
+                .color('#37800f')
+              Text('地图正在加载中...')
+                .fontSize(20)
+                .fontColor('#000')
+            }
+            .width('100%')
+            .height('100%')
+            .alignItems(HorizontalAlign.Center)
+            .justifyContent(FlexAlign.Center)
+          } else {
+            Column({ space: 5 }) {
+              Text('请前往设置开启精确位置权限')
+                .fontSize(20)
+                .fontColor('#000')
+            }
+            .width('100%')
+            .height('100%')
+            .alignItems(HorizontalAlign.Center)
+            .justifyContent(FlexAlign.Center)
           }
-          .width('100%')
-          .height('100%')
-          .alignItems(HorizontalAlign.Center)
-          .justifyContent(FlexAlign.Center)
         }
+
+        Row() {
+          Row() {}
+          .width('100%')
+          .height(60)
+          .backgroundColor('#fff')
+          .borderRadius(30)
+          .border({ width: { bottom: 2 }, color: '#ccc'})
+        }
+        .padding({ left: 15, right: 15, bottom: 20 })
       }
+      .width('100%')
+      .height('100%')
 
       backButton({ pageTitle: '碳足迹', bol: this.bol })
     }

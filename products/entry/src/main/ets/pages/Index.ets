@@ -116,6 +116,7 @@ struct c {
             this.currentIndex = index
           })
         }
+        .padding({ top: 35, bottom: 25 })
       }
       .title('NavIndex')
       .hideTitleBar(true)
