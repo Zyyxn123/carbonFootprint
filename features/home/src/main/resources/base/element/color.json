@@ -83,6 +83,14 @@
     {
       "name": "auxiliaryInfoView_border",
       "value": "#37800F"
+    },
+    {
+      "name": "searchForView_focus_border_color",
+      "value": "#4CAF50"
+    },
+    {
+      "name": "searchForView_shadow_color",
+      "value": "#888888"
     }
   ]
 }
