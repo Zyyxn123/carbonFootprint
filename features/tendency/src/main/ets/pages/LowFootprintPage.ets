@@ -44,6 +44,13 @@ export struct lowFootprintPage {
   @State isShow2: boolean = false
   @State isShow3: boolean = false
   @State textStr: string = ''
+  @State selectedAnnotation: PointAnnotationData | null = null
+  @State showAnnotationDetail: boolean = false
+  @State searchResults: SiteItem[] = []
+  @State isLoading: boolean = false
+  @State showSearchResults: boolean = false
+  @State carbonEmission: string = ''
+  @State remark: string = ''
   private mapOptions?: mapCommon.MapOptions;
   private callback?: AsyncCallback<map.MapComponentController>;
   private mapController?: map.MapComponentController;
@@ -52,8 +59,6 @@ export struct lowFootprintPage {
   private latitude: number = 0
   private longitude: number = 0
   private pointAnnotation?: map.PointAnnotation
-
-  // 所有已添加的标注点列表（用于防重复）
   private addedAnnotations: PointAnnotationData[] = [
     {
       id: 1,
@@ -63,14 +68,6 @@ export struct lowFootprintPage {
       description: '历史文化街区，低碳出行推荐地点'
     },
   ]
-
-  @State selectedAnnotation: PointAnnotationData | null = null
-  @State showAnnotationDetail: boolean = false
-  @State searchResults: SiteItem[] = []
-  @State isLoading: boolean = false
-  @State showSearchResults: boolean = false
-  @State carbonEmission: string = ''
-  @State remark: string = ''
   private searchTimer: number = 0
 
   mapConfig() {

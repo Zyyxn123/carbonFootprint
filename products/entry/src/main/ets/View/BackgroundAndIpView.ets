@@ -1,24 +1,390 @@
 @Component
 export struct backgroundAndIpView {
-  build() {
-    Column() {
-      Row() {
-        Image($r('app.media.img_1'))
-          .width(120)
-          .fillColor(Color.Blue)
+  // 主logo动画状态
+  @State logoScale: number = 0.8
+  @State logoOpacity: number = 0
+  @State logoRotation: number = -5
+  @State logoGlow: number = 0
+  // 浮动元素动画状态
+  @State floatOffset1: number = 0
+  @State floatOffset2: number = 0
+  @State floatOffset3: number = 0
+  @State floatOpacity: number = 0
+  // 文字动画状态
+  @State titleOpacity: number = 0
+  @State titleTranslateY: number = 30
+  @State titleScale: number = 0.9
+  @State subtitleOpacity: number = 0
+  @State subtitleTranslateY: number = 20
+  @State taglineOpacity: number = 0
+  @State taglineTranslateY: number = 20
+  // 装饰元素状态
+  @State decorationScale: number = 0
+  @State decorationOpacity: number = 0
+  @State decorationRotation: number = 0
 
-        Image($r('app.media.ip_new'))
-          .width(200)
+  aboutToAppear() {
+    // 初始化浮动动画
+    this.startFloatingAnimation()
+
+    // 主logo入场动画序列
+    setTimeout(() => {
+      animateTo({
+        duration: 800,
+        curve: Curve.EaseOut
+      }, () => {
+        this.logoScale = 1
+        this.logoOpacity = 1
+        this.logoRotation = 0
+      })
+    }, 200)
+
+    // logo光晕动画
+    setTimeout(() => {
+      animateTo({
+        duration: 1500,
+        curve: Curve.EaseInOut,
+        iterations: -1, // 无限循环
+        playMode: PlayMode.Alternate
+      }, () => {
+        this.logoGlow = 1
+      })
+    }, 1000)
+
+    // 浮动元素淡入
+    setTimeout(() => {
+      animateTo({
+        duration: 600,
+        curve: Curve.EaseOut
+      }, () => {
+        this.floatOpacity = 0.4
+      })
+    }, 400)
+
+    // 标题动画
+    setTimeout(() => {
+      animateTo({
+        duration: 900,
+        curve: Curve.EaseInOut
+      }, () => {
+        this.titleOpacity = 1
+        this.titleTranslateY = 0
+        this.titleScale = 1
+      })
+    }, 700)
+
+    // 副标题动画
+    setTimeout(() => {
+      animateTo({
+        duration: 700,
+        curve: Curve.EaseOut
+      }, () => {
+        this.subtitleOpacity = 1
+        this.subtitleTranslateY = 0
+      })
+    }, 1000)
+
+    // 标语动画
+    setTimeout(() => {
+      animateTo({
+        duration: 700,
+        curve: Curve.EaseOut
+      }, () => {
+        this.taglineOpacity = 1
+        this.taglineTranslateY = 0
+      })
+    }, 1300)
+
+    // 装饰元素动画
+    setTimeout(() => {
+      animateTo({
+        duration: 1200,
+        curve: Curve.EaseInOut
+      }, () => {
+        this.decorationScale = 1
+        this.decorationOpacity = 0.8
+      })
+    }, 1500)
+
+    // 装饰旋转动画
+    setInterval(() => {
+      animateTo({
+        duration: 20000,
+        curve: Curve.Linear
+      }, () => {
+        this.decorationRotation += 360
+      })
+    }, 20000)
+  }
+
+  // 浮动动画
+  startFloatingAnimation() {
+    // 元素1浮动
+    setInterval(() => {
+      animateTo({
+        duration: 4000,
+        curve: Curve.EaseInOut
+      }, () => {
+        this.floatOffset1 = Math.random() * 30 - 15
+      })
+    }, 4000)
+
+    // 元素2浮动
+    setInterval(() => {
+      animateTo({
+        duration: 3500,
+        curve: Curve.EaseInOut
+      }, () => {
+        this.floatOffset2 = Math.random() * 40 - 20
+      })
+    }, 3500)
+
+    // 元素3浮动
+    setInterval(() => {
+      animateTo({
+        duration: 4500,
+        curve: Curve.EaseInOut
+      }, () => {
+        this.floatOffset3 = Math.random() * 25 - 12.5
+      })
+    }, 4500)
+  }
+
+  build() {
+    Stack({ alignContent: Alignment.TopStart }) {
+      // 1. 主背景渐变
+      Column()
+        .width('100%')
+        .height('100%')
+        .linearGradient({
+          angle: 145,
+          colors: [
+            ['#0C3B2E', 0.0], // 深墨绿
+            ['#1B5E3A', 0.3], // 森林绿
+            [$r('app.color.logOrRes_button_background'), 0.6], // 主题绿
+            ['#8BC34A', 0.9], // 浅绿
+            ['#E8F5E9', 1.0]// 极浅绿
+          ]
+        })
+
+      // 2. 浮动装饰元素（类似Lottie动画效果）
+      // 浮动元素1 - 左上角
+      Circle()
+        .width(80)
+        .height(80)
+        .fill('#FFFFFF15')
+        .position({ x: -20 + this.floatOffset1, y: '15%' })
+        .opacity(this.floatOpacity)
+        .shadow({ radius: 30, color: '#FFFFFF20' })
+
+      // 浮动元素2 - 右上角
+      Circle()
+        .width(120)
+        .height(120)
+        .fill('#FFFFFF10')
+        .position({ x: '85%', y: '10%' })
+        .translate({ x: this.floatOffset2 })
+        .opacity(this.floatOpacity)
+
+      // 浮动元素3 - 左下角
+      Circle()
+        .width(60)
+        .height(60)
+        .fill('#FFFFFF20')
+        .position({ x: '10%', y: '70%' })
+        .translate({ y: this.floatOffset3 })
+        .opacity(this.floatOpacity)
+
+      // 3. 主要内容容器
+      Column() {
+        // 顶部留白区域
+        Column()
+          .height('15%')
+
+        // Logo区域
+        Stack({ alignContent: Alignment.Center }) {
+          // 动态光环背景
+          Circle()
+            .width(240)
+            .height(240)
+            .fill('#FFFFFF')
+            .opacity(0.05 + this.logoGlow * 0.1)
+            .shadow({
+              radius: 60 + this.logoGlow * 30,
+              color: '#4CAF50'
+            })
+            .scale({ x: this.decorationScale, y: this.decorationScale })
+            .opacity(this.decorationOpacity)
+
+          // 旋转装饰环
+          Circle()
+            .width(200)
+            .height(200)
+            .stroke('#FFFFFF40')
+            .fill(Color.Transparent)
+            .rotate({ angle: this.decorationRotation })
+            .scale({ x: this.decorationScale, y: this.decorationScale })
+            .opacity(this.decorationOpacity)
+
+          // 主Logo
+          Image($r('app.media.img_1'))
+            .width(160)
+            .height(160)
+            .objectFit(ImageFit.Contain)
+            .scale({ x: this.logoScale, y: this.logoScale })
+            .rotate({ angle: this.logoRotation })
+            .opacity(this.logoOpacity)
+            .shadow({
+              radius: 40,
+              color: '#00000040',
+              offsetX: 0,
+              offsetY: 10
+            })
+        }
+        .margin({ bottom: 50 })
+
+        // 艺术化文字区域
+        Column() {
+          // 主标题 - 艺术字体效果
+          Stack({ alignContent: Alignment.Center }) {
+            // 背景发光效果
+            Text('碳迹')
+              .fontSize(48)
+              .fontWeight(FontWeight.Bold)
+              .fontColor('#FFFFFF')
+              .shadow({
+                radius: 20 + this.logoGlow * 10,
+                color: '#4CAF50',
+                offsetX: 0,
+                offsetY: 0
+              })
+              .opacity(this.titleOpacity)
+              .translate({ y: this.titleTranslateY })
+              .scale({ x: this.titleScale, y: this.titleScale })
+
+            // 主标题前景
+            Text('碳迹')
+              .fontSize(48)
+              .fontWeight(FontWeight.Bold)
+              .fontColor('#FFFFFF')
+              .opacity(this.titleOpacity)
+              .translate({ y: this.titleTranslateY })
+              .scale({ x: this.titleScale, y: this.titleScale })
+          }
+
+          // 副标题区域
+          Column() {
+            // 第一行副标题 - 优雅小字
+            Text('TRACE YOUR')
+              .fontSize(14)
+              .fontColor('#FFFFFF99')
+              .letterSpacing(8)
+              .opacity(this.subtitleOpacity)
+              .translate({ y: this.subtitleTranslateY })
+              .margin({ bottom: 8 })
+
+            // 第二行副标题 - 强调
+            Text('GREEN FOOTPRINT')
+              .fontSize(22)
+              .fontWeight(FontWeight.Medium)
+              .fontColor('#FFFFFF')
+              .letterSpacing(2)
+              .opacity(this.subtitleOpacity)
+              .translate({ y: this.subtitleTranslateY })
+              .margin({ bottom: 24 })
+
+            // 装饰分隔线
+            Row() {
+              Column()
+                .width(60)
+                .height(1)
+                .backgroundColor('#FFFFFF60')
+                .margin({ right: 16 })
+
+              // 中间图标
+              Image($r('app.media.img_1'))  // 使用小图标，可以替换为leaf图标
+                .width(24)
+                .height(24)
+                .objectFit(ImageFit.Contain)
+                .opacity(this.taglineOpacity)
+                .rotate({ angle: this.decorationRotation / 10 })
+
+              Column()
+                .width(60)
+                .height(1)
+                .backgroundColor('#FFFFFF60')
+                .margin({ left: 16 })
+            }
+            .alignItems(VerticalAlign.Center)
+            .margin({ bottom: 24 })
+            .opacity(this.taglineOpacity)
+
+            // 标语
+            Column() {
+              Text('每一次选择')
+                .fontSize(16)
+                .fontColor('#FFFFFFDD')
+                .opacity(this.taglineOpacity)
+                .translate({ y: this.taglineTranslateY })
+
+              Text('都是对地球的温柔承诺')
+                .fontSize(18)
+                .fontWeight(FontWeight.Medium)
+                .fontColor('#FFFFFF')
+                .opacity(this.taglineOpacity)
+                .translate({ y: this.taglineTranslateY })
+                .margin({ top: 4 })
+            }
+            .alignItems(HorizontalAlign.Center)
+          }
+          .alignItems(HorizontalAlign.Center)
+          .margin({ top: 30 })
+        }
+        .alignItems(HorizontalAlign.Center)
+
+        // 底部指示器
+        Column() {
+          // 滚动指示点
+          Row() {
+            ForEach([0, 1, 2], (index: number) => {
+              Circle()
+                .width(8)
+                .height(8)
+                .fill(index === 0 ? '#FFFFFF' : '#FFFFFF60')
+                .margin({ right: 8 })
+                .animation({
+                  duration: 1000,
+                  curve: Curve.EaseInOut,
+                  delay: index * 200,
+                  iterations: -1,
+                  playMode: PlayMode.Alternate
+                })
+                .scale({
+                  x: index === 0 ? 1 + this.logoGlow * 0.3 : 1,
+                  y: index === 0 ? 1 + this.logoGlow * 0.3 : 1
+                })
+            })
+          }
+          .margin({ top: 60 })
+
+          // 提示文字
+          Text('向上滑动登录')
+            .fontSize(12)
+            .fontColor('#FFFFFF99')
+            .margin({ top: 12 })
+            .opacity(this.taglineOpacity)
+        }
+        .alignItems(HorizontalAlign.Center)
+
+        // 底部留白
+        Column()
+          .height('10%')
       }
       .width('100%')
-      .margin('10%')
-      .alignItems(VerticalAlign.Top)
-      .justifyContent(FlexAlign.Center)
+      .height('100%')
     }
     .width('100%')
-    .justifyContent(FlexAlign.Start)
     .height('100%')
-    .backgroundColor($r('app.color.logOrRes_background'))
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
 }
