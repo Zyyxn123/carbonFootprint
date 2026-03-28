@@ -503,7 +503,7 @@ export struct logOrResView {
       .margin({ top: '15%' })  // 给上半区域动画留出空间，但确保输入区域可见
     }
     .width('100%')
-    .height(600)
+    .height(650)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
 }

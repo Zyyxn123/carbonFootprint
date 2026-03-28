@@ -1,18 +1,21 @@
 import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstants } from '@ohos/customrouter';
-import { CarEmiApplianceTable,
+import {
+  CarEmiApplianceTable,
   CarEmiFoodTable,
   CarEmiTotalWeeklyTable,
-  CarEmiTransTable, HealthyNewsPreference, HTTPForHealthyNews,
-  TendTasksTable } from '@ohos/utils';
-import { AdsPage } from './AdsPage';
+  CarEmiTransTable,
+  HealthyNewsPreference,
+  HTTPForHealthyNews,
+  TendTasksTable
+} from '@ohos/utils';
 import { LogOrResPage } from './LogOrResPage';
-import { quickStart } from './quickStart';
 import common from '@ohos.app.ability.common';
 import { home_mainPage } from '@ohos/home';
 import { tendency_homePage } from '@ohos/tendency';
 import { carbonCircle_homePage } from '@ohos/carboncircle';
 import { Mine_homePage } from '@ohos/mine';
 import TabMenusViewModel from '../ViewModel/TabMenusViewModel';
+import TabMenusTYpeModel from '../Model/TabMenusModel';
 
 let date = new Date()
 
@@ -26,6 +29,7 @@ struct c {
   @StorageLink('CurrentIndex') currentIndex: number = 0
   @State entryHapRouter: NavPathStack = new NavPathStack()
   @StorageLink('isLoginState') isLogin: boolean = false
+  @State hoverIndex: number = -1
   private healthyNewsPre: HealthyNewsPreference = HealthyNewsPreference.getInstance()
   private httpForHN: HTTPForHealthyNews = HTTPForHealthyNews.getInstance()
   private context = this.getUIContext().getHostContext() as common.UIAbilityContext
@@ -63,7 +67,7 @@ struct c {
 
   @Builder
   routerMap(builderName: string, param: object) {
-      RouterModule.getBuilder(builderName).builder(param)
+    RouterModule.getBuilder(builderName).builder(param)
   }
 
   @Builder
@@ -81,43 +85,170 @@ struct c {
     }
   }
 
+  // 自定义导航条Canvas背景绘制
+  drawTabBarBackground(ctx: CanvasRenderingContext2D, width: number, height: number) {
+    // 清除画布
+    ctx.clearRect(0, 0, width, height)
+
+    // 绘制半透明背景（磨砂玻璃效果）
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.85)'
+    ctx.beginPath()
+    ctx.roundRect(0, 0, width, height, 20)
+    ctx.fill()
+
+    // 绘制顶部细边框
+    ctx.strokeStyle = 'rgba(120, 180, 120, 0.2)'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.moveTo(0, 0)
+    ctx.lineTo(width, 0)
+    ctx.stroke()
+  }
+
+  // 绘制选中指示器（绿色渐变圆角矩形）
+  drawIndicator(ctx: CanvasRenderingContext2D, x: number, width: number, height: number) {
+    const indicatorHeight = 4
+    const cornerRadius = 2
+
+    // 绿色渐变
+    const gradient = ctx.createLinearGradient(x, 0, x + width, 0)
+    gradient.addColorStop(0, '#4CAF50')
+    gradient.addColorStop(0.5, '#37800F')
+    gradient.addColorStop(1, '#2E7D32')
+
+    ctx.fillStyle = gradient
+    ctx.beginPath()
+    ctx.roundRect(x, height - indicatorHeight, width, indicatorHeight, cornerRadius)
+    ctx.fill()
+
+    // 添加内发光
+    ctx.shadowColor = '#4CAF50'
+    ctx.shadowBlur = 8
+    ctx.shadowOffsetX = 0
+    ctx.shadowOffsetY = 0
+    ctx.fill()
+    ctx.shadowBlur = 0
+  }
+
+  // 自定义导航条Builder
+  @Builder
+  customTabBarBuilder() {
+    Stack({ alignContent: Alignment.Bottom }) {
+      // 底层：磨砂玻璃背景（透明效果）
+      Column()
+        .width('100%')
+        .height(80)
+        .backgroundColor('rgba(255, 255, 255, 0.75)')
+        .backdropBlur(10)
+        .borderRadius({ topLeft: 20, topRight: 20 })
+        .shadow({ radius: 20, color: 'rgba(0, 0, 0, 0.05)', offsetY: -5 })
+
+      // 上层：Tab项容器
+      Row() {
+        ForEach(TabMenusViewModel.TabsMenu, (item: TabMenusTYpeModel, index: number) => {
+          Column() {
+            // 图标容器（带悬浮和选中动画）
+            Stack({ alignContent: Alignment.Center }) {
+              // 背景光环（选中或悬停时显示）
+              if (this.currentIndex === index || this.hoverIndex === index) {
+                Circle()
+                  .width(50)
+                  .height(50)
+                  .fill(this.currentIndex === index ? 'rgba(76, 175, 80, 0.15)' : 'rgba(120, 180, 120, 0.1)')
+                  .animation({ duration: 300, curve: Curve.EaseOut })
+              }
+
+              // 图标
+              Image(this.currentIndex === index ? item.selectImage : item.image)
+                .width(26)
+                .height(26)
+                .animation({ duration: 200, curve: Curve.EaseOut })
+            }
+            .width(50)
+            .height(50)
+            .margin({ bottom: 6 })
+
+            // 文字（选中时加粗和颜色变化）
+            Text(item.text)
+              .fontSize(11)
+              .fontColor(this.currentIndex === index ? '#37800F' : '#5A5A5A')
+              .fontWeight(this.currentIndex === index ? FontWeight.Bold : FontWeight.Normal)
+              .opacity(this.currentIndex === index ? 1 : 0.8)
+              .animation({ duration: 200, curve: Curve.EaseOut })
+          }
+          .width('25%')
+          .height(80)
+          .justifyContent(FlexAlign.Center)
+          .alignItems(HorizontalAlign.Center)
+          .onClick(() => {
+            // 切换tab
+            this.currentIndex = index
+          })
+          .onTouch((event: TouchEvent) => {
+            if (event.type === TouchType.Down) {
+              this.hoverIndex = index
+            } else if (event.type === TouchType.Up || event.type === TouchType.Cancel) {
+              this.hoverIndex = -1
+            }
+          })
+          // .stateEffect(true)
+          .scale({
+            x: this.hoverIndex === index ? 1.08 : (this.currentIndex === index ? 1.05 : 1),
+            y: this.hoverIndex === index ? 1.08 : (this.currentIndex === index ? 1.05 : 1)
+          })
+          .animation({ duration: 200, curve: Curve.EaseOut })
+        })
+      }
+      .width('100%')
+      .height(80)
+      .justifyContent(FlexAlign.SpaceAround)
+      .alignItems(VerticalAlign.Center)
+    }
+    .width('100%')
+    .height(80)
+    .margin({ top: 5 })
+    .backgroundColor(Color.Transparent)
+  }
+
+  // 内容区域Builder
+  @Builder
+  contentBuilder() {
+    if (this.currentIndex === 0) {
+      home_mainPage()
+    }
+    else if (this.currentIndex === 1) {
+      tendency_homePage()
+    }
+    else if (this.currentIndex === 2) {
+      carbonCircle_homePage()
+    }
+    else if (this.currentIndex === 3) {
+      Mine_homePage()
+    }
+    else {
+      home_mainPage()
+    }
+  }
+
   build() {
     if (this.isLogin) {
       Navigation(this.entryHapRouter) {
-        Column() {
-          Tabs({ barPosition: BarPosition.End, controller: this.tabCtrl }) {
-            TabContent() {
-              home_mainPage()
-            }
-            .tabBar(this.tabBarType(0))
-            .border({ width: { bottom: 1 }, color: $r('app.color.tabBar_border') })
-
-            TabContent() {
-              tendency_homePage()
-            }
-            .tabBar(this.tabBarType(1))
-            .border({ width: { bottom: 1 }, color: $r('app.color.tabBar_border') })
-
-            TabContent() {
-              carbonCircle_homePage()
-            }
-            .tabBar(this.tabBarType(2))
-            .border({ width: { bottom: 1 }, color: $r('app.color.tabBar_border') })
-
-            TabContent() {
-              Mine_homePage()
-            }
-            .tabBar(this.tabBarType(3))
-            .border({ width: { bottom: 1 }, color: $r('app.color.tabBar_border') })
+        Stack({ alignContent: Alignment.Bottom }) {
+          // 内容区域
+          Column() {
+            this.contentBuilder()
           }
-          .scrollable(false)
-          .barMode(BarMode.Fixed)
-          .onChange((index: number) => {
-            this.currentIndex = index
-          })
+          .width('100%')
+          .height('100%')
+          // .flexGrow(1)
+
+          // 自定义导航条
+          this.customTabBarBuilder()
         }
-        .padding({ top: 35, bottom: 25 })
+        .width('100%')
+        .height('100%')
       }
+      .padding({ bottom: 10, top: 35 })
       .title('NavIndex')
       .hideTitleBar(true)
       .navDestination(this.routerMap)
@@ -133,7 +264,7 @@ struct c {
       .height('100%')
     } else {
       Column() {
-        LogOrResPage({ isLogin: this.isLogin})
+        LogOrResPage({ isLogin: this.isLogin })
       }
     }
   }
