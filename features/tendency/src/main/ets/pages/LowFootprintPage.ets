@@ -52,7 +52,9 @@ export struct lowFootprintPage {
   private latitude: number = 0
   private longitude: number = 0
   private pointAnnotation?: map.PointAnnotation
-  private annotationDataList: PointAnnotationData[] = [
+
+  // 所有已添加的标注点列表（用于防重复）
+  private addedAnnotations: PointAnnotationData[] = [
     {
       id: 1,
       latitude: 32.020750,
@@ -61,6 +63,7 @@ export struct lowFootprintPage {
       description: '历史文化街区，低碳出行推荐地点'
     },
   ]
+
   @State selectedAnnotation: PointAnnotationData | null = null
   @State showAnnotationDetail: boolean = false
   @State searchResults: SiteItem[] = []
@@ -82,6 +85,16 @@ export struct lowFootprintPage {
       dayNightMode: mapCommon.DayNightMode.AUTO
     }
     this.bol = true
+  }
+
+  // ====================== ✅ 核心：防重复判断 ======================
+  private isAnnotationExists(lat: number, lng: number, title: string): boolean {
+    // 经纬度误差小于 0.0001 视为同一个位置
+    const eps = 0.0001;
+    return this.addedAnnotations.some(item =>
+    (Math.abs(item.latitude - lat) < eps && Math.abs(item.longitude - lng) < eps) ||
+      (item.title.trim() === title.trim())
+    );
   }
 
   checkPermission() {
@@ -128,7 +141,8 @@ export struct lowFootprintPage {
         mapController.setZoomControlsEnabled(false)
         this.mapController.setCompassControlsEnabled(false)
 
-        for (let data of this.annotationDataList) {
+        // 初始化默认标注
+        for (let data of this.addedAnnotations) {
           let pointAnnotationOptions: mapCommon.PointAnnotationParams = {
             position: {
               latitude: data.latitude,
@@ -147,7 +161,7 @@ export struct lowFootprintPage {
           }
 
           try {
-            let annotation = await this.mapController.addPointAnnotation(pointAnnotationOptions)
+            await this.mapController.addPointAnnotation(pointAnnotationOptions)
           } catch (e) {
             console.error(`Failed to create the pointAnnotation, code is：${e.code}, message is ${e.message}`);
           }
@@ -157,7 +171,7 @@ export struct lowFootprintPage {
           let pos = event.getPosition();
           let clickedLat = pos.latitude;
           let clickedLon = pos.longitude;
-          let foundData = this.annotationDataList.find(data =>
+          let foundData = this.addedAnnotations.find(data =>
           Math.abs(data.latitude - clickedLat) < 0.001 && Math.abs(data.longitude - clickedLon) < 0.001
           )
           if (foundData) {
@@ -245,6 +259,59 @@ export struct lowFootprintPage {
         .padding({ left: 15, right: 10 })
         .backgroundColor('#F3FEF3')
 
+        Column({ space: 10 }) {
+          Text('碳排放数据 (可选)')
+            .fontSize(14)
+            .fontColor('#37800f')
+            .fontWeight(FontWeight.Medium)
+            .width('100%')
+            .textAlign(TextAlign.Start)
+            .margin({ bottom: 5 })
+
+          Row() {
+            TextInput({ placeholder: '请输入碳排放量，单位：千克', text: $$this.carbonEmission })
+              .width('85%')
+              .fontColor('#000')
+              .placeholderColor('#999')
+              .backgroundColor(Color.Transparent)
+              .onChange((value: string) => {
+                this.carbonEmission = value
+              })
+
+            Text('kg')
+              .fontSize(14)
+              .fontColor('#666666')
+              .margin({ left: 10 })
+          }
+          .border({ width: 1, color: '#81B29A', radius: 12 })
+          .padding({ left: 15, right: 15, top: 10, bottom: 10 })
+          .backgroundColor('#F9FFFD')
+
+          Column({ space: 5 }) {
+            Text('备注信息 (可选)')
+              .fontSize(14)
+              .fontColor('#37800f')
+              .fontWeight(FontWeight.Medium)
+              .width('100%')
+              .textAlign(TextAlign.Start)
+              .margin({ bottom: 5 })
+
+            TextInput({ placeholder: '请输入相关备注信息', text: $$this.remark })
+              .width('100%')
+              .fontColor('#000')
+              .placeholderColor('#999')
+              .backgroundColor('#FFFFFF')
+              .border({ width: 1, color: '#81B29A', radius: 12 })
+              .padding({ left: 15, right: 15, top: 10, bottom: 10 })
+              .onChange((value: string) => {
+                this.remark = value
+              })
+          }
+          .width('100%')
+        }
+        .width('100%')
+        .margin({ top: 20 })
+
         if (this.showSearchResults) {
           Column({ space: 5 }) {
             if (this.isLoading) {
@@ -306,9 +373,9 @@ export struct lowFootprintPage {
                           offsetY: 2
                         })
                         .onClick(() => {
-                          this.navigateToSite(item)
                           this.isShow1 = false
                           this.textStr = ''
+                          this.navigateToSite(item)
                         })
                         .animation({ duration: 200, curve: Curve.EaseInOut })
 
@@ -348,61 +415,6 @@ export struct lowFootprintPage {
           .width('100%')
           .border({ width: 1, color: '#ccc', radius: 15 })
         }
-
-        // 碳排放数据输入
-        Column({ space: 10 }) {
-          Text('碳排放数据 (可选)')
-            .fontSize(14)
-            .fontColor('#37800f')
-            .fontWeight(FontWeight.Medium)
-            .width('100%')
-            .textAlign(TextAlign.Start)
-            .margin({ bottom: 5 })
-
-          Row() {
-            TextInput({ placeholder: '请输入碳排放量，单位：千克', text: $$this.carbonEmission })
-              .width('85%')
-              .fontColor('#000')
-              .placeholderColor('#999')
-              .backgroundColor(Color.Transparent)
-              .onChange((value: string) => {
-                this.carbonEmission = value
-              })
-
-            Text('kg')
-              .fontSize(14)
-              .fontColor('#666666')
-              .margin({ left: 10 })
-          }
-          .border({ width: 1, color: '#81B29A', radius: 12 })
-          .padding({ left: 15, right: 15, top: 10, bottom: 10 })
-          .backgroundColor('#F9FFFD')
-
-          // 备注信息输入
-          Column({ space: 5 }) {
-            Text('备注信息 (可选)')
-              .fontSize(14)
-              .fontColor('#37800f')
-              .fontWeight(FontWeight.Medium)
-              .width('100%')
-              .textAlign(TextAlign.Start)
-              .margin({ bottom: 5 })
-
-            TextInput({ placeholder: '请输入相关备注信息', text: $$this.remark })
-              .width('100%')
-              .fontColor('#000')
-              .placeholderColor('#999')
-              .backgroundColor('#FFFFFF')
-              .border({ width: 1, color: '#81B29A', radius: 12 })
-              .padding({ left: 15, right: 15, top: 10, bottom: 10 })
-              .onChange((value: string) => {
-                this.remark = value
-              })
-          }
-          .width('100%')
-        }
-        .width('100%')
-        .margin({ top: 20 })
       }
       .width('100%')
     }
@@ -440,47 +452,89 @@ export struct lowFootprintPage {
     }
   }
 
+  async navigateToCurrentLocation(): Promise<void> {
+    if (!this.mapController) {
+      console.error('地图控制器未初始化')
+      return
+    }
+
+    try {
+      const result = await geoLocationManager.getCurrentLocation()
+      console.info(`当前位置：纬度 ${result.latitude}, 经度 ${result.longitude}`)
+
+      let cameraPosition: mapCommon.CameraPosition = {
+        target: {
+          latitude: result.latitude,
+          longitude: result.longitude
+        },
+        zoom: 15,
+        tilt: 0,
+        bearing: 0
+      };
+
+      let cameraUpdate = map.newCameraPosition(cameraPosition);
+      this.mapController.animateCamera(cameraUpdate, 1000);
+
+    } catch (error) {
+      const err: BusinessError = error as BusinessError;
+      console.error(`获取当前位置失败：${err.code}, ${err.message}`)
+
+      if (this.latitude !== 0 && this.longitude !== 0) {
+        console.info(`使用缓存位置：纬度 ${this.latitude}, 经度 ${this.longitude}`)
+
+        let cameraPosition: mapCommon.CameraPosition = {
+          target: {
+            latitude: this.latitude,
+            longitude: this.longitude
+          },
+          zoom: 15,
+          tilt: 0,
+          bearing: 0
+        };
+
+        let cameraUpdate = map.newCameraPosition(cameraPosition);
+        this.mapController.animateCamera(cameraUpdate, 1000);
+      }
+    }
+  }
+
   async navigateToSite(siteItem: SiteItem): Promise<void> {
     if (!this.mapController || !siteItem.location) {
       return
     }
 
     const location = siteItem.location
+    const title = siteItem.name ?? '未知地点'
 
-    this.mapOptions = {
-      position: {
-        target: {
-          latitude: location.latitude,
-          longitude: location.longitude
-        },
-        zoom: 16
-      }
+    // ====================== ✅ 防重复：存在就不添加 ======================
+    if (this.isAnnotationExists(location.latitude, location.longitude, title)) {
+      console.info('该地点已存在标注，不再重复添加');
+
+      // 仅移动地图
+      let cameraPosition: mapCommon.CameraPosition = {
+        target: { latitude: location.latitude, longitude: location.longitude },
+        zoom: 16, tilt: 0, bearing: 0
+      };
+      let cameraUpdate = map.newCameraPosition(cameraPosition);
+      this.mapController.animateCamera(cameraUpdate, 1000);
+      return;
     }
 
+    // 移动地图
     let cameraPosition: mapCommon.CameraPosition = {
-      target: {
-        latitude: location.latitude,
-        longitude: location.longitude
-      },
-      zoom: 10,
-      tilt: 0,
-      bearing: 0
+      target: { latitude: location.latitude, longitude: location.longitude },
+      zoom: 16, tilt: 0, bearing: 0
     };
-
     let cameraUpdate = map.newCameraPosition(cameraPosition);
-
-    // 以动画方式移动地图相机
     this.mapController.animateCamera(cameraUpdate, 1000);
 
+    // 添加标注
     let pointAnnotationOptions: mapCommon.PointAnnotationParams = {
-      position: {
-        latitude: location.latitude,
-        longitude: location.longitude
-      },
+      position: { latitude: location.latitude, longitude: location.longitude },
       repeatable: true,
       collisionRule: mapCommon.CollisionRule.NAME,
       titles: [{
-        content: siteItem.name ?? '目标位置',
+        content: title,
         color: 0xFF37800f,
         fontSize: 16,
         strokeColor: 0xFFFFFFFF,
@@ -491,7 +545,17 @@ export struct lowFootprintPage {
 
     try {
       await this.mapController.addPointAnnotation(pointAnnotationOptions)
-      console.info(`已添加标注：${siteItem.name}`)
+      console.info(`已添加标注：${title}`)
+
+      // ✅ 加入已添加列表，防止重复
+      this.addedAnnotations.push({
+        id: Date.now(),
+        latitude: location.latitude,
+        longitude: location.longitude,
+        title: title,
+        description: siteItem.formatAddress || '无详细地址',
+        iconColor: '#37800f'
+      })
     } catch (e) {
       console.error(`添加标注失败`)
     }
@@ -499,15 +563,14 @@ export struct lowFootprintPage {
     this.showSearchResults = false
     this.textStr = siteItem.name ?? ''
 
-    const annotationData: PointAnnotationData = {
+    this.selectedAnnotation = {
       id: Date.now(),
       latitude: location.latitude,
       longitude: location.longitude,
-      title: siteItem.name ?? '未知地点',
+      title: title,
       description: siteItem.formatAddress || '无详细地址',
       iconColor: '#37800f'
     }
-    this.selectedAnnotation = annotationData
     this.showAnnotationDetail = true
   }
 
@@ -656,29 +719,34 @@ export struct lowFootprintPage {
               })
           }
           .justifyContent(FlexAlign.SpaceEvenly)
-          .width('80%')
+          .width('70%')
           .height(50)
           .backgroundColor('#F3FEF3')
           .borderRadius(25)
           .border({ width: { bottom: 2 }, color: '#ccc' })
+
+          Row() {
+            Image($r('app.media.currLocation'))
+              .width(25)
+              .height(25)
+              .fillColor('#FFFFFF')
+          }
+          .justifyContent(FlexAlign.Center)
+          .alignItems(VerticalAlign.Center)
+          .width(50)
+          .height(50)
+          .backgroundColor('#37800f')
+          .borderRadius(25)
+          .shadow({ radius: 5, color: '#00000020', offsetX: 0, offsetY: 2 })
+          .onClick(() => {
+            this.navigateToCurrentLocation()
+          })
+          .animation({ duration: 200, curve: Curve.EaseInOut })
         }
         .padding({ bottom: 35, left: 15, right: 15 })
       }
 
       backButton({ pageTitle: '碳足迹', bol: this.bol })
-
-      // if (this.showAnnotationDetail) {
-      //   Column() {
-      //     this.AnnotationDetailBuilder()
-      //   }
-      //   .width('100%')
-      //   .height('100%')
-      //   .justifyContent(FlexAlign.Center)
-      //   .backgroundColor('#80000000')
-      //   .onClick(() => {
-      //     this.showAnnotationDetail = false
-      //   })
-      // }
     }
     .width('100%')
     .height('100%')
