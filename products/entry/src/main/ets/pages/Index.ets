@@ -134,14 +134,14 @@ struct c {
   @Builder
   customTabBarBuilder() {
     Stack({ alignContent: Alignment.Bottom }) {
-      // 底层：磨砂玻璃背景（透明效果）
+      // 底层：磨砂玻璃背景（与登录背景协调的浅绿色）
       Column()
         .width('100%')
-        .height(80)
-        .backgroundColor('rgba(255, 255, 255, 0.75)')
-        .backdropBlur(10)
+        .height(90)
+        .backgroundColor('rgba(232, 245, 233, 0.65)')  // #E8F5E9 对应登录背景最浅色，适当透明
+        .backdropBlur(8)
         .borderRadius({ topLeft: 20, topRight: 20 })
-        .shadow({ radius: 20, color: 'rgba(0, 0, 0, 0.05)', offsetY: -5 })
+        .shadow({ radius: 15, color: 'rgba(27, 94, 58, 0.1)', offsetY: -3 })  // 绿色系阴影
 
       // 上层：Tab项容器
       Row() {
@@ -154,7 +154,7 @@ struct c {
                 Circle()
                   .width(50)
                   .height(50)
-                  .fill(this.currentIndex === index ? 'rgba(76, 175, 80, 0.15)' : 'rgba(120, 180, 120, 0.1)')
+                  .fill(this.currentIndex === index ? 'rgba(46, 125, 50, 0.18)' : 'rgba(86, 156, 80, 0.1)')
                   .animation({ duration: 300, curve: Curve.EaseOut })
               }
 
@@ -171,9 +171,9 @@ struct c {
             // 文字（选中时加粗和颜色变化）
             Text(item.text)
               .fontSize(11)
-              .fontColor(this.currentIndex === index ? '#37800F' : '#5A5A5A')
+              .fontColor(this.currentIndex === index ? '#2E6B2A' : '#5A7A4A')  // 选中：深绿，未选中：中等绿
               .fontWeight(this.currentIndex === index ? FontWeight.Bold : FontWeight.Normal)
-              .opacity(this.currentIndex === index ? 1 : 0.8)
+              .opacity(this.currentIndex === index ? 1 : 0.85)
               .animation({ duration: 200, curve: Curve.EaseOut })
           }
           .width('25%')
@@ -201,11 +201,12 @@ struct c {
       }
       .width('100%')
       .height(80)
+      .margin({ bottom: 10 })
       .justifyContent(FlexAlign.SpaceAround)
       .alignItems(VerticalAlign.Center)
     }
     .width('100%')
-    .height(80)
+    .height(100)
     .margin({ top: 5 })
     .backgroundColor(Color.Transparent)
   }
@@ -248,7 +249,7 @@ struct c {
         .width('100%')
         .height('100%')
       }
-      .padding({ bottom: 10, top: 35 })
+      .padding({ top: 35 })
       .title('NavIndex')
       .hideTitleBar(true)
       .navDestination(this.routerMap)
