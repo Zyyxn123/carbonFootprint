@@ -28,6 +28,14 @@ export struct logOrResView {
   @State pageTranslateY: number = 30
   @State loginButtonText: ResourceStr = $r('app.string.logOrRes_button')
 
+  // 上半区域动画状态
+  @State floatLeaf1Y: number = 0
+  @State floatLeaf2Y: number = 0
+  @State floatLeaf3Y: number = 0
+  @State leafRotation: number = 0
+  @State particleOpacity: number = 0
+  @State glowIntensity: number = 0
+
   // 验证相关状态
   @State accountError: string = ''
   @State passwordError: string = ''
@@ -54,6 +62,72 @@ export struct logOrResView {
       this.pageOpacity = 1
       this.pageTranslateY = 0
     })
+
+    // 启动上半区域动画
+    this.startUpperAnimation()
+  }
+
+  // 上半区域动画方法
+  startUpperAnimation() {
+    // 叶子浮动动画
+    setInterval(() => {
+      animateTo({
+        duration: 3000,
+        curve: Curve.EaseInOut
+      }, () => {
+        this.floatLeaf1Y = Math.random() * 40 - 20
+      })
+    }, 3000)
+
+    setInterval(() => {
+      animateTo({
+        duration: 3500,
+        curve: Curve.EaseInOut
+      }, () => {
+        this.floatLeaf2Y = Math.random() * 30 - 15
+      })
+    }, 3500)
+
+    setInterval(() => {
+      animateTo({
+        duration: 4000,
+        curve: Curve.EaseInOut
+      }, () => {
+        this.floatLeaf3Y = Math.random() * 50 - 25
+      })
+    }, 4000)
+
+    // 叶子旋转动画
+    setInterval(() => {
+      animateTo({
+        duration: 20000,
+        curve: Curve.Linear
+      }, () => {
+        this.leafRotation += 360
+      })
+    }, 20000)
+
+    // 粒子淡入动画
+    setTimeout(() => {
+      animateTo({
+        duration: 1000,
+        curve: Curve.EaseOut
+      }, () => {
+        this.particleOpacity = 0.6
+      })
+    }, 500)
+
+    // 光脉动动画
+    setInterval(() => {
+      animateTo({
+        duration: 2000,
+        curve: Curve.EaseInOut,
+        iterations: -1,
+        playMode: PlayMode.Alternate
+      }, () => {
+        this.glowIntensity = 1
+      })
+    }, 2000)
   }
 
   // 表单验证方法
@@ -99,286 +173,337 @@ export struct logOrResView {
   }
 
   build() {
-    Column() {
-      // 页面内容容器
+    Stack({ alignContent: Alignment.TopStart }) {
+      // // 1. 纯白色背景（确保输入区域清晰）
+      // Column()
+      //   .width('100%')
+      //   .height('100%')
+      //   .backgroundColor('#FFFFFF')
+      // 2. 上半区域动画元素（与绿色主题协调）
+      // // 顶部光晕效果（更subtle）
+      // Circle()
+      //   .width(200)
+      //   .height(200)
+      //   .fill('#E8F5E9')  // 浅绿色背景协调
+      //   .position({ x: '-5%', y: '-10%' })
+      //   .opacity(0.15 + this.glowIntensity * 0.1)  // 降低透明度
+      //   .shadow({ radius: 50, color: '#C8E6C960' })
+      //
+      // // 漂浮叶子1（使用叶子形状）
+      // Circle()
+      //   .width(40)
+      //   .height(25)  // 椭圆形状更像叶子
+      //   .fill('#4CAF50')
+      //   .position({ x: '15%', y: '12%' })
+      //   .translate({ y: this.floatLeaf1Y })
+      //   .rotate({ angle: this.leafRotation / 2 })
+      //   .opacity(0.5)  // 降低透明度，不干扰输入
+      //
+      // // 漂浮叶子2
+      // Circle()
+      //   .width(28)
+      //   .height(20)  // 椭圆形状
+      //   .fill('#37800F')  // 深绿色
+      //   .position({ x: '75%', y: '8%' })
+      //   .translate({ y: this.floatLeaf2Y })
+      //   .rotate({ angle: this.leafRotation })
+      //   .opacity(0.4)  // 更低透明度
+      //
+      // // 漂浮叶子3
+      // Circle()
+      //   .width(20)
+      //   .height(15)  // 小椭圆
+      //   .fill('#8BC34A')  // 浅绿色
+      //   .position({ x: '35%', y: '3%' })
+      //   .translate({ y: this.floatLeaf3Y })
+      //   .rotate({ angle: -this.leafRotation / 3 })
+      //   .opacity(0.3)  // 最低透明度
+      //
+      // // 粒子效果（更小、更淡，不干扰输入）
+      // Circle()
+      //   .width(4)
+      //   .height(4)
+      //   .fill('#37800F')  // 主题绿色
+      //   .position({ x: '25%', y: '18%' })
+      //   .opacity(this.particleOpacity * 0.4)
+      //
+      // Circle()
+      //   .width(3)
+      //   .height(3)
+      //   .fill('#4CAF50')
+      //   .position({ x: '65%', y: '15%' })
+      //   .opacity(this.particleOpacity * 0.3)
+      //
+      // Circle()
+      //   .width(5)
+      //   .height(5)
+      //   .fill('#8BC34A')
+      //   .position({ x: '45%', y: '22%' })
+      //   .opacity(this.particleOpacity * 0.35)
+
+      // 3. 内容区域容器（白色卡片，确保输入清晰）
       Column() {
-        // 标题区域
+        // 页面内容容器
         Column() {
-          Text('碳迹')
-            .fontSize(32)
-            .fontWeight(FontWeight.Bold)
-            .fontColor($r('app.color.logOrRes_button_background'))
-            .margin({ bottom: 8 })
+          // 标题区域（在白色背景下使用深绿色保持协调）
+          Column() {
+            Text('登录 / 注册')
+              .fontSize(26)
+              .fontWeight(FontWeight.Bold)
+              .fontColor('#0A5C36')  // 深绿色，与主题协调
+              .margin({ bottom: 8 })
 
-          Text('记录您的碳足迹，共建绿色地球')
-            .fontSize(14)
-            .fontColor($r('app.color.logOrRes_button_word_a'))
-            .opacity(0.8)
-        }
-        .width('100%')
-        .alignItems(HorizontalAlign.Center)
-        .margin({ bottom: 40 })
-
-        // 账号输入框
-        Column() {
-          Row() {
-            Image($r('app.media.log_account'))
-              .width(25)
-              .fillColor(this.isAccountFocused ? $r('app.color.logOrRes_button_background') : $r('app.color.logOrRes_button_border'))
-              .animation({ duration: 200, curve: Curve.EaseOut })
-
-            TextInput({ placeholder: '请输入账号', text: $$this.accountStr })
-              .backgroundColor(Color.Transparent)
-              .width(260)
-              .placeholderColor($r('app.color.logOrRes_button_word_a'))
-              .fontColor($r('app.color.logOrRes_button_word_c'))
-              .copyOption(CopyOptions.LocalDevice)
-              .onFocus(() => {
-                animateTo({ duration: 200 }, () => {
-                  this.isAccountFocused = true
-                })
-              })
-              .onBlur(() => {
-                animateTo({ duration: 200 }, () => {
-                  this.isAccountFocused = false
-                })
-                // 失去焦点时验证
-                if (this.accountStr.length > 0 && this.accountStr.length < 3) {
-                  this.accountError = '账号至少3个字符'
-                }
-              })
+            Text('开启您的碳足迹之旅')
+              .fontSize(14)
+              .fontColor('#1B5E3A')  // 中等绿色
+              .opacity(0.9)
           }
           .width('100%')
-          .height(50)
-          .border({
-            radius: 25,
-            color: this.isAccountFocused ? $r('app.color.logOrRes_button_background') : $r('app.color.logOrRes_button_border'),
-            width: this.isAccountFocused ? 3 : 2
-          })
-          .padding({ left: 12 })
-          .animation({ duration: 200, curve: Curve.EaseOut })
+          .alignItems(HorizontalAlign.Center)
+          .margin({ bottom: 35 })
 
-          // 账号错误提示
-          if (this.accountError) {
-            Text(this.accountError)
-              .fontSize(12)
-              .fontColor(Color.Red)
-              .margin({ top: 4, left: 12 })
-              .width('100%')
-              .textAlign(TextAlign.Start)
-              .transition({ type: TransitionType.Insert, opacity: 0.5 })
-          }
-        }
-        .width('85%')
+          // 账号输入框
+          Column() {
+            Row() {
+              Image($r('app.media.log_account'))
+                .width(25)
+                .fillColor(this.isAccountFocused ? $r('app.color.logOrRes_button_background') : $r('app.color.logOrRes_button_border'))
+                .animation({ duration: 200, curve: Curve.EaseOut })
 
-        // 密码输入框
-        Column() {
-          Row() {
-            Image($r('app.media.log_password'))
-              .width(25)
-              .fillColor(this.isPasswordFocused ? $r('app.color.logOrRes_button_background') : $r('app.color.logOrRes_button_border'))
-              .animation({ duration: 200, curve: Curve.EaseOut })
-
-            TextInput({ placeholder: '请输入密码', text: $$this.passwordStr })
-              .width(275)
-              .placeholderColor($r('app.color.logOrRes_button_word_a'))
-              .fontColor($r('app.color.logOrRes_button_word_c'))
-              .passwordIcon({ onIconSrc: $r('app.media.log_secret'), offIconSrc: $r('app.media.log_secret_selected') })
-              .type(InputType.Password)
-              .backgroundColor(Color.Transparent)
-              .copyOption(CopyOptions.LocalDevice)
-              .onFocus(() => {
-                animateTo({ duration: 200 }, () => {
-                  this.isPasswordFocused = true
+              TextInput({ placeholder: '请输入账号', text: $$this.accountStr })
+                .backgroundColor(Color.Transparent)
+                .width(260)
+                .placeholderColor($r('app.color.logOrRes_button_word_a'))
+                .fontColor($r('app.color.logOrRes_button_word_c'))
+                .copyOption(CopyOptions.LocalDevice)
+                .onFocus(() => {
+                  animateTo({ duration: 200 }, () => {
+                    this.isAccountFocused = true
+                  })
                 })
-              })
-              .onBlur(() => {
-                animateTo({ duration: 200 }, () => {
-                  this.isPasswordFocused = false
+                .onBlur(() => {
+                  animateTo({ duration: 200 }, () => {
+                    this.isAccountFocused = false
+                  })
+                  // 失去焦点时验证
+                  if (this.accountStr.length > 0 && this.accountStr.length < 3) {
+                    this.accountError = '账号至少3个字符'
+                  }
                 })
-                // 失去焦点时验证
-                if (this.passwordStr.length > 0 && this.passwordStr.length < 6) {
-                  this.passwordError = '密码至少6个字符'
-                }
-              })
+            }
+            .width('100%')
+            .height(50)
+            .border({
+              radius: 25,
+              color: this.isAccountFocused ? $r('app.color.logOrRes_button_background') : $r('app.color.logOrRes_button_border'),
+              width: this.isAccountFocused ? 3 : 2
+            })
+            .padding({ left: 12 })
+            .animation({ duration: 200, curve: Curve.EaseOut })
+
+            // 账号错误提示
+            if (this.accountError) {
+              Text(this.accountError)
+                .fontSize(12)
+                .fontColor(Color.Red)
+                .margin({ top: 4, left: 12 })
+                .width('100%')
+                .textAlign(TextAlign.Start)
+                .transition({ type: TransitionType.Insert, opacity: 0.5 })
+            }
           }
-          .width('100%')
-          .height(50)
-          .border({
-            radius: 25,
-            color: this.isPasswordFocused ? $r('app.color.logOrRes_button_background') : $r('app.color.logOrRes_button_border'),
-            width: this.isPasswordFocused ? 3 : 2
-          })
-          .padding({ left: 12, right: 12 })
-          .margin({ top: 25 })
-          .animation({ duration: 200, curve: Curve.EaseOut })
+          .width('85%')
 
-          // 密码错误提示
-          if (this.passwordError) {
-            Text(this.passwordError)
-              .fontSize(12)
-              .fontColor(Color.Red)
-              .margin({ top: 4, left: 12 })
-              .width('100%')
-              .textAlign(TextAlign.Start)
-              .transition({ type: TransitionType.Insert, opacity: 0.5 })
+          // 密码输入框
+          Column() {
+            Row() {
+              Image($r('app.media.log_password'))
+                .width(25)
+                .fillColor(this.isPasswordFocused ? $r('app.color.logOrRes_button_background') : $r('app.color.logOrRes_button_border'))
+                .animation({ duration: 200, curve: Curve.EaseOut })
+
+              TextInput({ placeholder: '请输入密码', text: $$this.passwordStr })
+                .width(275)
+                .placeholderColor($r('app.color.logOrRes_button_word_a'))
+                .fontColor($r('app.color.logOrRes_button_word_c'))
+                .passwordIcon({ onIconSrc: $r('app.media.log_secret'), offIconSrc: $r('app.media.log_secret_selected') })
+                .type(InputType.Password)
+                .backgroundColor(Color.Transparent)
+                .copyOption(CopyOptions.LocalDevice)
+                .onFocus(() => {
+                  animateTo({ duration: 200 }, () => {
+                    this.isPasswordFocused = true
+                  })
+                })
+                .onBlur(() => {
+                  animateTo({ duration: 200 }, () => {
+                    this.isPasswordFocused = false
+                  })
+                  // 失去焦点时验证
+                  if (this.passwordStr.length > 0 && this.passwordStr.length < 6) {
+                    this.passwordError = '密码至少6个字符'
+                  }
+                })
+            }
+            .width('100%')
+            .height(50)
+            .border({
+              radius: 25,
+              color: this.isPasswordFocused ? $r('app.color.logOrRes_button_background') : $r('app.color.logOrRes_button_border'),
+              width: this.isPasswordFocused ? 3 : 2
+            })
+            .padding({ left: 12, right: 12 })
+            .margin({ top: 25 })
+            .animation({ duration: 200, curve: Curve.EaseOut })
+
+            // 密码错误提示
+            if (this.passwordError) {
+              Text(this.passwordError)
+                .fontSize(12)
+                .fontColor(Color.Red)
+                .margin({ top: 4, left: 12 })
+                .width('100%')
+                .textAlign(TextAlign.Start)
+                .transition({ type: TransitionType.Insert, opacity: 0.5 })
+            }
           }
-        }
-        .width('85%')
-        .margin({ bottom: 12 })
-
-        // 忘记密码
-        Text($r('app.string.logOrRes_forgetPsw'))
-          .fontColor($r('app.color.logOrRes_button_word_b'))
           .width('85%')
-          .textAlign(TextAlign.End)
-          .fontWeight(FontWeight.Medium)
-          .fontSize(15)
-          .margin({ top: 8 })
-          .onClick(() => {
-            // 忘记密码逻辑
-          })
+          .margin({ bottom: 12 })
 
-        // 登录/注册按钮
-        Button(this.loginButtonText)
-          .fontSize(17)
-          .fontColor($r('app.color.logOrRes_button_word'))
-          .backgroundColor($r('app.color.logOrRes_button_background'))
-          .width('85%')
-          .height(50)
-          .margin({ top: 30 })
-          .borderRadius(25)
-          .stateEffect(true)
-          .scale({ x: this.buttonScale, y: this.buttonScale })
-          .onTouch((event: TouchEvent) => {
-            if (event.type === TouchType.Down) {
-              this.startButtonAnimation()
-            } else if (event.type === TouchType.Up) {
-              this.resetButtonAnimation()
-            }
-          })
-          .onClick(async () => {
-            // if (this.isSubmitting) return
-            //
-            // // 表单验证
-            // if (!this.validateForm()) {
-            //   return
-            // }
-            //
-            // this.isSubmitting = true
-            // this.loginButtonText = '登录中...'
-            //
-            // // 这里可以调用实际的登录API
-            // // this.httpForLoginState.setExtraData(this.accountStr, this.passwordStr, '1')
-            // // await this.httpForLoginState.HTTPFunc()
-            //
-            // // 模拟登录过程
-            // setTimeout(() => {
-            //   this.loginButtonText = $r('app.string.logOrRes_button')
-            //   this.isSubmitting = false
-            //
-            //   // 这里可以添加实际登录成功后的逻辑
-            //   prompt.showToast({
-            //     message: '登录成功（模拟）',
-            //     duration: 2000
-            //   })
-            // }, 1500)
-          })
-
-        // 游客登录按钮（文字按钮样式）
-        Text('游客体验')
-          .fontColor($r('app.color.logOrRes_button_word_b'))
-          .fontSize(15)
-          .margin({ top: 20 })
-          .onClick(async () => {
-            if (this.isSubmitting) return
-
-            this.isSubmitting = true
-            this.loginProgressBol = true
-
-            // 保持原有的游客登录逻辑不变
-            let date = new Date().toLocaleDateString()
-            AppStorage.set('currLoginAcc', 'testDemo')
-            const bol_acc: boolean = await this.userRdbStoreIns.hasAcc('testDemo')
-            const bol_totalData: boolean = await this.carEmiTotalWeeklyTable.hasTodayItem('testDemo', date)
-            const bol_TaskData: boolean = await this.tendTasksTable.hasTodayItem('testDemo', date)
-            if (!bol_acc) {
-              this.userRdbStoreIns.setOriginalData('testDemo')
-              this.carEmiTransTableIns.setOriginalTotalData('testDemo')
-              this.carEmiApplianceTable.setOriginalTotalData('testDemo')
-              this.carEmiFoodTable.setOriginalTotalData('testDemo')
-            }
-            if (!bol_totalData) {
-              this.carEmiTotalWeeklyTable.setOriginalTotalData('testDemo', date)
-            }
-            if (!bol_TaskData) {
-              this.tendTasksTable.setOriginalTotalData('testDemo', date)
-            }
-
-            // 添加登录成功动画
-            animateTo({ duration: 300 }, () => {
-              this.pageOpacity = 0
-              this.pageTranslateY = -30
+          // 忘记密码
+          Text($r('app.string.logOrRes_forgetPsw'))
+            .fontColor($r('app.color.logOrRes_button_word_b'))
+            .width('85%')
+            .textAlign(TextAlign.End)
+            .fontWeight(FontWeight.Medium)
+            .fontSize(15)
+            .margin({ top: 8 })
+            .onClick(() => {
+              // 忘记密码逻辑
             })
 
-            setTimeout(() => {
-              this.isLogin = true
-              this.healthyNewsPre.setTodayData_HN(this.httpForHN.data)
-              this.loginProgressBol = false
-              this.isSubmitting = false
-            }, 300)
-          })
+          // 登录/注册按钮
+          Button(this.loginButtonText)
+            .fontSize(17)
+            .fontColor($r('app.color.logOrRes_button_word'))
+            .backgroundColor($r('app.color.logOrRes_button_background'))
+            .width('85%')
+            .height(50)
+            .margin({ top: 30 })
+            .borderRadius(25)
+            .stateEffect(true)
+            .scale({ x: this.buttonScale, y: this.buttonScale })
+            .onTouch((event: TouchEvent) => {
+              if (event.type === TouchType.Down) {
+                this.startButtonAnimation()
+              } else if (event.type === TouchType.Up) {
+                this.resetButtonAnimation()
+              }
+            })
+            .onClick(async () => {
+              // if (this.isSubmitting) return
+              //
+              // // 表单验证
+              // if (!this.validateForm()) {
+              //   return
+              // }
+              //
+              // this.isSubmitting = true
+              // this.loginButtonText = '登录中...'
+              //
+              // // 这里可以调用实际的登录API
+              // // this.httpForLoginState.setExtraData(this.accountStr, this.passwordStr, '1')
+              // // await this.httpForLoginState.HTTPFunc()
+              //
+              // // 模拟登录过程
+              // setTimeout(() => {
+              //   this.loginButtonText = $r('app.string.logOrRes_button')
+              //   this.isSubmitting = false
+              //
+              //   // 这里可以添加实际登录成功后的逻辑
+              //   prompt.showToast({
+              //     message: '登录成功（模拟）',
+              //     duration: 2000
+              //   })
+              // }, 1500)
+            })
 
-        // 加载状态
-        if (this.loginProgressBol) {
-          Column() {
-            LoadingProgress()
-              .color($r('app.color.logOrRes_button_background'))
-              .width(50)
-              .height(50)
+          // 游客登录按钮（文字按钮样式）
+          Text('游客体验')
+            .fontColor($r('app.color.logOrRes_button_word_b'))
+            .fontSize(15)
+            .margin({ top: 20 })
+            .onClick(async () => {
+              if (this.isSubmitting) return
 
-            Text(this.isLogin ? '正在跳转...' : '登录中...')
-              .fontSize(12)
-              .fontColor($r('app.color.logOrRes_button_word_a'))
-              .margin({ top: 10 })
+              this.isSubmitting = true
+              this.loginProgressBol = true
+
+              // 保持原有的游客登录逻辑不变
+              let date = new Date().toLocaleDateString()
+              AppStorage.set('currLoginAcc', 'testDemo')
+              const bol_acc: boolean = await this.userRdbStoreIns.hasAcc('testDemo')
+              const bol_totalData: boolean = await this.carEmiTotalWeeklyTable.hasTodayItem('testDemo', date)
+              const bol_TaskData: boolean = await this.tendTasksTable.hasTodayItem('testDemo', date)
+              if (!bol_acc) {
+                this.userRdbStoreIns.setOriginalData('testDemo')
+                this.carEmiTransTableIns.setOriginalTotalData('testDemo')
+                this.carEmiApplianceTable.setOriginalTotalData('testDemo')
+                this.carEmiFoodTable.setOriginalTotalData('testDemo')
+              }
+              if (!bol_totalData) {
+                this.carEmiTotalWeeklyTable.setOriginalTotalData('testDemo', date)
+              }
+              if (!bol_TaskData) {
+                this.tendTasksTable.setOriginalTotalData('testDemo', date)
+              }
+
+              // 添加登录成功动画
+              animateTo({ duration: 300 }, () => {
+                this.pageOpacity = 0
+                this.pageTranslateY = -30
+              })
+
+              setTimeout(() => {
+                this.isLogin = true
+                this.healthyNewsPre.setTodayData_HN(this.httpForHN.data)
+                this.loginProgressBol = false
+                this.isSubmitting = false
+              }, 300)
+            })
+
+          // 加载状态
+          if (this.loginProgressBol) {
+            Column() {
+              LoadingProgress()
+                .color($r('app.color.logOrRes_button_background'))
+                .width(50)
+                .height(50)
+
+              Text(this.isLogin ? '正在跳转...' : '登录中...')
+                .fontSize(12)
+                .fontColor($r('app.color.logOrRes_button_word_a'))
+                .margin({ top: 10 })
+            }
+            .transition({ type: TransitionType.Insert, opacity: 0.5 })
+            .margin({ top: 30 })
           }
-          .transition({ type: TransitionType.Insert, opacity: 0.5 })
-          .margin({ top: 30 })
         }
-
-        // 调试按钮（仅开发环境显示）
-        // Button('删除数据库')
-        //   .fontSize(12)
-        //   .fontColor(Color.Gray)
-        //   .margin({ top: 20 })
-        //   .onClick(() => {
-        //     this.userRdbStoreIns.deleteMyTable()
-        //     this.carEmiTransTableIns.deleteMyTable()
-        //     this.carEmiApplianceTable.deleteMyTable()
-        //     this.carEmiFoodTable.deleteMyTable()
-        //     this.carEmiTotalWeeklyTable.deleteMyTable()
-        //     this.tendTasksTable.deleteMyTable()
-        //   })
+        .width('100%')
+        .padding({ top: 30, bottom: 50 })
       }
+      .opacity(this.pageOpacity)
+      .translate({ y: this.pageTranslateY })
+      .alignItems(HorizontalAlign.Center)
       .width('100%')
-      .padding({ top: 40, bottom: 40 })
+      .height('100%')
+      .backgroundColor('#FFFFFF')  // 确保内容区域纯白
+      .borderRadius({ topLeft: 40, topRight: 40 })
+      .shadow({ radius: 20, type: ShadowType.COLOR, color: '#00000020', offsetY: -5 })
+      .margin({ top: '15%' })  // 给上半区域动画留出空间，但确保输入区域可见
     }
-    .opacity(this.pageOpacity)
-    .translate({ y: this.pageTranslateY })
-    .alignItems(HorizontalAlign.Center)
     .width('100%')
-    .height('72%')
-    .backgroundColor($r('app.color.logOrRes_background_fore'))
+    .height(600)
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
-    .borderRadius({ topLeft: 25, topRight: 25 })
-    .shadow({ radius: 30, type: ShadowType.COLOR, color: $r('app.color.logOrRes_shadow'), offsetY: -5 })
-    .linearGradient({
-      angle: 180,
-      colors: [
-        [$r('app.color.logOrRes_background_fore'), 0.0],
-        [$r('app.color.logOrRes_background_fore'), 0.8],
-        [$r('app.color.logOrRes_background'), 1.0]
-      ]
-    })
   }
 }

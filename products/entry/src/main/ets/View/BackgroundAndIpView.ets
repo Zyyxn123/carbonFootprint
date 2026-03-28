@@ -23,6 +23,15 @@ export struct backgroundAndIpView {
   @State decorationOpacity: number = 0
   @State decorationRotation: number = 0
 
+  // Canvas动画状态
+  @State canvasAnimationTime: number = 0
+  @State canvasRotation: number = 0
+  @State canvasPulse: number = 0
+  private canvasContext: CanvasRenderingContext2D = new CanvasRenderingContext2D()
+  private animationId: number = 0
+  private canvasWidth: number = 200
+  private canvasHeight: number = 200
+
   aboutToAppear() {
     // 初始化浮动动画
     this.startFloatingAnimation()
@@ -150,6 +159,127 @@ export struct backgroundAndIpView {
     }, 4500)
   }
 
+  aboutToDisappear() {
+    // 停止Canvas动画
+    if (this.animationId) {
+      clearInterval(this.animationId)
+    }
+  }
+
+  // Canvas动画循环
+  startCanvasAnimation() {
+    this.animationId = setInterval(() => {
+      this.canvasAnimationTime += 0.05
+      this.canvasRotation += 1
+      this.canvasPulse = 0.5 + 0.5 * Math.sin(this.canvasAnimationTime)
+
+      // 请求重绘
+      this.canvasContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight)
+      this.drawCanvas()
+    }, 16) // 约60fps
+  }
+
+  // Canvas绘制函数
+  drawCanvas() {
+    const ctx = this.canvasContext
+    const centerX = this.canvasWidth / 2
+    const centerY = this.canvasHeight / 2
+    const time = this.canvasAnimationTime
+
+    // 清除画布
+    ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight)
+
+    // 绘制多层光晕（优化后的优美光晕）
+    for (let i = 0; i < 3; i++) {
+      const radius = 60 + i * 20
+      const opacity = 0.2 - i * 0.05
+      const pulseFactor = 1 + 0.1 * Math.sin(time + i * 0.5)
+
+      ctx.beginPath()
+      ctx.arc(centerX, centerY, radius * pulseFactor, 0, Math.PI * 2)
+      ctx.fillStyle = `rgba(76, 175, 80, ${opacity})`
+      ctx.fill()
+
+      // 外发光
+      ctx.beginPath()
+      ctx.arc(centerX, centerY, radius * pulseFactor + 10, 0, Math.PI * 2)
+      ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * 0.5})`
+      ctx.lineWidth = 2
+      ctx.stroke()
+    }
+
+    // 绘制抽象叶子形状
+    ctx.save()
+    ctx.translate(centerX, centerY)
+    ctx.rotate(this.canvasRotation * Math.PI / 180)
+
+    // 叶子主体
+    ctx.beginPath()
+    for (let i = 0; i < 8; i++) {
+      const angle = (i * Math.PI) / 4
+      const radius = 50 + 10 * Math.sin(time * 2 + i)
+      const x = radius * Math.cos(angle)
+      const y = radius * Math.sin(angle) * 0.7
+
+      if (i === 0) {
+        ctx.moveTo(x, y)
+      } else {
+        ctx.lineTo(x, y)
+      }
+    }
+    ctx.closePath()
+
+    // 叶子渐变填充
+    const gradient = ctx.createLinearGradient(-50, -50, 50, 50)
+    gradient.addColorStop(0, '#4CAF50')
+    gradient.addColorStop(1, '#8BC34A')
+    ctx.fillStyle = gradient
+    ctx.fill()
+
+    // 叶子描边
+    ctx.strokeStyle = '#FFFFFF'
+    ctx.lineWidth = 2
+    ctx.stroke()
+
+    // 叶子脉络
+    ctx.beginPath()
+    for (let i = 0; i < 4; i++) {
+      const angle = (i * Math.PI) / 2
+      const length = 40 + 5 * Math.sin(time * 3 + i)
+      ctx.moveTo(0, 0)
+      ctx.lineTo(length * Math.cos(angle), length * Math.sin(angle) * 0.7)
+    }
+    ctx.strokeStyle = '#FFFFFF'
+    ctx.lineWidth = 1
+    ctx.stroke()
+
+    ctx.restore()
+
+    // 绘制旋转粒子
+    for (let i = 0; i < 12; i++) {
+      const angle = (i * Math.PI) / 6 + time
+      const distance = 80 + 10 * Math.sin(time * 2 + i * 0.5)
+      const size = 3 + 2 * Math.sin(time * 3 + i)
+
+      ctx.beginPath()
+      ctx.arc(
+        centerX + distance * Math.cos(angle),
+        centerY + distance * Math.sin(angle),
+        size,
+        0,
+        Math.PI * 2
+      )
+      ctx.fillStyle = `rgba(255, 255, 255, ${0.7 + 0.3 * Math.sin(time + i)})`
+      ctx.fill()
+    }
+  }
+
+  // Canvas onReady回调
+  onCanvasReady(canvas: CanvasRenderingContext2D) {
+    this.canvasContext = canvas
+    this.startCanvasAnimation()
+  }
+
   build() {
     Stack({ alignContent: Alignment.TopStart }) {
       // 1. 主背景渐变
@@ -203,18 +333,47 @@ export struct backgroundAndIpView {
 
         // Logo区域
         Stack({ alignContent: Alignment.Center }) {
-          // 动态光环背景
-          Circle()
-            .width(240)
-            .height(240)
-            .fill('#FFFFFF')
-            .opacity(0.05 + this.logoGlow * 0.1)
-            .shadow({
-              radius: 60 + this.logoGlow * 30,
-              color: '#4CAF50'
-            })
-            .scale({ x: this.decorationScale, y: this.decorationScale })
-            .opacity(this.decorationOpacity)
+          // 优化光晕背景 - 多层光环（颜色调淡）
+          Stack({ alignContent: Alignment.Center }) {
+            // 外层光晕
+            Circle()
+              .width(260)
+              .height(260)
+              .fill('#FFFFFF')
+              .opacity(0.01 + this.logoGlow * 0.03)
+              .shadow({
+                radius: 80 + this.logoGlow * 40,
+                color: '#4CAF50'
+              })
+              .scale({ x: this.decorationScale, y: this.decorationScale })
+              .opacity(this.decorationOpacity)
+
+            // 中层光晕
+            Circle()
+              .width(220)
+              .height(220)
+              .fill('#FFFFFF')
+              .opacity(0.02 + this.logoGlow * 0.05)
+              .shadow({
+                radius: 50 + this.logoGlow * 25,
+                color: '#8BC34A'
+              })
+              .scale({ x: this.decorationScale, y: this.decorationScale })
+              .opacity(this.decorationOpacity * 0.6)
+
+            // 内层光晕（透明度最低，不遮挡旋转光点）
+            Circle()
+              .width(180)
+              .height(180)
+              .fill('#FFFFFF')
+              .opacity(0.008 + this.logoGlow * 0.02)
+              .shadow({
+                radius: 30 + this.logoGlow * 15,
+                color: '#C8E6C9'
+              })
+              .scale({ x: this.decorationScale, y: this.decorationScale })
+              .opacity(this.decorationOpacity * 0.2)
+          }
 
           // 旋转装饰环
           Circle()
@@ -226,19 +385,15 @@ export struct backgroundAndIpView {
             .scale({ x: this.decorationScale, y: this.decorationScale })
             .opacity(this.decorationOpacity)
 
-          // 主Logo
-          Image($r('app.media.img_1'))
-            .width(160)
-            .height(160)
-            .objectFit(ImageFit.Contain)
+          // 主Logo - Canvas动画
+          Canvas(this.canvasContext)
+            .width(200)
+            .height(200)
             .scale({ x: this.logoScale, y: this.logoScale })
             .rotate({ angle: this.logoRotation })
             .opacity(this.logoOpacity)
-            .shadow({
-              radius: 40,
-              color: '#00000040',
-              offsetX: 0,
-              offsetY: 10
+            .onReady(() => {
+              this.onCanvasReady(this.canvasContext)
             })
         }
         .margin({ bottom: 50 })
@@ -301,13 +456,14 @@ export struct backgroundAndIpView {
                 .backgroundColor('#FFFFFF60')
                 .margin({ right: 16 })
 
-              // 中间图标
-              Image($r('app.media.img_1'))  // 使用小图标，可以替换为leaf图标
+              // 中间图标 - 叶子形状
+              Circle()
                 .width(24)
                 .height(24)
-                .objectFit(ImageFit.Contain)
+                .fill('#4CAF50')
                 .opacity(this.taglineOpacity)
                 .rotate({ angle: this.decorationRotation / 10 })
+                .shadow({ radius: 5, color: '#FFFFFF60' })
 
               Column()
                 .width(60)
