@@ -57,7 +57,7 @@ export struct lowFootprintPage {
       id: 1,
       latitude: 32.020750,
       longitude: 118.788765,
-      title: '南京夫子庙()例',
+      title: '南京夫子庙(例)',
       description: '历史文化街区，低碳出行推荐地点'
     },
   ]
@@ -66,6 +66,8 @@ export struct lowFootprintPage {
   @State searchResults: SiteItem[] = []
   @State isLoading: boolean = false
   @State showSearchResults: boolean = false
+  @State carbonEmission: string = ''
+  @State remark: string = ''
   private searchTimer: number = 0
 
   mapConfig() {
@@ -346,6 +348,61 @@ export struct lowFootprintPage {
           .width('100%')
           .border({ width: 1, color: '#ccc', radius: 15 })
         }
+
+        // 碳排放数据输入
+        Column({ space: 10 }) {
+          Text('碳排放数据 (可选)')
+            .fontSize(14)
+            .fontColor('#37800f')
+            .fontWeight(FontWeight.Medium)
+            .width('100%')
+            .textAlign(TextAlign.Start)
+            .margin({ bottom: 5 })
+
+          Row() {
+            TextInput({ placeholder: '请输入碳排放量，单位：千克', text: $$this.carbonEmission })
+              .width('85%')
+              .fontColor('#000')
+              .placeholderColor('#999')
+              .backgroundColor(Color.Transparent)
+              .onChange((value: string) => {
+                this.carbonEmission = value
+              })
+
+            Text('kg')
+              .fontSize(14)
+              .fontColor('#666666')
+              .margin({ left: 10 })
+          }
+          .border({ width: 1, color: '#81B29A', radius: 12 })
+          .padding({ left: 15, right: 15, top: 10, bottom: 10 })
+          .backgroundColor('#F9FFFD')
+
+          // 备注信息输入
+          Column({ space: 5 }) {
+            Text('备注信息 (可选)')
+              .fontSize(14)
+              .fontColor('#37800f')
+              .fontWeight(FontWeight.Medium)
+              .width('100%')
+              .textAlign(TextAlign.Start)
+              .margin({ bottom: 5 })
+
+            TextInput({ placeholder: '请输入相关备注信息', text: $$this.remark })
+              .width('100%')
+              .fontColor('#000')
+              .placeholderColor('#999')
+              .backgroundColor('#FFFFFF')
+              .border({ width: 1, color: '#81B29A', radius: 12 })
+              .padding({ left: 15, right: 15, top: 10, bottom: 10 })
+              .onChange((value: string) => {
+                this.remark = value
+              })
+          }
+          .width('100%')
+        }
+        .width('100%')
+        .margin({ top: 20 })
       }
       .width('100%')
     }
@@ -411,14 +468,9 @@ export struct lowFootprintPage {
     };
 
     let cameraUpdate = map.newCameraPosition(cameraPosition);
-    // 以非动画方式移动地图相机
-    // this.mapController.moveCamera(cameraUpdate);
 
     // 以动画方式移动地图相机
     this.mapController.animateCamera(cameraUpdate, 1000);
-
-    // 以动画方式移动地图相机，并返回动画结果
-    // let animateResult = await this.mapController.animateCameraStatus(cameraUpdate, 1000);
 
     let pointAnnotationOptions: mapCommon.PointAnnotationParams = {
       position: {
@@ -551,7 +603,7 @@ export struct lowFootprintPage {
                 this.isShow1 = true
               })
               .bindSheet($$this.isShow1, this.bSBuilder(0), {
-                height: 500,
+                height: 700,
                 showClose: false,
                 backgroundColor: '#fff',
                 onWillDismiss: () => {
@@ -615,18 +667,18 @@ export struct lowFootprintPage {
 
       backButton({ pageTitle: '碳足迹', bol: this.bol })
 
-      if (this.showAnnotationDetail) {
-        Column() {
-          this.AnnotationDetailBuilder()
-        }
-        .width('100%')
-        .height('100%')
-        .justifyContent(FlexAlign.Center)
-        .backgroundColor('#80000000')
-        .onClick(() => {
-          this.showAnnotationDetail = false
-        })
-      }
+      // if (this.showAnnotationDetail) {
+      //   Column() {
+      //     this.AnnotationDetailBuilder()
+      //   }
+      //   .width('100%')
+      //   .height('100%')
+      //   .justifyContent(FlexAlign.Center)
+      //   .backgroundColor('#80000000')
+      //   .onClick(() => {
+      //     this.showAnnotationDetail = false
+      //   })
+      // }
     }
     .width('100%')
     .height('100%')
