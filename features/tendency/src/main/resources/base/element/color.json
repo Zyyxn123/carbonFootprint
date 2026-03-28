@@ -35,6 +35,34 @@
     {
       "name": "recAndTask_content_color",
       "value": "#ffffff"
+    },
+    {
+      "name": "green_primary",
+      "value": "#37800f"
+    },
+    {
+      "name": "green_secondary",
+      "value": "#81B29A"
+    },
+    {
+      "name": "green_light",
+      "value": "#F3FEF3"
+    },
+    {
+      "name": "green_mint",
+      "value": "#e7fdff"
+    },
+    {
+      "name": "green_pale",
+      "value": "#edffdd"
+    },
+    {
+      "name": "annotation_background",
+      "value": "#ffffff"
+    },
+    {
+      "name": "annotation_text",
+      "value": "#000000"
     }
   ]
 }

@@ -8,7 +8,7 @@ import { BusinessError } from '@kit.BasicServicesKit';
 import { bundleManager } from "@kit.AbilityKit";
 import { JSON } from "@kit.ArkTS";
 import footPriVM from "../ViewModel/FootPriViewModel";
-
+import { PointAnnotationData, SiteItem, Type } from "../Type/FootprintMsgType";
 
 const permissions: Permissions[] = ['ohos.permission.LOCATION', 'ohos.permission.APPROXIMATELY_LOCATION'];
 
@@ -16,22 +16,20 @@ function reqPermissionsFromUser(permissions: Array<Permissions>, context: common
   return new Promise((resolve) => {
     let atManager: abilityAccessCtrl.AtManager = abilityAccessCtrl.createAtManager()
     let bol = false
-    // requestPermissionsFromUser会判断权限的授权状态来决定是否唤起弹窗
     atManager.requestPermissionsFromUser(context, permissions).then((data) => {
       let grantStatus: number[] = data.authResults
       let length: number = grantStatus.length
       for (let i = 0; i < length; i++) {
         if (grantStatus[i] === 0) {
-          // 用户授权，可以继续访问目标操作
           console.info(`${permissions[i]} is granted by user.`)
           resolve(true)
         } else {
-          // 用户拒绝授权，提示用户必须授权才能访问当前页面的功能，并引导用户到系统设置中打开相应的权限
           resolve(false)
         }
       }
     }).catch((err: BusinessError) => {
       console.error(`Failed to request permissions from user, code: ${err.code}, message: ${err.message}`)
+      resolve(false)
     })
   })
 }
@@ -42,9 +40,10 @@ export struct lowFootprintPage {
   @State permissionAllow: boolean = true
   @Prop val: object
   @State currIndex: number = -1
-  @State isShow: boolean = false
+  @State isShow1: boolean = false
+  @State isShow2: boolean = false
+  @State isShow3: boolean = false
   @State textStr: string = ''
-  private TAG = "HuaweiMapDemo";
   private mapOptions?: mapCommon.MapOptions;
   private callback?: AsyncCallback<map.MapComponentController>;
   private mapController?: map.MapComponentController;
@@ -53,6 +52,21 @@ export struct lowFootprintPage {
   private latitude: number = 0
   private longitude: number = 0
   private pointAnnotation?: map.PointAnnotation
+  private annotationDataList: PointAnnotationData[] = [
+    {
+      id: 1,
+      latitude: 32.020750,
+      longitude: 118.788765,
+      title: '南京夫子庙()例',
+      description: '历史文化街区，低碳出行推荐地点'
+    },
+  ]
+  @State selectedAnnotation: PointAnnotationData | null = null
+  @State showAnnotationDetail: boolean = false
+  @State searchResults: SiteItem[] = []
+  @State isLoading: boolean = false
+  @State showSearchResults: boolean = false
+  private searchTimer: number = 0
 
   mapConfig() {
     this.mapOptions = {
@@ -107,39 +121,48 @@ export struct lowFootprintPage {
 
     this.callback = async (err, mapController) => {
       if (!err) {
-        // 获取地图的控制器类，用来操作地图
         this.mapController = mapController;
         this.mapEventManager = this.mapController.getEventManager();
         mapController.setZoomControlsEnabled(false)
         this.mapController.setCompassControlsEnabled(false)
-        let pointAnnotationOptions: mapCommon.PointAnnotationParams = {
-          position: {
-            latitude: 32.020750,
-            longitude: 118.788765
-          },
-          repeatable: true,
-          collisionRule: mapCommon.CollisionRule.NAME,
-          titles: [{
-            // 定义标题内容
-            content: "南京夫子庙",
-            // 定义标题字体颜色
-            color: 0xFF000000,
-            // 定义标题字体大小
-            fontSize: 15,
-            // 定义标题描边颜色
-            strokeColor: 0xFFFFFFFF,
-            // 定义标题描边宽度
-            strokeWidth: 2,
-            // 定义标题字体样式
-            fontStyle: mapCommon.FontStyle.ITALIC
-          }],
+
+        for (let data of this.annotationDataList) {
+          let pointAnnotationOptions: mapCommon.PointAnnotationParams = {
+            position: {
+              latitude: data.latitude,
+              longitude: data.longitude
+            },
+            repeatable: true,
+            collisionRule: mapCommon.CollisionRule.NAME,
+            titles: [{
+              content: data.title,
+              color: 0xFF000000,
+              fontSize: 15,
+              strokeColor: 0xFFFFFFFF,
+              strokeWidth: 2,
+              fontStyle: mapCommon.FontStyle.ITALIC
+            }],
+          }
+
+          try {
+            let annotation = await this.mapController.addPointAnnotation(pointAnnotationOptions)
+          } catch (e) {
+            console.error(`Failed to create the pointAnnotation, code is：${e.code}, message is ${e.message}`);
+          }
         }
 
-        try {
-          this.pointAnnotation = await this.mapController.addPointAnnotation(pointAnnotationOptions)
-        } catch (e) {
-          console.error(`Failed to create the pointAnnotation, code is：${e.code}, message is ${e.message}`);
-        }
+        this.mapEventManager?.on('pointAnnotationClick', (event: map.PointAnnotation) => {
+          let pos = event.getPosition();
+          let clickedLat = pos.latitude;
+          let clickedLon = pos.longitude;
+          let foundData = this.annotationDataList.find(data =>
+          Math.abs(data.latitude - clickedLat) < 0.001 && Math.abs(data.longitude - clickedLon) < 0.001
+          )
+          if (foundData) {
+            this.selectedAnnotation = foundData
+            this.showAnnotationDetail = true
+          }
+        })
       }
     }
   }
@@ -160,10 +183,13 @@ export struct lowFootprintPage {
   FootprintBuilder() {
     Column({ space: 10 }) {
       Row() {
+        Text('碳足迹')
+          .fontSize(20)
+          .fontColor('#000')
+          .fontWeight(FontWeight.Medium)
+
         Image($r('app.media.arrow_up'))
-          .rotate({
-            angle: 180
-          })
+          .rotate({ angle: 180 })
           .fillColor('#000')
           .padding(10)
           .borderRadius(20)
@@ -172,71 +198,156 @@ export struct lowFootprintPage {
           .backgroundColor('#ffe3e3e3')
           .height(35)
           .onClick(() => {
-            this.isShow = false
+            this.isShow1 = false
+            this.textStr = ''
           })
       }
-      .justifyContent(FlexAlign.End)
+      .justifyContent(FlexAlign.SpaceBetween)
       .width('100%')
 
-      Row() {
-        TextInput({ placeholder: '请输入', text: $$this.textStr })
-          .width('70%')
-          .backgroundColor(Color.Transparent)
-        Divider()
-          .vertical(true)
-          .color('#ccc')
-          .width(3)
-          .height(30)
-          .strokeWidth(2)
-          .margin({ left: 5, right: 10 })
-        Image($r('app.media.map_search'))
-          .width(30)
-          .fillColor('#ccc')
-          .margin({ right: 5 })
-          .onClick(async () => {
-            let params: site.SearchByTextParams = {
-              query: this.textStr,
-              language: "zh_CN"
-            }
-            try {
-              const result = await site.searchByText(params)
-              console.info(`Succeeded in searching by text. result is ${JSON.stringify(result)}`)
-
-              if (result.sites && result.sites.length > 0) {
-                for (let index = 0; index < result.sites.length; index++) {
-                  const siteItem = result.sites[index];
-
-                  console.info(`datas: ${index}siteId: ` + siteItem.siteId);
-                  console.info(`datas: ${index}name: ` + siteItem.name);
-                  console.info(`datas: ${index}formatAddress: ` + siteItem.formatAddress);
-                  // console.info(`1111111111distance: ` + siteItem.distance);
-                  console.info(`datas: ${index}atitude: ` + siteItem.location?.latitude);
-                  console.info(`datas: ${index}longitude: ` + siteItem.location?.longitude);
-                  // console.info(`1111111111viewport northeast latitude: ` + siteItem.viewport?.northeast.latitude);
-                  // console.info(`1111111111viewport northeast longitude: ` + siteItem.viewport?.northeast.longitude);
-                  // console.info(`1111111111viewport southwest latitude: ` + siteItem.viewport?.southwest.latitude);
-                  // console.info(`1111111111viewport southwest longitude: ` + siteItem.viewport?.southwest.longitude);
-                  // console.info(`1111111111countryName: ` + siteItem.addressComponent.countryName);
-                  // console.info(`1111111111countryCode: ` + siteItem.addressComponent.countryCode);
-                  // console.info(`1111111111adminLevel1: ` + siteItem.addressComponent.adminLevel1);
-                  // console.info(`1111111111adminLevel2: ` + siteItem.addressComponent.adminLevel2);
-                  // console.info(`1111111111adminLevel3: ` + siteItem.addressComponent.adminLevel3);
-                  // console.info(`1111111111adminLevel4: ` + siteItem.addressComponent.adminLevel4);
-                  // console.info(`1111111111adminCode: ` + siteItem.addressComponent.adminCode);
-                  // console.info(`1111111111cityCode: ` + siteItem.addressComponent.city?.cityCode);
-                  // console.info(`1111111111cityId: ` + siteItem.addressComponent.city?.cityId);
-                  // console.info(`1111111111cityName: ` + siteItem.addressComponent.city?.cityName);
-                  // console.info(`1111111111streetNumber: ` + siteItem.addressComponent.streetNumber?.streetNumber);
-                  // console.info(`1111111111streetName: ` + siteItem.addressComponent.streetNumber?.streetName);
-                }
+      Column({ space: 10 }) {
+        Row() {
+          TextInput({ placeholder: '搜索地点...', text: $$this.textStr })
+            .width('75%')
+            .fontColor('#000')
+            .placeholderColor('#ccc')
+            .backgroundColor(Color.Transparent)
+            .onChange((value: string) => {
+              this.textStr = value
+              if (this.searchTimer) {
+                clearTimeout(this.searchTimer)
               }
-            } catch (error) {
-              const err: BusinessError = error as BusinessError;
-              console.error(`Failed in searching by text. Code is ${err.code}, message is ${err.message}`)
+              this.searchTimer = setTimeout(() => {
+                this.performSearch(value)
+              }, 500) as number
+            })
+
+          Divider()
+            .vertical(true)
+            .color('#81B29A')
+            .width(2)
+            .height(30)
+            .strokeWidth(2)
+            .margin({ left: 5, right: 10 })
+
+          Image($r('app.media.map_search'))
+            .width(30)
+            .fillColor('#37800f')
+            .margin({ right: 5 })
+            .onClick(() => {
+              this.performSearch(this.textStr)
+            })
+            .animation({ duration: 200, curve: Curve.EaseInOut })
+        }
+        .border({ width: 2, color: '#81B29A', radius: 20 })
+        .padding({ left: 15, right: 10 })
+        .backgroundColor('#F3FEF3')
+
+        if (this.showSearchResults) {
+          Column({ space: 5 }) {
+            if (this.isLoading) {
+              Row() {
+                LoadingProgress().width(25).height(25).color('#37800f')
+                Text('搜索中...').fontSize(14).fontColor('#666666').margin({ left: 10 })
+              }
+              .width('100%')
+              .padding(15)
+              .justifyContent(FlexAlign.Center)
             }
-          })
+            else if (this.searchResults.length > 0) {
+              Column({ space: 8 }) {
+                Text(`找到 ${this.searchResults.length} 个结果`)
+                  .fontSize(14)
+                  .fontColor('#37800f')
+                  .fontWeight(FontWeight.Medium)
+                  .width('100%')
+                  .textAlign(TextAlign.Start)
+                  .padding({ left: 5, bottom: 5 })
+
+                Scroll() {
+                  Column({ space: 5 }) {
+                    ForEach(this.searchResults, (item: SiteItem, index: number) => {
+                      Column() {
+                        Row() {
+                          Column({ space: 2 }) {
+                            Text(item.name ?? '未知地点')
+                              .fontSize(16)
+                              .fontColor('#000000')
+                              .fontWeight(FontWeight.Medium)
+                              .maxLines(1)
+                              .textOverflow({ overflow: TextOverflow.Ellipsis })
+
+                            if (item.formatAddress) {
+                              Text(item.formatAddress)
+                                .fontSize(13)
+                                .fontColor('#666666')
+                                .maxLines(1)
+                                .textOverflow({ overflow: TextOverflow.Ellipsis })
+                            }
+                          }
+                          .width('90%')
+
+                          Image($r('app.media.arrow_up'))
+                            .rotate({ angle: 90 })
+                            .width(20)
+                            .fillColor('#37800f')
+                            .opacity(0.7)
+                        }
+                        .width('100%')
+                        .padding(12)
+                        .backgroundColor('#FFFFFF')
+                        .borderRadius(12)
+                        .shadow({
+                          radius: 3,
+                          color: '#00000010',
+                          offsetX: 0,
+                          offsetY: 2
+                        })
+                        .onClick(() => {
+                          this.navigateToSite(item)
+                          this.isShow1 = false
+                          this.textStr = ''
+                        })
+                        .animation({ duration: 200, curve: Curve.EaseInOut })
+
+                        if (index < this.searchResults.length - 1) {
+                          Divider().strokeWidth(1).color('#E0E0E0')
+                        }
+                      }
+                    })
+                  }
+                  .width('100%')
+                }
+                .width('100%')
+                .height(250)
+              }
+              .width('100%')
+              .padding(5)
+              .backgroundColor('#FFFFFF')
+              .borderRadius(15)
+              .shadow({
+                radius: 10,
+                color: '#00000020',
+                offsetX: 0,
+                offsetY: 5
+              })
+            }
+            else if (this.textStr.trim().length > 0) {
+              Row() {
+                Text('未找到相关地点').fontSize(14).fontColor('#999999')
+              }
+              .width('100%')
+              .padding(20)
+              .justifyContent(FlexAlign.Center)
+              .backgroundColor('#FFFFFF')
+              .borderRadius(15)
+            }
+          }
+          .width('100%')
+          .border({ width: 1, color: '#ccc', radius: 15 })
+        }
       }
-      .border({ width: 2, color: '#ccc', radius: 15 })
+      .width('100%')
     }
     .alignItems(HorizontalAlign.Center)
     .width('100%')
@@ -244,10 +355,155 @@ export struct lowFootprintPage {
     .padding({ left: 10, right: 10, top: 20 })
   }
 
+  async performSearch(query: string): Promise<void> {
+    if (!query.trim()) {
+      this.searchResults = []
+      this.showSearchResults = false
+      return
+    }
+
+    this.isLoading = true
+    this.showSearchResults = true
+
+    let params: site.SearchByTextParams = {
+      query: query,
+      language: "zh_CN"
+    }
+
+    try {
+      const result = await site.searchByText(params)
+      console.info(`搜索结果：${JSON.stringify(result)}`)
+      this.searchResults = result.sites as SiteItem[]
+    } catch (error) {
+      const err: BusinessError = error as BusinessError;
+      console.error(`搜索失败：${err.code}, ${err.message}`)
+      this.searchResults = []
+    } finally {
+      this.isLoading = false
+    }
+  }
+
+  async navigateToSite(siteItem: SiteItem): Promise<void> {
+    if (!this.mapController || !siteItem.location) {
+      return
+    }
+
+    const location = siteItem.location
+
+    this.mapOptions = {
+      position: {
+        target: {
+          latitude: location.latitude,
+          longitude: location.longitude
+        },
+        zoom: 16
+      }
+    }
+
+    let cameraPosition: mapCommon.CameraPosition = {
+      target: {
+        latitude: location.latitude,
+        longitude: location.longitude
+      },
+      zoom: 10,
+      tilt: 0,
+      bearing: 0
+    };
+
+    let cameraUpdate = map.newCameraPosition(cameraPosition);
+    // 以非动画方式移动地图相机
+    // this.mapController.moveCamera(cameraUpdate);
+
+    // 以动画方式移动地图相机
+    this.mapController.animateCamera(cameraUpdate, 1000);
+
+    // 以动画方式移动地图相机，并返回动画结果
+    // let animateResult = await this.mapController.animateCameraStatus(cameraUpdate, 1000);
+
+    let pointAnnotationOptions: mapCommon.PointAnnotationParams = {
+      position: {
+        latitude: location.latitude,
+        longitude: location.longitude
+      },
+      repeatable: true,
+      collisionRule: mapCommon.CollisionRule.NAME,
+      titles: [{
+        content: siteItem.name ?? '目标位置',
+        color: 0xFF37800f,
+        fontSize: 16,
+        strokeColor: 0xFFFFFFFF,
+        strokeWidth: 2,
+        fontStyle: mapCommon.FontStyle.ITALIC
+      }],
+    }
+
+    try {
+      await this.mapController.addPointAnnotation(pointAnnotationOptions)
+      console.info(`已添加标注：${siteItem.name}`)
+    } catch (e) {
+      console.error(`添加标注失败`)
+    }
+
+    this.showSearchResults = false
+    this.textStr = siteItem.name ?? ''
+
+    const annotationData: PointAnnotationData = {
+      id: Date.now(),
+      latitude: location.latitude,
+      longitude: location.longitude,
+      title: siteItem.name ?? '未知地点',
+      description: siteItem.formatAddress || '无详细地址',
+      iconColor: '#37800f'
+    }
+    this.selectedAnnotation = annotationData
+    this.showAnnotationDetail = true
+  }
+
+  @Builder
+  AnnotationDetailBuilder() {
+    if (this.selectedAnnotation) {
+      Column({ space: 15 }) {
+        Text(this.selectedAnnotation.title)
+          .fontSize(20)
+          .fontColor('#000')
+          .fontWeight(FontWeight.Bold)
+
+        Divider().strokeWidth(1).color('#37800f')
+        Text(this.selectedAnnotation.description).fontSize(16).fontColor('#333')
+
+        Row() {
+          Text('经纬度：').fontColor('#666')
+          Text(`${this.selectedAnnotation.latitude.toFixed(6)}, ${this.selectedAnnotation.longitude.toFixed(6)}`)
+            .fontColor('#37800f')
+        }
+
+        Button('关闭')
+          .width('100%')
+          .height(40)
+          .backgroundColor('#37800f')
+          .fontColor('#fff')
+          .onClick(() => {
+            this.showAnnotationDetail = false
+          })
+      }
+      .padding(20)
+      .backgroundColor('#fff')
+      .borderRadius(20)
+      .shadow({ radius: 10, color: '#00000020' })
+      .width('80%')
+    }
+  }
+
   @Builder
   bSBuilder(index: number) {
     if (index === 0) {
       this.FootprintBuilder()
+    } else if (index === 1) {
+      Text('example1')
+        .fontColor('#000')
+    } else if (index === 2) {
+      Text('example2')
+        .fontColor('#000')
     }
   }
 
@@ -255,97 +511,125 @@ export struct lowFootprintPage {
     Stack({ alignContent: Alignment.Top }) {
       Stack({ alignContent: Alignment.Bottom }) {
         if (this.bol) {
-          MapComponent({ mapOptions: this.mapOptions, mapCallback: this.callback }).width('100%').height('100%')
+          MapComponent({ mapOptions: this.mapOptions, mapCallback: this.callback })
+            .width('100%')
+            .height('100%')
         } else {
           if (this.permissionAllow) {
             Column({ space: 5 }) {
-              LoadingProgress()
-                .width(45)
-                .color('#37800f')
-              Text('地图正在加载中...')
-                .fontSize(20)
-                .fontColor('#000')
+              LoadingProgress().width(45).color('#37800f')
+              Text('地图加载中...').fontSize(20)
             }
             .width('100%')
             .height('100%')
-            .alignItems(HorizontalAlign.Center)
             .justifyContent(FlexAlign.Center)
+            .backgroundColor('#F3FEF3')
           } else {
-            Column({ space: 5 }) {
-              Text('请前往设置开启精确位置权限')
+            Column() {
+              Text('请开启位置权限')
                 .fontSize(20)
                 .fontColor('#000')
             }
             .width('100%')
             .height('100%')
-            .alignItems(HorizontalAlign.Center)
             .justifyContent(FlexAlign.Center)
+            .backgroundColor('#F3FEF3')
           }
         }
 
         Row({ space: 10 }) {
           Row() {
-            ForEach(footPriVM.tabsContent, (item: string, index: number) => {
-              Text(item)
-                .fontSize(17)
-                .fontColor('#000')
-                .fontWeight(FontWeight.Medium)
-                .backgroundColor(this.currIndex === index ? '#37800f' : '#fff')
-                .padding(8)
-                .borderRadius(20)
-                .onClick(() => {
-                  if (this.currIndex === index) {
-                    this.currIndex = -1
-                  } else {
-                    this.currIndex = index
-                  }
-                  this.isShow = true
-                })
-                .bindSheet($$this.isShow, this.bSBuilder(index), {
-                  height: 500,
-                  showClose: false,
-                  backgroundColor: '#fff',
-                  borderColor: '#ccc',
-                  onWillDismiss: () => {
-                    this.isShow = false
-                  },
-                  onWillAppear: () => {
-                    this.isShow = true
-                  }
-                })
-            })
+            Text(footPriVM.tabsContent[0])
+              .fontSize(17)
+              .fontColor('#000')
+              .fontWeight(FontWeight.Medium)
+              .backgroundColor(this.currIndex === 0 ? '#37800f' : '#F3FEF3')
+              .animation({ duration: 300 })
+              .padding(8)
+              .borderRadius(20)
+              .onClick(() => {
+                this.isShow1 = true
+              })
+              .bindSheet($$this.isShow1, this.bSBuilder(0), {
+                height: 500,
+                showClose: false,
+                backgroundColor: '#fff',
+                onWillDismiss: () => {
+                  this.currIndex = -1
+                  this.isShow1 = false
+                  this.textStr = ''
+                }
+              })
+            Text(footPriVM.tabsContent[1])
+              .fontSize(17)
+              .fontColor('#000')
+              .fontWeight(FontWeight.Medium)
+              .backgroundColor(this.currIndex === 1 ? '#37800f' : '#F3FEF3')
+              .animation({ duration: 300 })
+              .padding(8)
+              .borderRadius(20)
+              .onClick(() => {
+                this.isShow2 = true
+              })
+              .bindSheet($$this.isShow2, this.bSBuilder(1), {
+                height: 500,
+                showClose: false,
+                backgroundColor: '#fff',
+                onWillDismiss: () => {
+                  this.currIndex = -1
+                  this.isShow2 = false
+                  this.textStr = ''
+                }
+              })
+            Text(footPriVM.tabsContent[2])
+              .fontSize(17)
+              .fontColor('#000')
+              .fontWeight(FontWeight.Medium)
+              .backgroundColor(this.currIndex === 2 ? '#37800f' : '#F3FEF3')
+              .animation({ duration: 300 })
+              .padding(8)
+              .borderRadius(20)
+              .onClick(() => {
+                this.isShow3 = true
+              })
+              .bindSheet($$this.isShow3, this.bSBuilder(2), {
+                height: 500,
+                showClose: false,
+                backgroundColor: '#fff',
+                onWillDismiss: () => {
+                  this.currIndex = -1
+                  this.isShow3 = false
+                  this.textStr = ''
+                }
+              })
           }
           .justifyContent(FlexAlign.SpaceEvenly)
-          .padding(8)
           .width('80%')
           .height(50)
-          .backgroundColor('#fff')
+          .backgroundColor('#F3FEF3')
           .borderRadius(25)
-          .border({ width: { bottom: 2, left: 1, right: 1 }, color: '#ccc' })
-          .zIndex(9)
-
-          // Row() {
-          //   Image($r('app.media.arrow_up'))
-          //     .width(45)
-          //     .fillColor('#000')
-          // }
-          // .backgroundColor('#fff')
-          // .width(45)
-          // .height(45)
-          // .borderRadius(22)
-          // .padding(8)
-          // .alignItems(VerticalAlign.Center)
-          // .justifyContent(FlexAlign.Center)
+          .border({ width: { bottom: 2 }, color: '#ccc' })
         }
-        .padding({ left: 15, right: 15, bottom: 35 })
+        .padding({ bottom: 35, left: 15, right: 15 })
       }
-      .width('100%')
-      .height('100%')
 
       backButton({ pageTitle: '碳足迹', bol: this.bol })
+
+      if (this.showAnnotationDetail) {
+        Column() {
+          this.AnnotationDetailBuilder()
+        }
+        .width('100%')
+        .height('100%')
+        .justifyContent(FlexAlign.Center)
+        .backgroundColor('#80000000')
+        .onClick(() => {
+          this.showAnnotationDetail = false
+        })
+      }
     }
-    .height('100%')
     .width('100%')
+    .height('100%')
   }
 }
 
@@ -367,102 +651,4 @@ const builderName = BuilderNameConstants.HAR_tendency_lowFootprint
 if (!RouterModule.getBuilder(builderName)) {
   const builder: WrappedBuilder<[object]> = wrapBuilder(harBuilder)
   RouterModule.registerBuilder(builderName, builder)
-}
-
-interface Type {
-  val: boolean
-}
-// 坐标经纬度
-export interface Location {
-  latitude: number;
-  longitude: number;
-}
-
-// 视图边界
-export interface Viewport {
-  northeast: Location;
-  southwest: Location;
-}
-
-// 城市信息
-export interface City {
-  cityCode: string;
-  cityId: string;
-  cityName: string;
-}
-
-// 街道门牌号
-export interface StreetNumber {
-  streetNumber: string;
-  streetName: string;
-}
-
-// 地址组件
-export interface AddressComponent {
-  countryName: string;
-  countryCode: string;
-  adminLevel1: string;
-  adminLevel2: string;
-  adminLevel3: string;
-  adminLevel4: string;
-  adminCode: string;
-  city: City;
-  streetNumber: StreetNumber;
-}
-
-// 时间点定义（修复点1）
-export interface TimePoint {
-  week: number;
-  time: string;
-}
-
-// 营业时间时段（修复点2）
-export interface OpeningPeriod {
-  open: TimePoint;
-  close: TimePoint;
-}
-
-// 营业时间
-export interface OpeningHours {
-  texts: string[];
-  periods: OpeningPeriod[];
-}
-
-// POI 评论评分
-export interface PoiComment {
-  averageRating: number;
-  total?: number;
-}
-
-// POI 详情
-export interface PoiInfo {
-  poiTypes: string[];
-  poiTypeIds: string[];
-  phone: string;
-  internationalPhone: string;
-  rating: number;
-  openingHours: Partial<OpeningHours>;
-  businessStatus: string;
-  brand?: string;
-  starRating: number;
-  icon: string;
-  comment: PoiComment;
-}
-
-// 单个地点（点位）
-export interface SiteItem {
-  siteId: string;
-  name: string;
-  formatAddress: string;
-  addressComponent: AddressComponent;
-  location: Location;
-  viewport: Viewport;
-  distance: number;
-  poi: PoiInfo;
-}
-
-// 搜索接口完整返回结果
-export interface SiteSearchResponse {
-  totalCount: number;
-  sites: SiteItem[];
 }
