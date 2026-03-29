@@ -2,6 +2,7 @@ import CarLevVM from "../ViewModel/CarLevelViewModel"
 
 @Component
 export struct gaugeComponent {
+
   showTotalCarEmiData() {
     if (CarLevVM.total_carbon > 50) {
       return 50
@@ -12,10 +13,6 @@ export struct gaugeComponent {
 
   build() {
     Column() {
-      /**
-       *  等级：模范 良好 基准 偏高 高碳
-       *  颜色：059669 10B981 D97706 EA580C DC2626
-       */
       Gauge({ value: this.showTotalCarEmiData(), min: 0, max: 50 }) {
         Column() {
           Text(CarLevVM.total_carbon.toFixed(0))
@@ -66,5 +63,7 @@ export struct gaugeComponent {
         .height(45)
         .textAlign(TextAlign.Center)
     }
+    .width('100%')
+    .height('100%')
   }
 }

@@ -54,8 +54,8 @@ export struct functionListsView {
       }
 
       Text(item.text)
-        .fontColor(Color.Black)
-        .fontSize(13)
+        .fontColor('#000')
+        .fontSize(14)
         .fontWeight(600)
     }
   }

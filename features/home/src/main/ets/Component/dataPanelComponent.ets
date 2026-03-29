@@ -1,3 +1,4 @@
+import { DataPanelMsgType } from "../Type/DataPanelMsgType"
 import CarLevVM from "../ViewModel/CarLevelViewModel"
 
 @Builder
@@ -7,7 +8,8 @@ function buildDataPanel(config: DataPanelConfiguration) {
       ForEach(config.values, (item: number, index: number) => {
         ChildItem({ item: item, index: index, max: config.maxValue })
       }, (item: number, index: number) => item.toString())
-    }.padding(6)
+    }
+    .padding(6)
   }
 }
 
@@ -29,6 +31,8 @@ export struct dataPanelComponent {
     return max * 3
   }
 
+
+
   build() {
     Column() {
       Row() {
@@ -40,13 +44,30 @@ export struct dataPanelComponent {
           .padding({ top: 5 })
           .contentModifier(new DataPanelBuilder())
       }
-      .margin({ left: 5, right: 5, bottom: 5 })
       .borderRadius(15)
-      .backgroundColor('#fff5f5f5')
+      .backgroundColor('#fff')
       .onClick(() => {
         this.vals = [CarLevVM.travel_carbon += 1, CarLevVM.electric_carbon += 2, CarLevVM.food_carbon]
       })
+
+      // 最大值和类型显示
+      Row() {
+        Text(`最高: ${CarLevVM.dataPanelMsg.maxValue.toFixed(2)}`)
+          .fontSize(16)
+          .fontColor('#000')
+          .fontWeight(FontWeight.Medium)
+          .margin({ right: 8 })
+
+        Text(`(${CarLevVM.dataPanelMsg.type})`)
+          .fontSize(16)
+          .fontColor('#000')
+      }
+      .margin({ top: 15 })
+      .justifyContent(FlexAlign.Center)
+      .width('100%')
     }
+    .width('100%')
+    .height('100%')
   }
 }
 
@@ -66,7 +87,7 @@ struct ChildItem {
       Row() {
         Rect()
           .height(25)
-          .width(this.item * 330 / this.max)
+          .width(this.item * 335 / this.max)
           .foregroundColor((this.index < 0 || this.index >= this.colorArray.length) ? this.colorArray[0] :
             this.colorArray[this.index])
           .radius(5)

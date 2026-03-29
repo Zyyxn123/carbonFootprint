@@ -2,9 +2,14 @@ import { WeeklyTotalDataType } from "@ohos/utils"
 import { CarLevelModel } from "../Model/CarLevelModel"
 import { CarLevConfigType } from "../Type/CarLevConfigType"
 import { CarLevelArrayType } from "../Type/CarLevelArrayType"
+import { DataPanelMsgType } from "../Type/DataPanelMsgType"
 
 @ObservedV2
 class CarLevelViewModel {
+  @Trace dataPanelMsg: DataPanelMsgType = {
+    maxValue: 0,
+    type: '未知类型'
+  }
   @Trace dataPanelVals: number[] = [0, 0, 0]
   @Trace showConfig: CarLevConfigType | undefined = undefined
   @Trace id: number = -1
@@ -55,6 +60,21 @@ class CarLevelViewModel {
     }
   ]
 
+  private  getMaxValueAndType() {
+    const values = CarLevVM.dataPanelVals
+    const maxValue = Math.max(...values)
+    const maxIndex = values.indexOf(maxValue)
+
+    const typeLabels = ['交通碳', '电力碳', '食物碳']
+    const type = typeLabels[maxIndex] || '未知类型'
+    const msg: DataPanelMsgType = {
+      maxValue: maxValue,
+      type: type
+    }
+
+    this.dataPanelMsg = msg
+  }
+
   public getCurrentCarbonLevel() {
     const value = CarLevVM.total_carbon
     for (let config of this.carbonLevelConfigs) {
@@ -85,6 +105,7 @@ class CarLevelViewModel {
       Number(this.food_carbon.toFixed(2))
     ]
 
+    this.getMaxValueAndType()
     this.getCurrentCarbonLevel()
     // 首次加载时，先检查是否需要周切换
     this.checkWeekSwitch()
@@ -128,6 +149,8 @@ class CarLevelViewModel {
       this.food_carbon = Number((this.food_carbon + fixedCarEmi).toFixed(2))
     }
     this.total_carbon = Number((this.total_carbon + fixedCarEmi).toFixed(2))
+
+    this.getMaxValueAndType()
 
     this.getCurrentCarbonLevel()
 

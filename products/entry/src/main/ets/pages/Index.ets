@@ -138,7 +138,7 @@ struct c {
       Column()
         .width('100%')
         .height(90)
-        .backgroundColor('rgba(255, 255, 255, 0.75)')
+        .backgroundColor('rgba(204, 238, 211, 0.75)')
         .backdropBlur(10)
         .borderRadius({ topLeft: 20, topRight: 20 })
         .shadow({ radius: 20, color: 'rgba(0, 0, 0, 0.05)', offsetY: -5 })

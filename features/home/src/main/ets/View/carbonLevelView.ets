@@ -31,14 +31,13 @@ export struct carbonLevelView {
           .height(190)
       }
       .width('48%')
-      .height('32%')
+      .height(222)
       .backgroundColor($r('app.color.carbonLevelView_carbonEmissionAndLevel_background'))
       .borderRadius(25)
 
       /**
        * 等级评分
        */
-      Column({ space: 5 }) {
         Column({ space: 5 }) {
           Text($r('app.string.carbonLevelView_carbonEmissionLevel'))
             .fontColor($r('app.color.carbonLevelView_carbonEmissionAndLevel_color'))
@@ -49,27 +48,9 @@ export struct carbonLevelView {
           dataPanelComponent()
         }
         .width('48%')
-        .height('25%')
+        .height(222)
         .backgroundColor($r('app.color.carbonLevelView_carbonEmissionAndLevel_background'))
         .borderRadius(15)
-
-        /**
-         * 目前减碳增量（对比昨天）
-         */
-        Row() {
-          Text($r('app.string.carbonLevelView_carbonEmissionReduce'))
-            .fontColor(Color.Black)
-            .fontSize(15)
-            .fontWeight(550)
-            .margin(6)
-        }
-        .height('6%')
-        .width(160)
-        .borderRadius(15)
-        .justifyContent(FlexAlign.Center)
-        .alignItems(VerticalAlign.Center)
-        .backgroundColor($r('app.color.carbonLevelView_carbonEmissionAndLevel_background'))
-      }
     }
     .width('100%')
     .alignItems(VerticalAlign.Top)
