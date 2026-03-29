@@ -95,3 +95,36 @@ export interface PointAnnotationData {
   description: string;
   iconColor?: string;
 }
+
+// 交通方式枚举
+export enum TransportType {
+  WALKING = 'walking',
+  CYCLING = 'cycling',
+  DRIVING = 'driving',
+  PUBLIC_TRANSPORT = 'public_transport'
+}
+
+// 交通方式选项
+export interface TransportOption {
+  value: TransportType;
+  label: string;
+  icon?: Resource;
+}
+
+// 轨迹信息
+export interface TrackInfo {
+  distance: number; // 公里
+  carbonEmission: number; // 千克
+  estimatedTime: number; // 分钟
+  transportType: TransportType;
+}
+
+// 轨迹记录
+export interface TrackRecord {
+  id: number;
+  startPoint: Location;
+  endPoint: Location;
+  trackInfo: TrackInfo;
+  createdAt: string;
+  remark?: string;
+}
