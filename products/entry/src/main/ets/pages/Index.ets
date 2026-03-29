@@ -133,17 +133,16 @@ struct c {
   // 自定义导航条Builder
   @Builder
   customTabBarBuilder() {
-    Stack({ alignContent: Alignment.Bottom }) {
+    Stack({ alignContent: Alignment.Top }) {
       // 底层：磨砂玻璃背景（透明效果）
       Column()
         .width('100%')
-        .height(80)
+        .height(90)
         .backgroundColor('rgba(255, 255, 255, 0.75)')
         .backdropBlur(10)
         .borderRadius({ topLeft: 20, topRight: 20 })
         .shadow({ radius: 20, color: 'rgba(0, 0, 0, 0.05)', offsetY: -5 })
 
-      // 上层：Tab项容器
       Row() {
         ForEach(TabMenusViewModel.TabsMenu, (item: TabMenusTYpeModel, index: number) => {
           Column() {
@@ -158,7 +157,6 @@ struct c {
                   .animation({ duration: 300, curve: Curve.EaseOut })
               }
 
-              // 图标
               Image(this.currentIndex === index ? item.selectImage : item.image)
                 .width(26)
                 .height(26)
@@ -168,7 +166,6 @@ struct c {
             .height(50)
             .margin({ bottom: 6 })
 
-            // 文字（选中时加粗和颜色变化）
             Text(item.text)
               .fontSize(11)
               .fontColor(this.currentIndex === index ? '#37800F' : '#5A5A5A')
@@ -181,7 +178,6 @@ struct c {
           .justifyContent(FlexAlign.Center)
           .alignItems(HorizontalAlign.Center)
           .onClick(() => {
-            // 切换tab
             this.currentIndex = index
           })
           .onTouch((event: TouchEvent) => {
@@ -191,7 +187,6 @@ struct c {
               this.hoverIndex = -1
             }
           })
-          // .stateEffect(true)
           .scale({
             x: this.hoverIndex === index ? 1.08 : (this.currentIndex === index ? 1.05 : 1),
             y: this.hoverIndex === index ? 1.08 : (this.currentIndex === index ? 1.05 : 1)
@@ -205,12 +200,10 @@ struct c {
       .alignItems(VerticalAlign.Center)
     }
     .width('100%')
-    .height(80)
-    .margin({ top: 5 })
+    .height(90)
     .backgroundColor(Color.Transparent)
   }
 
-  // 内容区域Builder
   @Builder
   contentBuilder() {
     if (this.currentIndex === 0) {
@@ -234,25 +227,20 @@ struct c {
     if (this.isLogin) {
       Navigation(this.entryHapRouter) {
         Stack({ alignContent: Alignment.Bottom }) {
-          // 内容区域
           Column() {
             this.contentBuilder()
           }
           .width('100%')
           .height('100%')
-          // .flexGrow(1)
 
-          // 自定义导航条
           this.customTabBarBuilder()
         }
         .width('100%')
         .height('100%')
       }
-      .padding({ bottom: 10, top: 35 })
       .title('NavIndex')
       .hideTitleBar(true)
       .navDestination(this.routerMap)
-      .backgroundColor($r('app.color.launch_ads_background'))
       .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
       .linearGradient({
         direction: GradientDirection.Bottom,

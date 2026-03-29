@@ -12,9 +12,6 @@ export struct searchForView {
   @State searchBoxScale: number = 1 // 搜索框缩放
   @State hasAppeared: boolean = false
 
-  aboutToAppear() {
-  }
-
   build() {
     Row({ space: 10 }) {
       Text($r('app.string.searchForView_carbonEmission'))
@@ -82,8 +79,7 @@ export struct searchForView {
     .translate({ x: this.translateX })
     .scale({ x: this.myScale, y: this.myScale })
     .width('100%')
-    .padding({ left: 10, right: 10})
-    .animation(AnimationUtils.slideInFromRight())
+    .padding({ left: 10, right: 10, top: 35 })
     .onAppear(() => {
       this.translateX = 0
     })
