@@ -138,9 +138,9 @@ struct c {
       Column()
         .width('100%')
         .height(90)
-        .backgroundColor('rgba(204, 238, 211, 0.75)')
+        .backgroundColor('#ff3e9111')
         .backdropBlur(10)
-        .borderRadius({ topLeft: 20, topRight: 20 })
+        .borderRadius(20)
         .shadow({ radius: 20, color: 'rgba(0, 0, 0, 0.05)', offsetY: -5 })
 
       Row() {
@@ -233,7 +233,10 @@ struct c {
           .width('100%')
           .height('100%')
 
-          this.customTabBarBuilder()
+          Column() {
+            this.customTabBarBuilder()
+          }
+          .padding({ left: 10, right: 10, bottom: 20})
         }
         .width('100%')
         .height('100%')

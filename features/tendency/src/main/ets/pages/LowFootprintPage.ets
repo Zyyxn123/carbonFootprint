@@ -5,11 +5,21 @@ import { backButton } from "../Component/BackButton";
 import { geoLocationManager } from '@kit.LocationKit';
 import { abilityAccessCtrl, common, Permissions } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
-import { bundleManager } from "@kit.AbilityKit";
 import { JSON } from "@kit.ArkTS";
 import footPriVM from "../ViewModel/FootPriViewModel";
-import { PointAnnotationData, SiteItem, Type, TransportType, TransportOption, TrackInfo, Location,
-  TrackRecord } from "../Type/FootprintMsgType";
+import {
+  PointAnnotationData,
+  SiteItem,
+  Type,
+  TransportType,
+  TransportOption,
+  TrackInfo,
+  Location,
+  TrackRecord
+} from "../Type/FootprintMsgType";
+import { promptAction } from "@kit.ArkUI";
+import { MapFootprintView } from "../View/MapFootprintView";
+import { MapTrackView } from "../View/MapTrackView";
 
 const permissions: Permissions[] = ['ohos.permission.LOCATION', 'ohos.permission.APPROXIMATELY_LOCATION'];
 
@@ -66,16 +76,29 @@ export struct lowFootprintPage {
     estimatedTime: 0,
     transportType: TransportType.DRIVING
   }
-  @State currentArc: map.MapArc | null = null
   @State transportOptions: TransportOption[] = [
-    { value: TransportType.WALKING, label: '步行', icon: $r('app.media.currLocation') },// $r('app.media.map_pin')
-    { value: TransportType.CYCLING, label: '骑行', icon: $r('app.media.currLocation') },// $r('app.media.map_pin')
-    { value: TransportType.DRIVING, label: '驾车', icon: $r('app.media.currLocation') },// $r('app.media.map_pin')
-    { value: TransportType.PUBLIC_TRANSPORT, label: '公共交通', icon: $r('app.media.currLocation') }// $r('app.media.map_pin')
+    { value: TransportType.WALKING, label: '步行', icon: $r('app.media.currLocation') }, // $r('app.media.map_pin')
+    { value: TransportType.CYCLING, label: '骑行', icon: $r('app.media.currLocation') }, // $r('app.media.map_pin')
+    { value: TransportType.DRIVING, label: '驾车', icon: $r('app.media.currLocation') }, // $r('app.media.map_pin')
+    {
+      value: TransportType.PUBLIC_TRANSPORT,
+      label: '公共交通',
+      icon: $r('app.media.currLocation')
+    }// $r('app.media.map_pin')
   ]
+  // 起点/终点搜索相关状态
+  @State startSearchResults: SiteItem[] = []
+  @State endSearchResults: SiteItem[] = []
+  @State showStartSearchResults: boolean = false
+  @State showEndSearchResults: boolean = false
+  @State startSearchLoading: boolean = false
+  @State endSearchLoading: boolean = false
+  @State startSearchTimer: number = 0
+  @State endSearchTimer: number = 0
+  private mapArc?: map.MapArc
   private mapOptions?: mapCommon.MapOptions;
   private callback?: AsyncCallback<map.MapComponentController>;
-  private mapController?: map.MapComponentController;
+  @StorageLink('mapCtr') mapController: map.MapComponentController | undefined = undefined
   private mapEventManager?: map.MapEventManager;
   private context: common.UIAbilityContext = this.getUIContext().getHostContext() as common.UIAbilityContext
   private latitude: number = 0
@@ -90,7 +113,7 @@ export struct lowFootprintPage {
       description: '历史文化街区，低碳出行推荐地点'
     },
   ]
-  private searchTimer: number = 0
+  public searchTimer: number = 0
 
   mapConfig() {
     this.mapOptions = {
@@ -117,7 +140,9 @@ export struct lowFootprintPage {
 
   // 碳轨迹计算函数
   private calculateDistance(): void {
-    if (!this.startPoint || !this.endPoint) return;
+    if (!this.startPoint || !this.endPoint) {
+      return;
+    }
 
     const R = 6371; // 地球半径（公里）
     const lat1 = this.startPoint.latitude * Math.PI / 180;
@@ -126,8 +151,8 @@ export struct lowFootprintPage {
     const deltaLon = (this.endPoint.longitude - this.startPoint.longitude) * Math.PI / 180;
 
     const a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
-              Math.cos(lat1) * Math.cos(lat2) *
-              Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
+      Math.cos(lat1) * Math.cos(lat2) *
+      Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     const distance = R * c;
@@ -151,7 +176,9 @@ export struct lowFootprintPage {
   }
 
   private calculateCarbonEmission(): void {
-    if (this.trackInfo.distance === 0) return;
+    if (this.trackInfo.distance === 0) {
+      return;
+    }
 
     const emissionFactors: Record<TransportType, number> = {
       [TransportType.WALKING]: 0, // 步行无碳排放
@@ -165,11 +192,6 @@ export struct lowFootprintPage {
     this.trackInfo.transportType = this.selectedTransport;
   }
 
-  private getTransportLabel(transportType: TransportType): string {
-    const option = this.transportOptions.find(opt => opt.value === transportType);
-    return option?.label || transportType;
-  }
-
   private setupMapClickHandler(): void {
     this.mapEventManager?.on('mapClick', (event) => {
       if (this.selectingPoint && this.showPointSelectionHint) {
@@ -181,11 +203,15 @@ export struct lowFootprintPage {
         if (this.selectingPoint === 'start') {
           this.startPoint = clickedLocation;
           this.startPointText = `${clickedLocation.latitude.toFixed(6)}, ${clickedLocation.longitude.toFixed(6)}`;
+          // 隐藏起点搜索结果
+          this.showStartSearchResults = false;
           // 添加起点标注
           this.addTrackPointAnnotation(clickedLocation, '起点', '#37800f');
         } else if (this.selectingPoint === 'end') {
           this.endPoint = clickedLocation;
           this.endPointText = `${clickedLocation.latitude.toFixed(6)}, ${clickedLocation.longitude.toFixed(6)}`;
+          // 隐藏终点搜索结果
+          this.showEndSearchResults = false;
           // 添加终点标注
           this.addTrackPointAnnotation(clickedLocation, '终点', '#d95011');
         }
@@ -203,7 +229,9 @@ export struct lowFootprintPage {
   }
 
   private addTrackPointAnnotation(location: Location, title: string, color: string): void {
-    if (!this.mapController) return;
+    if (!this.mapController) {
+      return;
+    }
 
     const pointAnnotationOptions: mapCommon.PointAnnotationParams = {
       position: {
@@ -237,161 +265,6 @@ export struct lowFootprintPage {
     const g = parseInt(hex.substring(2, 4), 16);
     const b = parseInt(hex.substring(4, 6), 16);
     return (0xFF << 24) | (r << 16) | (g << 8) | b;
-  }
-
-  // 弧线绘制功能
-  private async drawTrackArc(): Promise<void> {
-    if (!this.mapController || !this.startPoint || !this.endPoint) return;
-
-    try {
-      // 先清除现有的弧线
-      await this.clearTrackArc();
-
-      // 创建弧线参数（假设华为地图API支持addArc）
-      // 注意：实际API可能需要调整参数名称
-      const arcOptions: mapCommon.MapArcParams = {
-        startPoint: {
-          latitude: this.startPoint.latitude,
-          longitude: this.startPoint.longitude
-        },
-        centerPoint: {
-          latitude: (this.startPoint.latitude + this.endPoint.latitude) / 2,
-          longitude: (this.startPoint.longitude + this.endPoint.longitude) / 2,
-        },
-        endPoint: {
-          latitude: this.endPoint.latitude,
-          longitude: this.endPoint.longitude
-        },
-        color: this.hexToArgb('#37800f'), // ARGB格式：绿色
-        width: 5,
-        zIndex: 5,
-        // geodesic: true // 大圆航线
-      };
-
-      // 添加弧线到地图
-      this.currentArc = this.mapController.addArc(arcOptions);
-
-      // 调整地图视野以显示整个轨迹
-      await this.fitTrackToView();
-
-    } catch (error) {
-      console.error(`绘制轨迹失败：${error.code}, ${error.message}`);
-      // 备选方案：使用折线代替弧线
-      await this.drawTrackPolyline();
-    }
-  }
-
-  private async drawTrackPolyline(): Promise<void> {
-    if (!this.mapController || !this.startPoint || !this.endPoint) return;
-
-    try {
-      const polylineOptions: mapCommon.MapPolylineOptions = {
-        points: [
-          {
-            latitude: this.startPoint.latitude,
-            longitude: this.startPoint.longitude
-          },
-          {
-            latitude: this.endPoint.latitude,
-            longitude: this.endPoint.longitude
-          }
-        ],
-        color: this.hexToArgb('#37800f'),
-        width: 5,
-        zIndex: 5,
-        geodesic: true
-      };
-
-      this.currentArc = await this.mapController.addPolyline(polylineOptions);
-      await this.fitTrackToView();
-
-    } catch (error) {
-      console.error(`绘制折线失败：${error.code}, ${error.message}`);
-    }
-  }
-
-  private async fitTrackToView(): Promise<void> {
-    if (!this.mapController || !this.startPoint || !this.endPoint) return;
-
-    try {
-      const bounds: mapCommon.LatLngBounds = {
-        northeast: {
-          latitude: Math.max(this.startPoint.latitude, this.endPoint.latitude) + 0.01,
-          longitude: Math.max(this.startPoint.longitude, this.endPoint.longitude) + 0.01
-        },
-        southwest: {
-          latitude: Math.min(this.startPoint.latitude, this.endPoint.latitude) - 0.01,
-          longitude: Math.min(this.startPoint.longitude, this.endPoint.longitude) - 0.01
-        }
-      };
-
-      const cameraUpdate = map.newLatLngBounds(bounds, 50); // 50像素边距
-      /*await */this.mapController.animateCamera(cameraUpdate, 1000);
-
-    } catch (error) {
-      console.error(`调整地图视野失败：${error.code}, ${error.message}`);
-    }
-  }
-
-  private async clearTrackArc(): Promise<void> {
-    if (this.mapController && this.currentArc) {
-      try {
-        /*await */this.mapController.clear()/*removeArc(this.currentArc);*/
-        this.currentArc = null;
-      } catch (error) {
-        console.error(`清除弧线失败：${error.code}, ${error.message}`);
-      }
-    }
-  }
-
-  private async clearTrack(): Promise<void> {
-    try {
-      // 清除弧线
-      await this.clearTrackArc();
-
-      // 清除轨迹点标注（可以扩展）
-      // await this.clearTrackPointAnnotations();
-
-      // 重置状态
-      this.startPoint = null;
-      this.endPoint = null;
-      this.startPointText = '';
-      this.endPointText = '';
-      this.trackInfo = {
-        distance: 0,
-        carbonEmission: 0,
-        estimatedTime: 0,
-        transportType: TransportType.DRIVING
-      };
-
-    } catch (error) {
-      console.error(`清除轨迹失败：${error.code}, ${error.message}`);
-    }
-  }
-
-  private async saveTrackRecord(): Promise<void> {
-    if (!this.startPoint || !this.endPoint || this.trackInfo.distance === 0) return
-
-
-    try {
-      const trackRecord: TrackRecord = {
-        id: Date.now(),
-        startPoint: this.startPoint,
-        endPoint: this.endPoint,
-        trackInfo: this.trackInfo,
-        createdAt: new Date().toISOString()
-      };
-
-      // 保存到本地存储或数据库（示例：控制台输出）
-      console.info(`轨迹记录已保存：${JSON.stringify(trackRecord)}`);
-
-      // 显示保存成功提示（可以扩展为Toast）
-      // this.showSaveSuccess = true;
-      // setTimeout(() => { this.showSaveSuccess = false; }, 3000);
-
-    } catch (error) {
-      console.error(`保存轨迹记录失败：${error.code}, ${error.message}`);
-    }
   }
 
   checkPermission() {
@@ -584,7 +457,9 @@ export struct lowFootprintPage {
       // 仅移动地图
       let cameraPosition: mapCommon.CameraPosition = {
         target: { latitude: location.latitude, longitude: location.longitude },
-        zoom: 16, tilt: 0, bearing: 0
+        zoom: 16,
+        tilt: 0,
+        bearing: 0
       };
       let cameraUpdate = map.newCameraPosition(cameraPosition);
       this.mapController.animateCamera(cameraUpdate, 1000);
@@ -594,7 +469,9 @@ export struct lowFootprintPage {
     // 移动地图
     let cameraPosition: mapCommon.CameraPosition = {
       target: { latitude: location.latitude, longitude: location.longitude },
-      zoom: 16, tilt: 0, bearing: 0
+      zoom: 16,
+      tilt: 0,
+      bearing: 0
     };
     let cameraUpdate = map.newCameraPosition(cameraPosition);
     this.mapController.animateCamera(cameraUpdate, 1000);
@@ -645,470 +522,6 @@ export struct lowFootprintPage {
     this.showAnnotationDetail = true
   }
 
-  @Builder
-  TrackBuilder() {
-    Column({ space: 15 }) {
-      // 标题和关闭按钮
-      Row() {
-        Text('碳轨迹计算')
-          .fontSize(20)
-          .fontColor('#000')
-          .fontWeight(FontWeight.Medium)
-
-        Image($r('app.media.arrow_up'))
-          .rotate({ angle: 180 })
-          .fillColor('#000')
-          .padding(10)
-          .borderRadius(20)
-          .width(35)
-          .margin({ right: 10 })
-          .backgroundColor('#ffe3e3e3')
-          .height(35)
-          .onClick(() => {
-            this.isShow2 = false
-            this.clearTrack()
-          })
-      }
-      .justifyContent(FlexAlign.SpaceBetween)
-      .width('100%')
-
-      // 起点/终点输入区域
-      Column({ space: 10 }) {
-        Text('起点/终点选择')
-          .fontSize(16)
-          .fontColor('#37800f')
-          .fontWeight(FontWeight.Medium)
-          .width('100%')
-          .textAlign(TextAlign.Start)
-
-        // 起点输入
-        Row() {
-          TextInput({ placeholder: '点击地图选择起点或输入地址', text: $$this.startPointText })
-            .width('85%')
-            .fontColor('#000')
-            .placeholderColor('#999')
-            .backgroundColor(Color.Transparent)
-            .onChange((value: string) => {
-              this.startPointText = value
-            })
-
-          Image($r('app.media.currLocation')) // $r('app.media.map_pin')
-            .width(25)
-            .fillColor(this.startPoint ? '#37800f' : '#ccc')
-            .onClick(() => {
-              this.selectingPoint = 'start'
-              this.showPointSelectionHint = true
-            })
-        }
-        .border({ width: 1, color: this.startPoint ? '#37800f' : '#ccc', radius: 12 })
-        .padding({ left: 15, right: 15, top: 10, bottom: 10 })
-        .backgroundColor('#F9FFFD')
-
-        // 终点输入
-        Row() {
-          TextInput({ placeholder: '点击地图选择终点或输入地址', text: $$this.endPointText })
-            .width('85%')
-            .fontColor('#000')
-            .placeholderColor('#999')
-            .backgroundColor(Color.Transparent)
-            .onChange((value: string) => {
-              this.endPointText = value
-            })
-
-          Image($r('app.media.currLocation')) // $r('app.media.map_pin')
-            .width(25)
-            .fillColor(this.endPoint ? '#37800f' : '#ccc')
-            .onClick(() => {
-              this.selectingPoint = 'end'
-              this.showPointSelectionHint = true
-            })
-        }
-        .border({ width: 1, color: this.endPoint ? '#37800f' : '#ccc', radius: 12 })
-        .padding({ left: 15, right: 15, top: 10, bottom: 10 })
-        .backgroundColor('#F9FFFD')
-      }
-      .width('100%')
-
-      // 交通方式选择
-      Column({ space: 10 }) {
-        Text('交通方式')
-          .fontSize(16)
-          .fontColor('#37800f')
-          .fontWeight(FontWeight.Medium)
-          .width('100%')
-          .textAlign(TextAlign.Start)
-
-        Row({ space: 10 }) {
-          ForEach(this.transportOptions, (option: TransportOption) => {
-            Column({ space: 5 }) {
-              Image(option.icon)
-                .width(30)
-                .height(30)
-                .fillColor(this.selectedTransport === option.value ? '#37800f' : '#666')
-
-              Text(option.label)
-                .fontSize(12)
-                .fontColor(this.selectedTransport === option.value ? '#37800f' : '#666')
-            }
-            .padding(10)
-            .border({
-              width: 2,
-              color: this.selectedTransport === option.value ? '#37800f' : '#e0e0e0',
-              radius: 10
-            })
-            .backgroundColor(this.selectedTransport === option.value ? '#F3FEF3' : '#FFFFFF')
-            .onClick(() => {
-              this.selectedTransport = option.value
-              if (this.startPoint && this.endPoint) {
-                this.calculateDistance()
-                this.calculateCarbonEmission()
-              }
-            })
-          })
-        }
-        .width('100%')
-        .justifyContent(FlexAlign.SpaceBetween)
-      }
-      .width('100%')
-
-      // 轨迹信息展示
-      if (this.trackInfo.distance > 0) {
-        Column({ space: 10 }) {
-          Text('轨迹信息')
-            .fontSize(16)
-            .fontColor('#37800f')
-            .fontWeight(FontWeight.Medium)
-            .width('100%')
-            .textAlign(TextAlign.Start)
-
-          Row() {
-            Column({ space: 5 }) {
-              Text('距离')
-                .fontSize(14)
-                .fontColor('#666')
-              Text(`${this.trackInfo.distance.toFixed(2)} km`)
-                .fontSize(16)
-                .fontColor('#37800f')
-                .fontWeight(FontWeight.Medium)
-            }
-            .width('50%')
-
-            Column({ space: 5 }) {
-              Text('碳排放')
-                .fontSize(14)
-                .fontColor('#666')
-              Text(`${this.trackInfo.carbonEmission.toFixed(2)} kg`)
-                .fontSize(16)
-                .fontColor('#d95011')
-                .fontWeight(FontWeight.Medium)
-            }
-            .width('50%')
-          }
-          .width('100%')
-
-          Row() {
-            Column({ space: 5 }) {
-              Text('预计时间')
-                .fontSize(14)
-                .fontColor('#666')
-              Text(`${this.trackInfo.estimatedTime} min`)
-                .fontSize(16)
-                .fontColor('#37800f')
-            }
-            .width('50%')
-
-            Column({ space: 5 }) {
-              Text('交通方式')
-                .fontSize(14)
-                .fontColor('#666')
-              Text(this.getTransportLabel(this.selectedTransport))
-                .fontSize(16)
-                .fontColor('#37800f')
-            }
-            .width('50%')
-          }
-          .width('100%')
-        }
-        .width('100%')
-        .padding(15)
-        .backgroundColor('#F9FFFD')
-        .border({ width: 1, color: '#81B29A', radius: 15 })
-      }
-
-      // 控制按钮区域
-      Row({ space: 15 }) {
-        Button('绘制轨迹')
-          .width('45%')
-          .height(45)
-          .backgroundColor(this.startPoint && this.endPoint ? '#37800f' : '#ccc')
-          .fontColor('#fff')
-          .fontSize(16)
-          .enabled(this.startPoint !== null && this.endPoint !== null)
-          .onClick(() => {
-            this.drawTrackArc()
-          })
-
-        Button('清除轨迹')
-          .width('45%')
-          .height(45)
-          .backgroundColor('#d95011')
-          .fontColor('#fff')
-          .fontSize(16)
-          .onClick(() => {
-            this.clearTrack()
-          })
-      }
-      .width('100%')
-      .margin({ top: 20 })
-
-      // 保存按钮
-      if (this.trackInfo.distance > 0) {
-        Button('保存轨迹记录')
-          .width('100%')
-          .height(45)
-          .backgroundColor('#81B29A')
-          .fontColor('#fff')
-          .fontSize(16)
-          .onClick(() => {
-            this.saveTrackRecord()
-          })
-      }
-    }
-    .alignItems(HorizontalAlign.Center)
-    .width('100%')
-    .height('100%')
-    .padding({ left: 15, right: 15, top: 20, bottom: 20 })
-  }
-
-  @Builder
-  FootprintBuilder() {
-    Column({ space: 10 }) {
-      Row() {
-        Text('碳足迹')
-          .fontSize(20)
-          .fontColor('#000')
-          .fontWeight(FontWeight.Medium)
-
-        Image($r('app.media.arrow_up'))
-          .rotate({ angle: 180 })
-          .fillColor('#000')
-          .padding(10)
-          .borderRadius(20)
-          .width(35)
-          .margin({ right: 10 })
-          .backgroundColor('#ffe3e3e3')
-          .height(35)
-          .onClick(() => {
-            this.isShow1 = false
-            this.textStr = ''
-          })
-      }
-      .justifyContent(FlexAlign.SpaceBetween)
-      .width('100%')
-
-      Column({ space: 10 }) {
-        Row() {
-          TextInput({ placeholder: '搜索地点...', text: $$this.textStr })
-            .width('75%')
-            .fontColor('#000')
-            .placeholderColor('#ccc')
-            .backgroundColor(Color.Transparent)
-            .onChange((value: string) => {
-              this.textStr = value
-              if (this.searchTimer) {
-                clearTimeout(this.searchTimer)
-              }
-              this.searchTimer = setTimeout(() => {
-                this.performSearch(value)
-              }, 500) as number
-            })
-
-          Divider()
-            .vertical(true)
-            .color('#81B29A')
-            .width(2)
-            .height(30)
-            .strokeWidth(2)
-            .margin({ left: 5, right: 10 })
-
-          Image($r('app.media.map_search'))
-            .width(30)
-            .fillColor('#37800f')
-            .margin({ right: 5 })
-            .onClick(() => {
-              this.performSearch(this.textStr)
-            })
-            .animation({ duration: 200, curve: Curve.EaseInOut })
-        }
-        .border({ width: 2, color: '#81B29A', radius: 20 })
-        .padding({ left: 15, right: 10 })
-        .backgroundColor('#F3FEF3')
-
-        Column({ space: 10 }) {
-          Text('碳排放数据 (可选)')
-            .fontSize(14)
-            .fontColor('#37800f')
-            .fontWeight(FontWeight.Medium)
-            .width('100%')
-            .textAlign(TextAlign.Start)
-            .margin({ bottom: 5 })
-
-          Row() {
-            TextInput({ placeholder: '请输入碳排放量，单位：千克', text: $$this.carbonEmission })
-              .width('85%')
-              .fontColor('#000')
-              .placeholderColor('#999')
-              .backgroundColor(Color.Transparent)
-              .onChange((value: string) => {
-                this.carbonEmission = value
-              })
-
-            Text('kg')
-              .fontSize(14)
-              .fontColor('#666666')
-              .margin({ left: 10 })
-          }
-          .border({ width: 1, color: '#81B29A', radius: 12 })
-          .padding({ left: 15, right: 15, top: 10, bottom: 10 })
-          .backgroundColor('#F9FFFD')
-
-          Column({ space: 5 }) {
-            Text('备注信息 (可选)')
-              .fontSize(14)
-              .fontColor('#37800f')
-              .fontWeight(FontWeight.Medium)
-              .width('100%')
-              .textAlign(TextAlign.Start)
-              .margin({ bottom: 5 })
-
-            TextInput({ placeholder: '请输入相关备注信息', text: $$this.remark })
-              .width('100%')
-              .fontColor('#000')
-              .placeholderColor('#999')
-              .backgroundColor('#FFFFFF')
-              .border({ width: 1, color: '#81B29A', radius: 12 })
-              .padding({ left: 15, right: 15, top: 10, bottom: 10 })
-              .onChange((value: string) => {
-                this.remark = value
-              })
-          }
-          .width('100%')
-        }
-        .width('100%')
-        .margin({ top: 20 })
-
-        if (this.showSearchResults) {
-          Column({ space: 5 }) {
-            if (this.isLoading) {
-              Row() {
-                LoadingProgress().width(25).height(25).color('#37800f')
-                Text('搜索中...').fontSize(14).fontColor('#666666').margin({ left: 10 })
-              }
-              .width('100%')
-              .padding(15)
-              .justifyContent(FlexAlign.Center)
-            }
-            else if (this.searchResults.length > 0) {
-              Column({ space: 8 }) {
-                Text(`找到 ${this.searchResults.length} 个结果`)
-                  .fontSize(14)
-                  .fontColor('#37800f')
-                  .fontWeight(FontWeight.Medium)
-                  .width('100%')
-                  .textAlign(TextAlign.Start)
-                  .padding({ left: 5, bottom: 5 })
-
-                Scroll() {
-                  Column({ space: 5 }) {
-                    ForEach(this.searchResults, (item: SiteItem, index: number) => {
-                      Column() {
-                        Row() {
-                          Column({ space: 2 }) {
-                            Text(item.name ?? '未知地点')
-                              .fontSize(16)
-                              .fontColor('#000000')
-                              .fontWeight(FontWeight.Medium)
-                              .maxLines(1)
-                              .textOverflow({ overflow: TextOverflow.Ellipsis })
-
-                            if (item.formatAddress) {
-                              Text(item.formatAddress)
-                                .fontSize(13)
-                                .fontColor('#666666')
-                                .maxLines(1)
-                                .textOverflow({ overflow: TextOverflow.Ellipsis })
-                            }
-                          }
-                          .width('90%')
-
-                          Image($r('app.media.arrow_up'))
-                            .rotate({ angle: 90 })
-                            .width(20)
-                            .fillColor('#37800f')
-                            .opacity(0.7)
-                        }
-                        .width('100%')
-                        .padding(12)
-                        .backgroundColor('#FFFFFF')
-                        .borderRadius(12)
-                        .shadow({
-                          radius: 3,
-                          color: '#00000010',
-                          offsetX: 0,
-                          offsetY: 2
-                        })
-                        .onClick(() => {
-                          this.isShow1 = false
-                          this.textStr = ''
-                          this.navigateToSite(item)
-                        })
-                        .animation({ duration: 200, curve: Curve.EaseInOut })
-
-                        if (index < this.searchResults.length - 1) {
-                          Divider().strokeWidth(1).color('#E0E0E0')
-                        }
-                      }
-                    })
-                  }
-                  .width('100%')
-                }
-                .width('100%')
-                .height(250)
-              }
-              .width('100%')
-              .padding(5)
-              .backgroundColor('#FFFFFF')
-              .borderRadius(15)
-              .shadow({
-                radius: 10,
-                color: '#00000020',
-                offsetX: 0,
-                offsetY: 5
-              })
-            }
-            else if (this.textStr.trim().length > 0) {
-              Row() {
-                Text('未找到相关地点').fontSize(14).fontColor('#999999')
-              }
-              .width('100%')
-              .padding(20)
-              .justifyContent(FlexAlign.Center)
-              .backgroundColor('#FFFFFF')
-              .borderRadius(15)
-            }
-          }
-          .width('100%')
-          .border({ width: 1, color: '#ccc', radius: 15 })
-        }
-      }
-      .width('100%')
-    }
-    .alignItems(HorizontalAlign.Center)
-    .width('100%')
-    .height('100%')
-    .padding({ left: 10, right: 10, top: 20 })
-  }
-
   // 额外信息
   @Builder
   AnnotationDetailBuilder() {
@@ -1149,12 +562,11 @@ export struct lowFootprintPage {
   @Builder
   bSBuilder(index: number) {
     if (index === 0) {
-      this.FootprintBuilder()
+      MapFootprintView()
     } else if (index === 1) {
-      this.TrackBuilder()
+      MapTrackView()
     } else if (index === 2) {
-      Text('example2')
-        .fontColor('#000')
+      // MapPlanView()
     }
   }
 
@@ -1277,7 +689,12 @@ export struct lowFootprintPage {
           .height(50)
           .backgroundColor('#37800f')
           .borderRadius(25)
-          .shadow({ radius: 5, color: '#00000020', offsetX: 0, offsetY: 2 })
+          .shadow({
+            radius: 5,
+            color: '#00000020',
+            offsetX: 0,
+            offsetY: 2
+          })
           .onClick(() => {
             this.navigateToCurrentLocation()
           })
