@@ -17,15 +17,13 @@ export struct lowTaskPage {
         toDoTasksList()
 
         ListItem() {}
-        .width(10)
-        .height(50)
+        .width('100%')
+        .height(100)
       }
       .padding({ left: 10, right: 10 })
       .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: true })
       .width('100%')
-      // .height('100%')
     }
-    // .height('100%')
     .width('100%')
     .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
     .backgroundColor('#edffdd')

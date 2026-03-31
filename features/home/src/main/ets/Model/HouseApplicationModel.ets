@@ -17,7 +17,7 @@ export class ApplianceDataModel {
     await ApplianceDataModel.applianceIns.updateTotalData(data)
   }
 
-  public static async insertItemData(acc: string, appliance: string, use_time: number,
+  public static async updateItemData(acc: string, appliance: string, use_time: number,
     elect_power: number, time_token: string, carbon_emission: number) {
     await ApplianceDataModel.applianceIns.insertItemData(acc, appliance, use_time,
       elect_power, time_token, carbon_emission)

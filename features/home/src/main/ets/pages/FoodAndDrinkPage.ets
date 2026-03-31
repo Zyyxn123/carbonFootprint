@@ -1,6 +1,7 @@
 import { BuilderNameConstants, RouterModule, RouterNameConstants } from "@ohos/customrouter";
 import { backButton } from "../Component/BackButton";
 import { funcListsCards } from "../Component/FuncListsCards";
+import { funcListsCurrAction } from "../Component/FuncListsCurrAction";
 import { funcListsSelectedMap } from "../Component/FuncListsSelectedMap";
 import FoodDVM from "../ViewModel/FoodAndDrinkViewModel";
 
@@ -31,9 +32,14 @@ export struct foodAndDrinkPage {
             title: FoodDVM.title })
         }
 
-      //   ListItem() {
-      //     funcListsCurrAction()
-      //   }
+        ListItem() {
+          funcListsCurrAction({
+            index_page: 3,
+            funcList: FoodDVM.foodItemList,
+            subHeading: FoodDVM.subHeading,
+            bgcList: FoodDVM.foodAndDrinkLists
+          })
+        }
       }
       .width('100%')
       .height('100%')

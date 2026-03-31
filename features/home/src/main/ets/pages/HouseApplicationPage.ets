@@ -1,6 +1,7 @@
 import { BuilderNameConstants, RouterModule, RouterNameConstants } from "@ohos/customrouter";
 import { backButton } from "../Component/BackButton";
 import { funcListsCards } from "../Component/FuncListsCards";
+import { funcListsCurrAction } from "../Component/FuncListsCurrAction";
 import { funcListsSelectedMap } from "../Component/FuncListsSelectedMap";
 import HouseAPPVM from "../ViewModel/HouseApplicationViewModel";
 
@@ -32,9 +33,14 @@ export struct houseApplicationPage {
             title: HouseAPPVM.title })
         }
 
-        // ListItem() {
-        //   funcListsCurrAction()
-        // }
+        ListItem() {
+          funcListsCurrAction({
+            index_page: 2,
+            funcList: HouseAPPVM.applicationsItemList,
+            subHeading: HouseAPPVM.subHeading,
+            bgcList: HouseAPPVM.applicationsLists
+          })
+        }
       }
       .width('100%')
       .height('100%')

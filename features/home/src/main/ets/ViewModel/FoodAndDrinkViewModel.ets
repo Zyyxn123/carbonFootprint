@@ -1,4 +1,4 @@
-import { FoodTotalDataType } from '@ohos/utils'
+import { FoodItemDataType, FoodTotalDataType } from '@ohos/utils'
 import { FoodDataModel } from '../Model/FoodAndDrinkModel'
 import { cardsDataTypeModel, popBoxDataTypeModel, transportsTypeModel } from '../Model/ToDoItemsModel'
 
@@ -49,102 +49,115 @@ class FoodAndDrinkViewModel {
     {
       ts: '米饭',
       tsc: '#8D6E63',
+      bgcCard: '#EFEBE9',
       bgc: '#5D4037',
       img: $r('app.media.food_mifan'),
-      carEmissionPer: 0.85, // 米饭：约0.85 g/g（每克米饭碳排放0.85克）
+      carEmissionPer: 0.85,
       pointsPerOrder: 7
     },
     {
       ts: '青菜',
       tsc: '#4CAF50',
+      bgcCard: '#E8F5E9',
       bgc: '#2D5F2E',
       img: $r('app.media.food_qingcai'),
-      carEmissionPer: 0.18, // 青菜：约0.18 g/g（蔬菜碳排放极低）
+      carEmissionPer: 0.18,
       pointsPerOrder: 9
     },
     {
       ts: '猪肉',
       tsc: '#E57373',
+      bgcCard: '#FFEBEE',
       bgc: '#B71C1C',
       img: $r('app.media.food_zhurou'),
-      carEmissionPer: 12.8, // 猪肉：约12.8 g/g（红肉碳排放最高）
+      carEmissionPer: 12.8,
       pointsPerOrder: 2
     },
     {
       ts: '鸡蛋',
       tsc: '#FFC107',
+      bgcCard: '#FFF8E1',
       bgc: '#6B5A1E',
       img: $r('app.media.food_jidan'),
-      carEmissionPer: 4.8, // 鸡蛋：约4.8 g/g
+      carEmissionPer: 4.8,
       pointsPerOrder: 5
     },
     {
       ts: '牛奶',
       tsc: '#F5F5F5',
+      bgcCard: '#FAFAFA',
       bgc: '#9E9E9E',
       img: $r('app.media.food_niunai'),
-      carEmissionPer: 3.2, // 牛奶：约3.2 g/g
+      carEmissionPer: 3.2,
       pointsPerOrder: 6
     },
     {
       ts: '咖啡',
       tsc: '#795548',
+      bgcCard: '#EFEBE9',
       bgc: '#3E2723',
       img: $r('app.media.food_kafei'),
-      carEmissionPer: 11.2, // 咖啡：约11.2 g/g（含种植/加工环节）
+      carEmissionPer: 11.2,
       pointsPerOrder: 6
     },
     {
       ts: '苹果',
       tsc: '#F44336',
+      bgcCard: '#FFEBEE',
       bgc: '#C62828',
       img: $r('app.media.food_pingguo'),
-      carEmissionPer: 0.42, // 苹果：约0.42 g/g
+      carEmissionPer: 0.42,
       pointsPerOrder: 8
     },
     {
       ts: '豆制品',
       tsc: '#FFEB3B',
+      bgcCard: '#FFFDE7',
       bgc: '#F57F17',
       img: $r('app.media.food_douzhipin'),
-      carEmissionPer: 0.95, // 豆制品：约0.95 g/g
+      carEmissionPer: 0.95,
       pointsPerOrder: 8
     },
     {
       ts: '鸡肉',
       tsc: '#FFCCBC',
+      bgcCard: '#FBE9E7',
       bgc: '#8D6E63',
       img: $r('app.media.food_jirou'),
-      carEmissionPer: 6.9, // 鸡肉：约6.9 g/g（白肉低于红肉）
+      carEmissionPer: 6.9,
       pointsPerOrder: 4
     },
     {
       ts: '饮用水',
       tsc: '#2196F3',
+      bgcCard: '#E3F2FD',
       bgc: '#0F4C81',
       img: $r('app.media.food_yinyongshui'),
-      carEmissionPer: 0.008, // 饮用水：约0.008 g/g（仅加工/运输环节）
+      carEmissionPer: 0.008,
       pointsPerOrder: 10
     },
     {
       ts: '面包',
       tsc: '#FF9800',
+      bgcCard: '#FFF3E0',
       bgc: '#E65100',
       img: $r('app.media.food_mianbao'),
-      carEmissionPer: 1.15, // 面包：约1.15 g/g（含小麦种植/烘焙）
+      carEmissionPer: 1.15,
       pointsPerOrder: 7
     },
     {
       ts: '更多',
       tsc: '#9E9E9E',
+      bgcCard: '#F5F5F5',
       bgc: '#424242',
       img: $r('app.media.func_add'),
-      carEmissionPer: 0.0, // 占位项保持0
+      carEmissionPer: 0.0,
       pointsPerOrder: 1
     }
   ]
+  @Trace foodItemList: FoodItemDataType[] = []
   @Trace title: string = '请选择你的饮食'
-  @Trace subHeading: string = '出行足迹'
+  @Trace subHeading: string = '饮食足迹'
   @Trace id: number = -1
   @Trace total_emission: number = 0.0
   @Trace total_day: number = 0
@@ -176,6 +189,9 @@ class FoodAndDrinkViewModel {
     this.popBoxData[1].num = this.monthly_portion
     this.popBoxData[2].num = this.point
     this.popBoxData[3].num = this.medal
+
+    const dataItemList: FoodItemDataType[] = await FoodDataModel.getFoodItemData(acc)
+    this.foodItemList = dataItemList.reverse()
   }
 
   public async updateTotalData(acc: string) {
@@ -194,12 +210,29 @@ class FoodAndDrinkViewModel {
     await FoodDataModel.updateTotalData(data)
   }
 
-  public insertItemData(food: string, totalCarEmi: number,
+  public updateItemData(food: string, totalCarEmi: number,
     eat_portion: number, eat_time: number) {
     let date = new Date().toLocaleDateString()
 
-    FoodDataModel.insertItemData(this.acc, food, eat_portion,
+    FoodDataModel.updateItemData(this.acc, food, eat_portion,
       eat_time, date, totalCarEmi)
+  }
+
+  public setItemListData(food: string, totalCarEmi: number,
+    eat_portion: number, eat_time: number) {
+    let date = new Date().toLocaleDateString()
+
+    const dataItem: FoodItemDataType = {
+      id: this.id,
+      account: this.acc,
+      food: food,
+      eat_portion: eat_portion,
+      eat_time: eat_time,
+      time_token: date,
+      carbon_emission: totalCarEmi
+    }
+
+    this.foodItemList.unshift(dataItem)
   }
 
   public setCarEmiData(emi: number) {

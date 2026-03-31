@@ -17,7 +17,7 @@ export class FoodDataModel {
     await FoodDataModel.foodIns.updateTotalData(data)
   }
 
-  public static async insertItemData(acc: string, food: string, eat_portion: number,
+  public static async updateItemData(acc: string, food: string, eat_portion: number,
     eat_time: number, time_token: string, carbon_emission: number) {
     await FoodDataModel.foodIns.insertItemData(acc, food, eat_portion,
       eat_time, time_token, carbon_emission)

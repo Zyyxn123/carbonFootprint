@@ -9,97 +9,109 @@ class GreenTravelViewModel {
     {
       ts: '骑行',
       tsc: '#4CAF50',
+      bgcCard: '#E8F5E9',
       bgc: '#2D5F2E',
       img: $r('app.media.transports_zixingche'),
-      carEmissionPer: 0.0, // 骑行：无直接碳排放
+      carEmissionPer: 0.0,
       pointsPerOrder: 10
     },
     {
       ts: '步行',
       tsc: '#FFC107',
+      bgcCard: '#FFF8E1',
       bgc: '#6B5A1E',
       img: $r('app.media.transports_buxing'),
-      carEmissionPer: 0.0, // 步行：无直接碳排放
+      carEmissionPer: 0.0,
       pointsPerOrder: 10
     },
     {
       ts: '电动车',
       tsc: '#E91E63',
+      bgcCard: '#FCE4EC',
       bgc: '#4A235A',
       img: $r('app.media.transports_diandongche'),
-      carEmissionPer: 0.03, // 电动车：约0.03 kg/km（含电力生产碳排放）
+      carEmissionPer: 0.03,
       pointsPerOrder: 9
     },
     {
       ts: '公交车',
       tsc: '#2196F3',
+      bgcCard: '#E3F2FD',
       bgc: '#0F4C81',
       img: $r('app.media.transports_gongjiaoche'),
-      carEmissionPer: 0.08, // 公交车（人均）：约0.08 kg/km（按30人满载核算）
+      carEmissionPer: 0.08,
       pointsPerOrder: 7
     },
     {
       ts: '地铁',
       tsc: '#4CAF50',
+      bgcCard: '#E8F5E9',
       bgc: '#2D5F2E',
       img: $r('app.media.transports_ditie'),
-      carEmissionPer: 0.06, // 地铁（人均）：约0.06 kg/km（电力驱动，人均分摊）
+      carEmissionPer: 0.06,
       pointsPerOrder: 8
     },
     {
       ts: '高铁',
       tsc: '#FF9800',
+      bgcCard: '#FFF3E0',
       bgc: '#6B4423',
       img: $r('app.media.transports_gaotie'),
-      carEmissionPer: 0.04, // 高铁（人均）：约0.04 kg/km（电力驱动，能耗效率高）
+      carEmissionPer: 0.04,
       pointsPerOrder: 9
     },
     {
       ts: '火车',
       tsc: '#795548',
+      bgcCard: '#EFEBE9',
       bgc: '#3E2723',
       img: $r('app.media.transports_huoche'),
-      carEmissionPer: 0.09, // 绿皮火车（人均）：约0.09 kg/km（内燃机车为主）
+      carEmissionPer: 0.09,
       pointsPerOrder: 6
     },
     {
       ts: '飞机',
       tsc: '#3F51B5',
+      bgcCard: '#E8EAF6',
       bgc: '#1A237E',
       img: $r('app.media.transports_feiji'),
-      carEmissionPer: 0.25, // 飞机（人均）：约0.25 kg/km（短途航班更高）
+      carEmissionPer: 0.25,
       pointsPerOrder: 2
     },
     {
       ts: '邮轮',
       tsc: '#009688',
+      bgcCard: '#E0F2F1',
       bgc: '#004D40',
       img: $r('app.media.transports_youlun'),
-      carEmissionPer: 0.18, // 邮轮（人均）：约0.18 kg/km（燃油驱动，能耗高）
+      carEmissionPer: 0.18,
       pointsPerOrder: 3
     },
     {
       ts: '私家车',
       tsc: '#FF5722',
+      bgcCard: '#FBE9E7',
       bgc: '#5D4037',
       img: $r('app.media.transports_sijiache'),
-      carEmissionPer: 0.17, // 私家车（汽油车）：约0.17 kg/km（1.6L排量）
+      carEmissionPer: 0.17,
       pointsPerOrder: 4
     },
     {
       ts: '长途',
       tsc: '#8BC34A',
+      bgcCard: '#F1F8E9',
       bgc: '#33691E',
       img: $r('app.media.transports_gongjiaoche'),
-      carEmissionPer: 0.11, // 长途大巴（人均）：约0.11 kg/km
+      carEmissionPer: 0.11,
       pointsPerOrder: 5
     },
     {
       ts: '更多',
       tsc: '#9E9E9E',
+      bgcCard: '#F5F5F5',
       bgc: '#424242',
       img: $r('app.media.func_add'),
-      carEmissionPer: 0.0, // 占位项保持0
+      carEmissionPer: 0.0,
       pointsPerOrder: 1
     }
   ]
@@ -179,12 +191,7 @@ class GreenTravelViewModel {
     this.popBoxData[3].num = this.medal
 
     const dataItemList: TransItemDataType[] = await TransDataModel.getTransItemData(acc)
-    this.transportItemList = dataItemList
-
-    this.transportItemList.forEach((item, index) => {
-      console.log('GreenTVM.setItemListData: ' + `item.transport=${item.transport}, item.time_token=${item.time_token},
-      item.carbon_emission=${item.carbon_emission}, item.trip_time=${item.trip_time}, item.mileage=${item.mileage}, `)
-    })
+    this.transportItemList = dataItemList.reverse()
   }
 
   public async updateTotalData(acc: string) {
@@ -225,12 +232,7 @@ class GreenTravelViewModel {
       carbon_emission: totalCarEmi
     }
 
-    this.transportItemList.push(dataItem)
-
-    this.transportItemList.forEach((item, index) => {
-      console.log('GreenTVM.setItemListData: ' + `item.transport=${item.transport}, item.time_token=${item.time_token},
-      item.carbon_emission=${item.carbon_emission}, item.trip_time=${item.trip_time}, item.mileage=${item.mileage}, `)
-    })
+    this.transportItemList.unshift(dataItem)
   }
 
   public setCarEmiData(emi: number) {

@@ -224,13 +224,14 @@ export struct funcListsSelectedMap {
             let use_time: number = this.safeParseNumber(this.textFir)
             let totalCarEmi: number = parseFloat((use_time * item.carEmissionPer).toFixed(2))
             let elect_power: number = this.textSec === '' ? 0 : parseFloat(this.textSec)
-            HouseAPPVM.insertItemData(item.ts, totalCarEmi, use_time, elect_power)
+            HouseAPPVM.setItemListData(item.ts, totalCarEmi, use_time, elect_power)
             HouseAPPVM.setCarEmiData(totalCarEmi)
             HouseAPPVM.setCarEmiDay()
             HouseAPPVM.setMonthlyDegree(use_time)
             HouseAPPVM.setPoint(item.pointsPerOrder)
             CarLevVM.updateData(2, totalCarEmi)
             setTimeout(() => {
+              HouseAPPVM.updateItemData(item.ts, totalCarEmi, use_time, elect_power)
               HouseAPPVM.updateTotalData(acc)
             }, 500)
             this.isShow = false
@@ -335,14 +336,15 @@ export struct funcListsSelectedMap {
             let acc: string = AppStorage.get('currLoginAcc') as string
             let eat_portion: number = this.safeParseNumber(this.textFir)
             let totalCarEmi: number = parseFloat((eat_portion * item.carEmissionPer / 1000).toFixed(2))
-            let elect_power: number = parseFloat(this.textSec)
-            FoodDVM.insertItemData(item.ts, totalCarEmi, eat_portion, elect_power)
+            let eat_time: number = parseFloat(this.textSec)
+            FoodDVM.setItemListData(item.ts, totalCarEmi, eat_portion, eat_time)
             FoodDVM.setCarEmiData(totalCarEmi)
             FoodDVM.setCarEmiDay()
             FoodDVM.setMonthlyPortion(eat_portion)
             FoodDVM.setPoint(item.pointsPerOrder)
             CarLevVM.updateData(3, totalCarEmi)
             setTimeout(() => {
+              FoodDVM.updateItemData(item.ts, totalCarEmi, eat_portion, eat_time)
               FoodDVM.updateTotalData(acc)
             }, 500)
             this.isShow = false

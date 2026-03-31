@@ -1,4 +1,4 @@
-import { ApplianceTotalDataType } from "@ohos/utils"
+import { ApplianceItemDataType, ApplianceTotalDataType } from "@ohos/utils"
 import { ApplianceDataModel } from "../Model/HouseApplicationModel"
 import { cardsDataTypeModel, popBoxDataTypeModel, transportsTypeModel } from "../Model/ToDoItemsModel"
 
@@ -49,102 +49,115 @@ class houseApplicationViewModel {
     {
       ts: '冰箱',
       tsc: '#2196F3',
+      bgcCard: '#E3F2FD',
       bgc: '#0F4C81',
       img: $r('app.media.appliances_bingxiang'),
-      carEmissionPer: 0.015, // 冰箱：约0.015 kg/h（24小时运行，日均0.36kg）
+      carEmissionPer: 0.015,
       pointsPerOrder: 7
     },
     {
       ts: '空调',
       tsc: '#03A9F4',
+      bgcCard: '#E1F5FE',
       bgc: '#0B699E',
       img: $r('app.media.appliances_kongtiao'),
-      carEmissionPer: 0.85, // 空调（1.5匹）：约0.85 kg/h（制冷工况）
+      carEmissionPer: 0.85,
       pointsPerOrder: 3
     },
     {
       ts: '电饭煲',
       tsc: '#FF9800',
+      bgcCard: '#FFF3E0',
       bgc: '#6B4423',
       img: $r('app.media.appliances_dianfanbao'),
-      carEmissionPer: 0.38, // 电饭煲（800W）：约0.38 kg/h
+      carEmissionPer: 0.38,
       pointsPerOrder: 5
     },
     {
       ts: '洗衣机',
       tsc: '#009688',
+      bgcCard: '#E0F2F1',
       bgc: '#004D40',
       img: $r('app.media.appliances_xiyiji'),
-      carEmissionPer: 0.31, // 波轮洗衣机：约0.31 kg/h
+      carEmissionPer: 0.31,
       pointsPerOrder: 6
     },
     {
       ts: '电视机',
       tsc: '#9C27B0',
+      bgcCard: '#F3E5F5',
       bgc: '#4A148C',
       img: $r('app.media.appliances_dianshiji'),
-      carEmissionPer: 0.068, // 55寸智能电视：约0.068 kg/h
+      carEmissionPer: 0.068,
       pointsPerOrder: 8
     },
     {
       ts: '电脑',
       tsc: '#607D8B',
+      bgcCard: '#ECEFF1',
       bgc: '#34495E',
       img: $r('app.media.appliances_diannao'),
-      carEmissionPer: 0.085, // 台式电脑（含显示器）：约0.085 kg/h
+      carEmissionPer: 0.085,
       pointsPerOrder: 8
     },
     {
       ts: '电热水器',
       tsc: '#F44336',
+      bgcCard: '#FFEBEE',
       bgc: '#B71C1C',
       img: $r('app.media.appliances_dianreshuiqi'),
-      carEmissionPer: 1.65, // 2000W电热水器：约1.65 kg/h
+      carEmissionPer: 1.65,
       pointsPerOrder: 2
     },
     {
       ts: '电风扇',
       tsc: '#4CAF50',
+      bgcCard: '#E8F5E9',
       bgc: '#2D5F2E',
       img: $r('app.media.appliances_dianfengshan'),
-      carEmissionPer: 0.017, // 落地扇（40W）：约0.017 kg/h
+      carEmissionPer: 0.017,
       pointsPerOrder: 9
     },
     {
       ts: '微波炉',
       tsc: '#FF5722',
+      bgcCard: '#FBE9E7',
       bgc: '#5D4037',
       img: $r('app.media.appliances_weibolu'),
-      carEmissionPer: 0.45, // 1000W微波炉：约0.45 kg/h
+      carEmissionPer: 0.45,
       pointsPerOrder: 4
     },
     {
       ts: '电磁炉',
       tsc: '#795548',
+      bgcCard: '#EFEBE9',
       bgc: '#3E2723',
       img: $r('app.media.appliances_diancilu'),
-      carEmissionPer: 0.70, // 2000W电磁炉：约0.70 kg/h
+      carEmissionPer: 0.70,
       pointsPerOrder: 4
     },
     {
       ts: '吸尘器',
       tsc: '#9E9E9E',
+      bgcCard: '#F5F5F5',
       bgc: '#424242',
       img: $r('app.media.appliances_xichenqi'),
-      carEmissionPer: 0.22, // 手持式吸尘器：约0.22 kg/h
+      carEmissionPer: 0.22,
       pointsPerOrder: 6
     },
     {
       ts: '更多',
       tsc: '#9E9E9E',
+      bgcCard: '#F5F5F5',
       bgc: '#424242',
       img: $r('app.media.func_add'),
-      carEmissionPer: 0, // 占位项保持0
+      carEmissionPer: 0,
       pointsPerOrder: 1
     }
   ]
+  @Trace applicationsItemList: ApplianceItemDataType[] = []
   @Trace title: string = '选择你使用的电器'
-  @Trace subHeading: string = '出行足迹'
+  @Trace subHeading: string = '用电足迹'
   @Trace id: number = -1
   @Trace total_emission: number = 0.0
   @Trace total_day: number = 0
@@ -175,6 +188,9 @@ class houseApplicationViewModel {
     this.popBoxData[1].num = this.monthly_degree
     this.popBoxData[2].num = this.point
     this.popBoxData[3].num = this.medal
+
+    const dataItemList: ApplianceItemDataType[] = await ApplianceDataModel.getAppsItemData(acc)
+    this.applicationsItemList = dataItemList.reverse()
   }
 
   public async updateTotalData(acc: string) {
@@ -193,12 +209,29 @@ class houseApplicationViewModel {
     await ApplianceDataModel.updateTotalData(data)
   }
 
-  public insertItemData(appliance: string, totalCarEmi: number,
+  public updateItemData(appliance: string, totalCarEmi: number,
     use_time: number, elect_power: number) {
     let date = new Date().toLocaleDateString()
 
-    ApplianceDataModel.insertItemData(this.acc, appliance, use_time,
+    ApplianceDataModel.updateItemData(this.acc, appliance, use_time,
       elect_power, date, totalCarEmi)
+  }
+
+  public setItemListData(appliance: string, totalCarEmi: number,
+    use_time: number, elect_power: number) {
+    let date = new Date().toLocaleDateString()
+
+    const dataItem: ApplianceItemDataType = {
+      id: this.id,
+      account: this.acc,
+      appliance: appliance,
+      use_time: use_time,
+      elect_power: elect_power,
+      time_token: date,
+      carbon_emission: totalCarEmi
+    }
+
+    this.applicationsItemList.unshift(dataItem)
   }
 
   public setCarEmiData(emi: number) {

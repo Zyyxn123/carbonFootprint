@@ -57,6 +57,10 @@ export struct environmentalTipsPage {
             }))
           })
         }, (item: EnvironTipItemType) => item.id.toString())
+
+        ListItem() {}
+        .width('100%')
+        .height(100)
       }
       .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: true })
       .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])

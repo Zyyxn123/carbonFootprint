@@ -38,7 +38,8 @@ export struct greenTravelPage {
           funcListsCurrAction({
             index_page: 1,
             funcList: GreenTVM.transportItemList,
-            subHeading: GreenTVM.subHeading
+            subHeading: GreenTVM.subHeading,
+            bgcList: GreenTVM.transportLists
           })
         }
       }
@@ -59,7 +60,6 @@ export struct greenTravelPage {
     })
   }
 }
-
 
 @Builder
 export function harBuilder(value: object) {
