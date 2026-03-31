@@ -1,6 +1,7 @@
 import { BuilderNameConstants, RouterModule, RouterNameConstants } from "@ohos/customrouter";
 import { backButton } from "../Component/BackButton";
 import { funcListsCards } from "../Component/FuncListsCards";
+import { funcListsCurrAction } from "../Component/FuncListsCurrAction";
 import { funcListsSelectedMap } from "../Component/FuncListsSelectedMap";
 import GreenTVM from "../ViewModel/GreenTravelViewModel";
 
@@ -29,12 +30,17 @@ export struct greenTravelPage {
           funcListsSelectedMap({
             index_page: 1,
             funcList: GreenTVM.transportLists,
-            title: GreenTVM.title })
+            title: GreenTVM.title
+          })
         }
 
-        // ListItem() {
-        //   funcListsCurrAction()
-        // }
+        ListItem() {
+          funcListsCurrAction({
+            index_page: 1,
+            funcList: GreenTVM.transportItemList,
+            subHeading: GreenTVM.subHeading
+          })
+        }
       }
       .width('100%')
       .height('100%')

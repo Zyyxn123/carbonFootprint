@@ -1,31 +1,15 @@
-import { CarEmiFoodTable, FoodTotalDataType } from "@ohos/utils"
-
-// export interface foodAndDrinkTypeModel {
-//   bgc: string
-//   tsc: string
-//   ts: string
-//   img: ResourceStr
-// }
-//
-// export interface foodAndDrinkCardsDataTypeModel {
-//   text: string
-//   num: number
-//   unit?: string
-//   img?: ResourceStr
-// }
-//
-// export interface foodAndDrinkPopBoxDataTypeModel {
-//   text: string
-//   num: number
-//   unit?: string
-//   img?: ResourceStr
-// }
+import { CarEmiFoodTable, FoodItemDataType, FoodTotalDataType } from "@ohos/utils"
 
 export class FoodDataModel {
   static foodIns: CarEmiFoodTable = CarEmiFoodTable.getInstance()
 
   public static async getTotalData(acc: string) {
     const dataItem: FoodTotalDataType = await FoodDataModel.foodIns.getFoodTotalData(acc)
+    return dataItem
+  }
+
+  public static async getFoodItemData(acc: string) {
+    const dataItem: FoodItemDataType[] = await FoodDataModel.foodIns.getFoodItemData(acc)
     return dataItem
   }
 

@@ -1,49 +1,9 @@
-import { TransTotalDataType } from '@ohos/utils'
+import { TransItemDataType, TransTotalDataType } from '@ohos/utils'
 import { TransDataModel } from '../Model/GreenTravelModel'
 import { cardsDataTypeModel, popBoxDataTypeModel, transportsTypeModel } from '../Model/ToDoItemsModel'
 
 @ObservedV2
 class GreenTravelViewModel {
-  @Trace cardsData: cardsDataTypeModel[] = [
-    {
-      text: '累计碳排',
-      num: 0.0,
-      unit: 'kg'
-    },
-    {
-      text: '本月碳排量 76%',
-      num: 0.0,
-      unit: 'kg'
-    },
-    {
-      text: '累计出行',
-      num: 0,
-      unit: '天',
-      img: $r('app.media.icon_leave')
-    }
-  ]
-  @Trace popBoxData: popBoxDataTypeModel[] = [
-    {
-      text: '本月出行次数',
-      num: 0,
-      unit: ''
-    },
-    {
-      text: '本月出行里程',
-      num: 0,
-      unit: 'km'
-    },
-    {
-      text: '获得积分',
-      num: 0,
-      unit: ''
-    },
-    {
-      text: '环保勋章',
-      num: 1,
-      unit: ''
-    }
-  ]
   // kg/km
   @Trace transportLists: transportsTypeModel[] = [
     {
@@ -143,6 +103,47 @@ class GreenTravelViewModel {
       pointsPerOrder: 1
     }
   ]
+  @Trace transportItemList: TransItemDataType[] = []
+  @Trace cardsData: cardsDataTypeModel[] = [
+    {
+      text: '累计碳排',
+      num: 0.0,
+      unit: 'kg'
+    },
+    {
+      text: '本月碳排量 76%',
+      num: 0.0,
+      unit: 'kg'
+    },
+    {
+      text: '累计出行',
+      num: 0,
+      unit: '天',
+      img: $r('app.media.icon_leave')
+    }
+  ]
+  @Trace popBoxData: popBoxDataTypeModel[] = [
+    {
+      text: '本月出行次数',
+      num: 0,
+      unit: ''
+    },
+    {
+      text: '本月出行里程',
+      num: 0,
+      unit: 'km'
+    },
+    {
+      text: '获得积分',
+      num: 0,
+      unit: ''
+    },
+    {
+      text: '环保勋章',
+      num: 1,
+      unit: ''
+    }
+  ]
   @Trace title: string = '选择你的出行方式'
   @Trace subHeading: string = '出行足迹'
   @Trace id: number = -1
@@ -176,6 +177,14 @@ class GreenTravelViewModel {
     this.popBoxData[1].num = this.monthly_distance
     this.popBoxData[2].num = this.point
     this.popBoxData[3].num = this.medal
+
+    const dataItemList: TransItemDataType[] = await TransDataModel.getTransItemData(acc)
+    this.transportItemList = dataItemList
+
+    this.transportItemList.forEach((item, index) => {
+      console.log('GreenTVM.setItemListData: ' + `item.transport=${item.transport}, item.time_token=${item.time_token},
+      item.carbon_emission=${item.carbon_emission}, item.trip_time=${item.trip_time}, item.mileage=${item.mileage}, `)
+    })
   }
 
   public async updateTotalData(acc: string) {
@@ -194,12 +203,34 @@ class GreenTravelViewModel {
     await TransDataModel.updateTotalData(data)
   }
 
-  public insertItemData(transport: string, totalCarEmi: number,
+  public updateItemData(transport: string, totalCarEmi: number,
     mileage: number, tripTime: number) {
     let date = new Date().toLocaleDateString()
 
-    TransDataModel.insertItemData(this.acc, transport, mileage,
+    TransDataModel.updateItemData(this.acc, transport, mileage,
       tripTime, date, totalCarEmi)
+  }
+
+  public setItemListData(transport: string, totalCarEmi: number,
+    mileage: number, tripTime: number) {
+    let date = new Date().toLocaleDateString()
+
+    const dataItem: TransItemDataType = {
+      id: this.id,
+      account: this.acc,
+      transport: transport,
+      mileage: mileage,
+      trip_time: tripTime,
+      time_token: date,
+      carbon_emission: totalCarEmi
+    }
+
+    this.transportItemList.push(dataItem)
+
+    this.transportItemList.forEach((item, index) => {
+      console.log('GreenTVM.setItemListData: ' + `item.transport=${item.transport}, item.time_token=${item.time_token},
+      item.carbon_emission=${item.carbon_emission}, item.trip_time=${item.trip_time}, item.mileage=${item.mileage}, `)
+    })
   }
 
   public setCarEmiData(emi: number) {

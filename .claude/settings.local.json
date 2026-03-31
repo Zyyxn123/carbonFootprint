@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(for dir:*)",
+      "Bash(do echo:*)",
+      "Read(//f/myProject/firstProject_carbonFootPrint/carbonFootPrint/**)",
+      "Bash(done)"
+    ]
+  }
+}

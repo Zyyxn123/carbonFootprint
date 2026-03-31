@@ -128,6 +128,7 @@ export class CarEmiTransTable {
     }
   }
 
+
   public async getTransItemData(acc: string): Promise<TransItemDataType[]> {
     let resultItem: TransItemDataType[] = []
 

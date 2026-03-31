@@ -111,13 +111,14 @@ export struct funcListsSelectedMap {
             const mileage = this.safeParseNumber(this.textFir)
             let totalCarEmi: number = parseFloat((mileage * item.carEmissionPer).toFixed(2))
             let tripTime: number = this.textSec === '' ? 0 : parseFloat(this.textSec)
-            GreenTVM.insertItemData(item.ts, totalCarEmi, mileage, tripTime)
+            GreenTVM.setItemListData(item.ts, totalCarEmi, mileage, tripTime)
             GreenTVM.setCarEmiData(totalCarEmi)
             GreenTVM.setCarEmiDay()
             GreenTVM.setMonthlyDistance(mileage)
             GreenTVM.setPoint(item.pointsPerOrder)
             CarLevVM.updateData(1, totalCarEmi)
             setTimeout(() => {
+              GreenTVM.updateItemData(item.ts, totalCarEmi, mileage, tripTime)
               GreenTVM.updateTotalData(acc)
             }, 500)
             this.isShow = false
