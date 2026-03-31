@@ -8,6 +8,6 @@ export struct carbonFootprintTitle {
         .fontWeight(FontWeight.Bold)
     }
     .width('100%')
-    .padding({ top: 35 })
+    .padding({ top: 30 })
   }
 }

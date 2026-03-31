@@ -1,5 +1,7 @@
 import { BuilderNameConstants } from '@ohos/customrouter'
 
+export { home_mainPage } from './src/main/ets/pages/Home_mainPage'
+
 export async function harInit(builderName: string): Promise<void> {
   switch (builderName) {
     case BuilderNameConstants.HAR_home_environmentalTip:
@@ -30,5 +32,3 @@ export async function harInit(builderName: string): Promise<void> {
       break
   }
 }
-
-export { home_mainPage } from './src/main/ets/pages/Home_mainPage'

@@ -1,0 +1,32 @@
+{
+  "color": [
+    {
+      "name": "color_1",
+      "value": "#ff0000"
+    },
+    {
+      "name": "searchForView_carbonEmission_color",
+      "value": "#000000"
+    },
+    {
+      "name": "searchForView_magnifier_color",
+      "value": "#808080"
+    },
+    {
+      "name": "searchForView_placeholder_color",
+      "value": "#808080"
+    },
+    {
+      "name": "searchForView_border_color",
+      "value": "#37800F"
+    },
+    {
+      "name": "searchForView_focus_border_color",
+      "value": "#4CAF50"
+    },
+    {
+      "name": "searchForView_shadow_color",
+      "value": "#888888"
+    }
+  ]
+}

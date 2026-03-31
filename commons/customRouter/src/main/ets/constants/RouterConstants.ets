@@ -11,6 +11,7 @@ export class BuilderNameConstants {
   static readonly HAR_tendency_lowFootprint: string = '@ohos/tendency_lowFootprintPage'
   static readonly HAR_tendency_lowTask: string = '@ohos/tendency_lowTaskPage'
   static readonly HAR_tendency_tomorrowTendency: string = '@ohos/tendency_tomorrowTendencyPage'
+  static readonly HAR_carboncircle_msgEditingPage: string = '@ohos/carboncircle_msgEditingPage'
 }
 
 

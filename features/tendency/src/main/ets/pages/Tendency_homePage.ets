@@ -9,7 +9,7 @@ export struct tendency_homePage {
   private tabCtrl: TabsController = new TabsController()
 
   build() {
-    Column({ space: 15 }) {
+    Column({ space: 13 }) {
       carbonFootprintTitle()
       carbonRecordAndTasks()
       carbonLineChart()

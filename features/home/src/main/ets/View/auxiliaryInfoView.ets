@@ -40,7 +40,7 @@ export struct auxiliaryInfoView {
           .fillColor($r('app.color.auxiliaryInfoView_onwards'))
           .margin({ right: 10 })
       }
-      .height(65)
+      .height(60)
       .width('100%')
       .borderRadius(25)
       .border({ width: { left: 2, bottom: 1 }, color: $r('app.color.auxiliaryInfoView_border') })
@@ -75,7 +75,7 @@ export struct auxiliaryInfoView {
           .fillColor($r('app.color.auxiliaryInfoView_onwards'))
           .margin({ right: 10 })
       }
-      .height(65)
+      .height(60)
       .width('100%')
       .borderRadius(25)
       .border({ width: { left: 2, bottom: 1 }, color: $r('app.color.auxiliaryInfoView_border') })
