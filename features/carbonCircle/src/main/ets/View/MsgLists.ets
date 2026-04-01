@@ -5,7 +5,7 @@ import msgListVM from "../ViewModel/MsgListViewModel"
 export struct MsgLists {
   @Builder
   listItemBuilder(item: MsgListType, index: number) {
-    Column({ space: 15 }) {
+    Column({ space: 8 }) {
       Row({ space: 10 }) {
         Image($r(`app.media.${item.avatar}`))
           .width(40)
@@ -43,7 +43,32 @@ export struct MsgLists {
       .columnsGap(6)
       .rowsGap(6)
 
+      Row() {
+        Row({ space: 6 }) {
+          Image($r('app.media.carCircle_praise'))
+            .width(20)
+            .fillColor('#000')
 
+          Text('5')
+            .fontColor('#000')
+            .fontSize(15)
+        }
+        .width('50%')
+        .justifyContent(FlexAlign.Center)
+
+        Row({ space: 6 }) {
+          Image($r('app.media.carCircle_comment'))
+            .width(20)
+            .fillColor('#000')
+
+          Text('23')
+            .fontColor('#000')
+            .fontSize(15)
+        }
+        .justifyContent(FlexAlign.Center)
+        .width('50%')
+      }
+      .width('100%')
     }
     .width('100%')
     .alignItems(HorizontalAlign.Start)
@@ -54,7 +79,7 @@ export struct MsgLists {
       .width('100%')
       .color('#F2F2F2')
       .strokeWidth(2)
-      .margin({ top: 15, bottom: 25})
+      .margin({ top: 8, bottom: 15})
   }
 
   build() {

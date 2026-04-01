@@ -11,11 +11,17 @@ import { JSON } from "@kit.ArkTS";
 
 @Component
 export struct MapFootprintView {
-  @State isShow1: boolean = false
+  @Link myShowResults: boolean
+  @Link makeSureToQuit: boolean
+  @Link canMark: boolean
+  @Link currData: SiteItem | undefined
+  @Link isShow1: boolean
+  @Link footprintSelectedData: SiteItem | undefined
+  //
   @State showSearchResults: boolean = false
   @State isLoading: boolean = false
-  @State showAnnotationDetail: boolean = false
-  @State textStr: string = ''
+  // @State showAnnotationDetail: boolean = false
+  @Link textStr: string
   @State carbonEmission: string = ''
   @State remark: string = ''
   @State searchResults: SiteItem[] = []
@@ -77,9 +83,13 @@ export struct MapFootprintView {
     const location = siteItem.location
     const title = siteItem.name ?? '未知地点'
 
-    // ====================== ✅ 防重复：存在就不添加 ======================
+    // 已存在
     if (this.isAnnotationExists(location.latitude, location.longitude, title)) {
-      console.info('该地点已存在标注，不再重复添加');
+      this.getUIContext().getPromptAction().showToast({
+        message: '该地点已存在标注',
+        bottom: 80,
+        duration: 2000
+      })
 
       // 仅移动地图
       let cameraPosition: mapCommon.CameraPosition = {
@@ -87,10 +97,10 @@ export struct MapFootprintView {
         zoom: 16,
         tilt: 0,
         bearing: 0
-      };
-      let cameraUpdate = map.newCameraPosition(cameraPosition);
-      this.mapController.animateCamera(cameraUpdate, 1000);
-      return;
+      }
+      let cameraUpdate = map.newCameraPosition(cameraPosition)
+      this.mapController.animateCamera(cameraUpdate, 1000)
+      return
     }
 
     // 移动地图
@@ -99,9 +109,9 @@ export struct MapFootprintView {
       zoom: 16,
       tilt: 0,
       bearing: 0
-    };
-    let cameraUpdate = map.newCameraPosition(cameraPosition);
-    this.mapController.animateCamera(cameraUpdate, 1000);
+    }
+    let cameraUpdate = map.newCameraPosition(cameraPosition)
+    this.mapController.animateCamera(cameraUpdate, 1000)
 
     // 添加标注
     let pointAnnotationOptions: mapCommon.PointAnnotationParams = {
@@ -120,9 +130,8 @@ export struct MapFootprintView {
 
     try {
       await this.mapController.addPointAnnotation(pointAnnotationOptions)
-      console.info(`已添加标注：${title}`)
 
-      // ✅ 加入已添加列表，防止重复
+      // 加入已添加列表，防止重复
       this.addedAnnotations.push({
         id: Date.now(),
         latitude: location.latitude,
@@ -146,11 +155,12 @@ export struct MapFootprintView {
       description: siteItem.formatAddress || '无详细地址',
       iconColor: '#37800f'
     }
-    this.showAnnotationDetail = true
+    // this.showAnnotationDetail = true
   }
 
   build() {
     Column({ space: 10 }) {
+      // 顶部标题
       Row() {
         Text('碳足迹')
           .fontSize(20)
@@ -167,13 +177,53 @@ export struct MapFootprintView {
           .backgroundColor('#ffe3e3e3')
           .height(35)
           .onClick(() => {
-            this.isShow1 = false
-            this.textStr = ''
+            if (this.currData === undefined) {
+              this.isShow1 = false
+            } else {
+              if (this.makeSureToQuit) {
+                this.getUIContext().showAlertDialog({
+                  title: '选择操作',
+                  message: '当前信息不为空，退出后则清空信息',
+                  primaryButton: {
+                    value: '确定',
+                    fontColor: '#37800f',
+                    action: () => {
+                      this.makeSureToQuit = false
+                      this.getUIContext().getPromptAction().showToast({
+                        message: '再次点击则退出界面',
+                        bottom: 80,
+                        duration: 1500
+                      })
+                    }
+                  },
+                  secondaryButton: {
+                    value: '取消',
+                    fontColor: '#ffff0000',
+                    action: () => {}
+                  },
+                  backgroundColor: undefined,
+                  backgroundBlurStyle: BlurStyle.Thin,
+                  backgroundBlurStyleOptions: {
+                    colorMode: ThemeColorMode.LIGHT,
+                    adaptiveColor: AdaptiveColor.AVERAGE,
+                    scale: 1,
+                    blurOptions: { grayscale: [20, 20] },
+                  },
+                })
+              } else {
+                this.textStr = ''
+                this.isShow1 = false
+                this.canMark = false
+                this.makeSureToQuit = true
+                this.myShowResults = true
+              }
+            }
           })
       }
       .justifyContent(FlexAlign.SpaceBetween)
       .width('100%')
 
+      // 搜索栏
       Column({ space: 10 }) {
         Row() {
           TextInput({ placeholder: '搜索地点...', text: $$this.textStr })
@@ -182,13 +232,15 @@ export struct MapFootprintView {
             .placeholderColor('#ccc')
             .backgroundColor(Color.Transparent)
             .onChange((value: string) => {
-              this.textStr = value
-              if (this.searchTimer) {
-                clearTimeout(this.searchTimer)
+              if (this.myShowResults) {
+                this.textStr = value
+                if (this.searchTimer) {
+                  clearTimeout(this.searchTimer)
+                }
+                this.searchTimer = setTimeout(() => {
+                  this.performSearch(value)
+                }, 500) as number
               }
-              this.searchTimer = setTimeout(() => {
-                this.performSearch(value)
-              }, 500) as number
             })
 
           Divider()
@@ -204,6 +256,7 @@ export struct MapFootprintView {
             .fillColor('#37800f')
             .margin({ right: 5 })
             .onClick(() => {
+              this.myShowResults = true
               this.performSearch(this.textStr)
             })
             .animation({ duration: 200, curve: Curve.EaseInOut })
@@ -212,6 +265,7 @@ export struct MapFootprintView {
         .padding({ left: 15, right: 10 })
         .backgroundColor('#F3FEF3')
 
+        // 可选数据
         Column({ space: 10 }) {
           Text('碳排放数据 (可选)')
             .fontSize(14)
@@ -275,25 +329,102 @@ export struct MapFootprintView {
         .width('100%')
         .margin({ top: 20 })
 
-        if (this.showSearchResults) {
+        Blank()
+          .width('100%')
+          .height(60)
+
+        // 选择按钮
+        Row() {
+          Button('取消标记')
+            .width('45%')
+            .height(40)
+            .backgroundColor('#ffff0000')
+            .fontColor('#fff')
+            .fontSize(18)
+            .onClick(() => {
+              this.textStr = ''
+              this.showSearchResults = false
+              this.footprintSelectedData = undefined
+              this.carbonEmission = ''
+              this.remark = ''
+              this.canMark = false
+              this.myShowResults = true
+              this.currData = undefined
+            })
+
+          Button('确认标记')
+            .enabled((this.canMark && this.currData) ? true : false)
+            .width('45%')
+            .height(40)
+            .backgroundColor('#37800f')
+            .fontColor('#fff')
+            .fontSize(18)
+            .onClick(() => {
+              if (this.canMark && (this.currData!.name === this.textStr)) {
+                this.getUIContext().getPromptAction().showToast({
+                  message: `添加成功`,
+                  bottom: 80,
+                  duration: 1500
+                })
+                this.currData = undefined
+                this.textStr = ''
+                this.showSearchResults = false
+                this.footprintSelectedData = undefined
+                this.carbonEmission = ''
+                this.remark = ''
+                this.canMark = false
+              } else {
+                this.getUIContext().getPromptAction().showToast({
+                  message: `信息错误，请重新输入`,
+                  bottom: 80,
+                  duration: 1500,
+                  textColor: '#ffff0000'
+                })
+              }
+              this.myShowResults = true
+            })
+        }
+        .justifyContent(FlexAlign.SpaceBetween)
+        .width('80%')
+
+
+        if (this.showSearchResults && this.myShowResults) {
           Column({ space: 5 }) {
             if (this.isLoading) {
               Row() {
-                LoadingProgress().width(25).height(25).color('#37800f')
-                Text('搜索中...').fontSize(14).fontColor('#666666').margin({ left: 10 })
+                LoadingProgress().width(25).height(25).color('#37800f').backgroundColor('#fff')
+                Text('搜索中...').fontSize(14).fontColor('#666666').margin({ left: 10 }).backgroundColor('#fff')
               }
+              .backgroundColor('#fff')
               .width('100%')
               .padding(15)
               .justifyContent(FlexAlign.Center)
             } else if (this.searchResults.length > 0) {
               Column({ space: 8 }) {
-                Text(`找到 ${this.searchResults.length} 个结果`)
-                  .fontSize(14)
-                  .fontColor('#37800f')
-                  .fontWeight(FontWeight.Medium)
-                  .width('100%')
-                  .textAlign(TextAlign.Start)
-                  .padding({ left: 5, bottom: 5 })
+                Row() {
+                  Text(`找到 ${this.searchResults.length} 个结果`)
+                    .fontSize(14)
+                    .fontColor('#37800f')
+                    .fontWeight(FontWeight.Medium)
+                    .textAlign(TextAlign.Start)
+                    .padding({ left: 5, bottom: 5 })
+
+                  Image($r('app.media.arrow_up'))
+                    .width(35)
+                    .padding(5)
+                    .borderRadius(20)
+                    .fillColor('#ff676767')
+                    .backgroundColor('#fff6f6f6')
+                    .margin({ right: 5 })
+                    .onClick(() => {
+                      this.showSearchResults = false
+                      this.myShowResults = false
+                    })
+                }
+                .alignItems(VerticalAlign.Center)
+                .justifyContent(FlexAlign.SpaceBetween)
+                .width('100%')
+                .height(40)
 
                 Scroll() {
                   Column({ space: 5 }) {
@@ -335,8 +466,11 @@ export struct MapFootprintView {
                           offsetY: 2
                         })
                         .onClick(() => {
+                          this.currData = item
+                          this.textStr = this.currData.name ?? '未知地点'
+                          this.canMark = true
                           this.isShow1 = false
-                          this.textStr = ''
+                          this.myShowResults = false
                           this.navigateToSite(item)
                         })
                         .animation({ duration: 200, curve: Curve.EaseInOut })
@@ -350,7 +484,7 @@ export struct MapFootprintView {
                   .width('100%')
                 }
                 .width('100%')
-                .height(250)
+                .height(300)
               }
               .width('100%')
               .padding(5)
@@ -374,6 +508,8 @@ export struct MapFootprintView {
             }
           }
           .width('100%')
+          .backgroundColor('#000')
+          .position({ x: 0, y: 50 })
           .border({ width: 1, color: '#ccc', radius: 15 })
         }
       }

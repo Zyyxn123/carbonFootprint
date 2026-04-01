@@ -47,6 +47,14 @@ function reqPermissionsFromUser(permissions: Array<Permissions>, context: common
 
 @Component
 export struct lowFootprintPage {
+  @State myShowResults: boolean = true
+  @State makeSureToQuit: boolean = true
+  @State canMark: boolean = false
+  @State currData: SiteItem | undefined = undefined
+  // 碳足迹
+
+
+  @State footprintSelectedData: SiteItem | undefined = undefined
   @State bol: boolean = false
   @State permissionAllow: boolean = true
   @Prop val: object
@@ -562,7 +570,15 @@ export struct lowFootprintPage {
   @Builder
   bSBuilder(index: number) {
     if (index === 0) {
-      MapFootprintView()
+      MapFootprintView({
+        isShow1: this.isShow1,
+        textStr: this.textStr,
+        footprintSelectedData: this.footprintSelectedData,
+        myShowResults: this.myShowResults,
+        makeSureToQuit: this.makeSureToQuit,
+        canMark: this.canMark,
+        currData: this.currData,
+      })
     } else if (index === 1) {
       MapTrackView()
     } else if (index === 2) {
@@ -617,13 +633,12 @@ export struct lowFootprintPage {
                 this.isShow1 = true
               })
               .bindSheet($$this.isShow1, this.bSBuilder(0), {
-                height: 650,
+                height: 500,
                 showClose: false,
                 backgroundColor: '#fff',
                 onWillDismiss: () => {
                   this.currIndex = -1
                   this.isShow1 = false
-                  this.textStr = ''
                 }
               })
             Text(footPriVM.tabsContent[1])
@@ -644,7 +659,6 @@ export struct lowFootprintPage {
                 onWillDismiss: () => {
                   this.currIndex = -1
                   this.isShow2 = false
-                  // this.textStr = ''
                 }
               })
             Text(footPriVM.tabsContent[2])
@@ -665,7 +679,6 @@ export struct lowFootprintPage {
                 onWillDismiss: () => {
                   this.currIndex = -1
                   this.isShow3 = false
-                  this.textStr = ''
                 }
               })
           }
