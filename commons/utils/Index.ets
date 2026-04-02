@@ -2,6 +2,10 @@ export { HTTPForHealthyNews } from './/src//main//ets//HTTP//HTTPForHealthyNews'
 
 export { HTTPForLoginState } from './/src//main//ets//HTTP//HTTPForLoginState'
 
+export { HTTPForAIReport } from './/src//main//ets//HTTP//HTTPForAIReport'
+
+export { HTTPForCarCircle } from './/src//main//ets//HTTP//HTTPForCarCircle'
+
 export { HealthNewsResult, HealthNewsItem } from './src/main/ets/Interface/HealthyNewsInterface'
 
 export { UserBasicDataType } from './src/main/ets/Interface/UserBasicDataType'
@@ -17,6 +21,8 @@ export { WeeklyTotalDataType } from './src/main/ets/Interface/WeeklyTotalDataTyp
 export { TasksDataType, TaskMsgType, CarbonTask } from './src/main/ets/Interface/TasksDataType'
 
 export { HealthyNewsPreference } from './src/main/ets/Perferences/HealthyNewsPreference'
+
+export { AccJWTPreference } from './src/main/ets/Perferences/AccJWTPreference'
 
 export { UserRdbStore } from './src/main/ets/RdbStore/UserRdbStore'
 

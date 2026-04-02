@@ -46,6 +46,7 @@ export struct dataPanelComponent {
       }
       .borderRadius(15)
       .backgroundColor('#fff')
+      .border({ width: 1, color: '#37800f'})
       .onClick(() => {
         this.vals = [CarLevVM.travel_carbon += 1, CarLevVM.electric_carbon += 2, CarLevVM.food_carbon]
       })

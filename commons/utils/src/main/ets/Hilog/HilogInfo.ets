@@ -34,11 +34,17 @@ class Logger {
   }
 }
 
-export const HTTPLogger: Logger = new Logger('[HTTPLogger_HN]')
+export const HTTPLogger: Logger = new Logger('[HTTPLogger]')
+
+export const HTTPForCarCleLogger: Logger = new Logger('[HTTPForCarCleLogger]')
 
 export const HTTPForLoginLogger: Logger = new Logger('[HTTPForLoginLogger]')
 
-export const PreLogger_HN: Logger = new Logger('[PreLogger_HN]')
+export const HTTPForAIReportLogger: Logger = new Logger('[HTTPForAIReportLogger]')
+
+export const PreLogger_HN: Logger = new Logger('[PreLogger]')
+
+export const AccJWTPreLogger: Logger = new Logger('[AccJWTPreLogger]')
 
 export const UserRdbLogger: Logger = new Logger('[UserRdbLogger]')
 

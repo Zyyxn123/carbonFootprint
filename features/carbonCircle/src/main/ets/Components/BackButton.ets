@@ -1,4 +1,5 @@
 import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstants } from "@ohos/customrouter"
+import { AccJWTPreference, HTTPForCarCircle } from "@ohos/utils"
 import msgListVM from "../ViewModel/MsgListViewModel"
 import userDataVM from "../ViewModel/UserDataViewModel"
 
@@ -8,7 +9,8 @@ export struct backButton {
   @Link hasContent: boolean
   @Link imgSrc: string[]
   @Link textStr: string
-
+  private httpForCarCircleIns: HTTPForCarCircle = HTTPForCarCircle.getInstance()
+  private accJWTPre: AccJWTPreference = AccJWTPreference.getInstance()
   build() {
     Row({ space: 10 }) {
       Row({ space: 8 }) {
@@ -36,11 +38,15 @@ export struct backButton {
           .onClick(() => {
             if (this.hasContent) {
               const acc = AppStorage.get('currLoginAcc') as string
+              const title: string = '今日分享'
               const name: string =  userDataVM.name
               const avatar: string =  userDataVM.avatar
               const date = new Date().toLocaleString()
+              const JWT = this.accJWTPre.getCurrAccJWT(acc)
+              this.httpForCarCircleIns.setJWT(JWT)
               console.log('send msg: ' + `acc=${acc}, name=${name}, avatar=${avatar}, date=${date}`)
-              msgListVM.setMsg(acc, name, avatar, this.imgSrc, this.textStr, date, 0)
+              // msgListVM.setMsg(acc, name, avatar, this.imgSrc, this.textStr, date, 0)
+              this.httpForCarCircleIns.httpForPublishData(title, this.textStr,  this.imgSrc, avatar)
 
               this.getUIContext().getPromptAction().showToast({
                 message: '发表成功',

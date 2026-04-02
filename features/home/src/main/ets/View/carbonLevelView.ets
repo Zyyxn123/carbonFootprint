@@ -25,6 +25,7 @@ export struct carbonLevelView {
           .margin({ top: 10 })
 
         gaugeComponent()
+          .border({ width: 1, color: '#37800f'})
           .backgroundColor($r('app.color.carbonLevelView_data_background'))
           .padding(3)
           .borderRadius(25)

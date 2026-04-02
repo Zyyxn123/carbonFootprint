@@ -1,5 +1,6 @@
 import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from "@ohos/customrouter"
 import {
+  AccJWTPreference,
   CarEmiApplianceTable,
   CarEmiFoodTable,
   CarEmiTotalWeeklyTable,
@@ -19,7 +20,6 @@ export struct logOrResView {
   @State passwordStr: string = ''
   @State loginProgressBol: boolean = false
   @Link isLogin: boolean
-
   // 动画相关状态
   @State isAccountFocused: boolean = false
   @State isPasswordFocused: boolean = false
@@ -27,7 +27,6 @@ export struct logOrResView {
   @State pageOpacity: number = 0
   @State pageTranslateY: number = 30
   @State loginButtonText: ResourceStr = $r('app.string.logOrRes_button')
-
   // 上半区域动画状态
   @State floatLeaf1Y: number = 0
   @State floatLeaf2Y: number = 0
@@ -35,12 +34,11 @@ export struct logOrResView {
   @State leafRotation: number = 0
   @State particleOpacity: number = 0
   @State glowIntensity: number = 0
-
   // 验证相关状态
   @State accountError: string = ''
   @State passwordError: string = ''
   @State isSubmitting: boolean = false
-
+  private accJWTPre: AccJWTPreference = AccJWTPreference.getInstance()
   private healthyNewsPre: HealthyNewsPreference = HealthyNewsPreference.getInstance()
   private httpForHN: HTTPForHealthyNews = HTTPForHealthyNews.getInstance()
   private userRdbStoreIns: UserRdbStore = UserRdbStore.getInstance()
@@ -267,7 +265,8 @@ export struct logOrResView {
             Row() {
               Image($r('app.media.log_account'))
                 .width(25)
-                .fillColor(this.isAccountFocused ? $r('app.color.logOrRes_button_background') : $r('app.color.logOrRes_button_border'))
+                .fillColor(this.isAccountFocused ? $r('app.color.logOrRes_button_background') :
+                  $r('app.color.logOrRes_button_border'))
                 .animation({ duration: 200, curve: Curve.EaseOut })
 
               TextInput({ placeholder: '请输入账号', text: $$this.accountStr })
@@ -295,7 +294,8 @@ export struct logOrResView {
             .height(50)
             .border({
               radius: 25,
-              color: this.isAccountFocused ? $r('app.color.logOrRes_button_background') : $r('app.color.logOrRes_button_border'),
+              color: this.isAccountFocused ? $r('app.color.logOrRes_button_background') :
+                $r('app.color.logOrRes_button_border'),
               width: this.isAccountFocused ? 3 : 2
             })
             .padding({ left: 12 })
@@ -319,14 +319,18 @@ export struct logOrResView {
             Row() {
               Image($r('app.media.log_password'))
                 .width(25)
-                .fillColor(this.isPasswordFocused ? $r('app.color.logOrRes_button_background') : $r('app.color.logOrRes_button_border'))
+                .fillColor(this.isPasswordFocused ? $r('app.color.logOrRes_button_background') :
+                  $r('app.color.logOrRes_button_border'))
                 .animation({ duration: 200, curve: Curve.EaseOut })
 
               TextInput({ placeholder: '请输入密码', text: $$this.passwordStr })
                 .width(275)
                 .placeholderColor($r('app.color.logOrRes_button_word_a'))
                 .fontColor($r('app.color.logOrRes_button_word_c'))
-                .passwordIcon({ onIconSrc: $r('app.media.log_secret'), offIconSrc: $r('app.media.log_secret_selected') })
+                .passwordIcon({
+                  onIconSrc: $r('app.media.log_secret'),
+                  offIconSrc: $r('app.media.log_secret_selected')
+                })
                 .type(InputType.Password)
                 .backgroundColor(Color.Transparent)
                 .copyOption(CopyOptions.LocalDevice)
@@ -349,7 +353,8 @@ export struct logOrResView {
             .height(50)
             .border({
               radius: 25,
-              color: this.isPasswordFocused ? $r('app.color.logOrRes_button_background') : $r('app.color.logOrRes_button_border'),
+              color: this.isPasswordFocused ? $r('app.color.logOrRes_button_background') :
+                $r('app.color.logOrRes_button_border'),
               width: this.isPasswordFocused ? 3 : 2
             })
             .padding({ left: 12, right: 12 })
@@ -401,31 +406,40 @@ export struct logOrResView {
               }
             })
             .onClick(async () => {
-              // if (this.isSubmitting) return
-              //
-              // // 表单验证
-              // if (!this.validateForm()) {
-              //   return
-              // }
-              //
-              // this.isSubmitting = true
-              // this.loginButtonText = '登录中...'
-              //
-              // // 这里可以调用实际的登录API
-              // // this.httpForLoginState.setExtraData(this.accountStr, this.passwordStr, '1')
-              // // await this.httpForLoginState.HTTPFunc()
-              //
-              // // 模拟登录过程
-              // setTimeout(() => {
-              //   this.loginButtonText = $r('app.string.logOrRes_button')
-              //   this.isSubmitting = false
-              //
-              //   // 这里可以添加实际登录成功后的逻辑
-              //   prompt.showToast({
-              //     message: '登录成功（模拟）',
-              //     duration: 2000
-              //   })
-              // }, 1500)
+              if (this.isSubmitting) {
+                return
+              }
+
+              // 表单验证
+              if (!this.validateForm()) {
+                return
+              }
+
+              this.isSubmitting = true
+              this.loginButtonText = '登录中...'
+
+              // 这里可以调用实际的登录API
+              this.httpForLoginState.setExtraData(this.accountStr, this.passwordStr, '1')
+              await this.httpForLoginState.HTTPFunc()
+
+              // 模拟登录过程
+              setTimeout(() => {
+                if (this.httpForLoginState.isOK === false) {
+                  this.getUIContext().getPromptAction().showToast({
+                    message: '登录或注册出错',
+                    duration: 1500,
+                    bottom: 80
+                  })
+                } else {
+                  AppStorage.set('currLoginAcc', this.accountStr)
+                  this.accJWTPre.setCurrAccJWT(this.accountStr, this.httpForLoginState.returnJWT)
+                  this.isLogin = true
+                  console.log('数据：' + this.accountStr + ';;' + this.httpForLoginState.returnUserName)
+                }
+
+                this.loginButtonText = $r('app.string.logOrRes_button')
+                this.isSubmitting = false
+              }, 1500)
             })
 
           // 游客登录按钮（文字按钮样式）
@@ -434,7 +448,9 @@ export struct logOrResView {
             .fontSize(15)
             .margin({ top: 20 })
             .onClick(async () => {
-              if (this.isSubmitting) return
+              if (this.isSubmitting) {
+                return
+              }
 
               this.isSubmitting = true
               this.loginProgressBol = true
@@ -497,10 +513,15 @@ export struct logOrResView {
       .alignItems(HorizontalAlign.Center)
       .width('100%')
       .height('100%')
-      .backgroundColor('#FFFFFF')  // 确保内容区域纯白
+      .backgroundColor('#FFFFFF') // 确保内容区域纯白
       .borderRadius({ topLeft: 40, topRight: 40 })
-      .shadow({ radius: 20, type: ShadowType.COLOR, color: '#00000020', offsetY: -5 })
-      .margin({ top: '15%' })  // 给上半区域动画留出空间，但确保输入区域可见
+      .shadow({
+        radius: 20,
+        type: ShadowType.COLOR,
+        color: '#00000020',
+        offsetY: -5
+      })
+      .margin({ top: '15%' }) // 给上半区域动画留出空间，但确保输入区域可见
     }
     .width('100%')
     .height(650)

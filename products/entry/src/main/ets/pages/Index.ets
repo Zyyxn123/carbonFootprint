@@ -1,5 +1,6 @@
 import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstants } from '@ohos/customrouter';
 import {
+  AccJWTPreference,
   CarEmiApplianceTable,
   CarEmiFoodTable,
   CarEmiTotalWeeklyTable,
@@ -30,10 +31,11 @@ struct c {
   @State entryHapRouter: NavPathStack = new NavPathStack()
   @StorageLink('isLoginState') isLogin: boolean = false
   @State hoverIndex: number = -1
-  private healthyNewsPre: HealthyNewsPreference = HealthyNewsPreference.getInstance()
-  private httpForHN: HTTPForHealthyNews = HTTPForHealthyNews.getInstance()
-  private context = this.getUIContext().getHostContext() as common.UIAbilityContext
   private tabCtrl: TabsController = new TabsController()
+  private context = this.getUIContext().getHostContext() as common.UIAbilityContext
+  private healthyNewsPre: HealthyNewsPreference = HealthyNewsPreference.getInstance()
+  private accJWTPre: AccJWTPreference = AccJWTPreference.getInstance()
+  private httpForHN: HTTPForHealthyNews = HTTPForHealthyNews.getInstance()
   private carEmiTransTable: CarEmiTransTable = CarEmiTransTable.getInstance()
   private carEmiApplianceTable: CarEmiApplianceTable = CarEmiApplianceTable.getInstance()
   private carEmiFoodTable: CarEmiFoodTable = CarEmiFoodTable.getInstance()
@@ -42,6 +44,7 @@ struct c {
 
   async aboutToAppear() {
     this.healthyNewsPre.getMyPre(this.context)
+    this.accJWTPre.getMyPre(this.context)
     if (!this.entryHapRouter) {
       this.entryHapRouter = new NavPathStack()
     }

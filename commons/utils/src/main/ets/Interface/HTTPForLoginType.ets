@@ -1,22 +1,18 @@
-export interface ExtraDataType {
+export interface loginExtraDataType {
   account: string
   password: string
   device_id: string
 }
 
 export interface ReturnDataType {
-  // code: number
-  // msg: string
-  // dao: userType
-  UserID: number
-  Username: string
-  AccessToken: string
-  ExpiresIN: number
+  code: number
+  msg: string
+  dao: daoType
 }
 
-// interface userType {
-//   user_id: number
-//   username: string
-//   access_token: string
-//   expires_in: number
-// }
+interface daoType {
+  user_id: number
+  username: string
+  access_token: string
+  expires_in: number
+}

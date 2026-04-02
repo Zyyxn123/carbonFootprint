@@ -51,6 +51,7 @@ export struct lowFootprintPage {
   @State makeSureToQuit: boolean = true
   @State canMark: boolean = false
   @State currData: SiteItem | undefined = undefined
+  @State BSHeight1: number = 500
   // 碳足迹
 
 
@@ -578,6 +579,7 @@ export struct lowFootprintPage {
         makeSureToQuit: this.makeSureToQuit,
         canMark: this.canMark,
         currData: this.currData,
+        BSHeight1: this.BSHeight1,
       })
     } else if (index === 1) {
       MapTrackView()
@@ -633,7 +635,7 @@ export struct lowFootprintPage {
                 this.isShow1 = true
               })
               .bindSheet($$this.isShow1, this.bSBuilder(0), {
-                height: 500,
+                height: this.BSHeight1,
                 showClose: false,
                 backgroundColor: '#fff',
                 onWillDismiss: () => {

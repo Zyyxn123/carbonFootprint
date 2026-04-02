@@ -3,17 +3,29 @@ import { http } from '@kit.NetworkKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { HTTPLogger } from '../Hilog/HilogInfo';
 import { JSON } from '@kit.ArkTS';
-import { ExtraDataType, ReturnDataType } from "../Interface/HTTPForLoginType";
+import { loginExtraDataType, ReturnDataType } from "../Interface/HTTPForLoginType";
 
 export class HTTPForLoginState {
   private static instance: HTTPForLoginState
   private readonly url: string = 'http://192.168.43.16:8081/api/v1/user/login'
-  public extraData: ExtraDataType = {
+  public extraData: loginExtraDataType = {
     account: '',
     password: '',
     device_id: ''
   }
-  public returnData: string = ''
+  // public returnData: ReturnDataType = {
+  //   code: 0,
+  //   msg: '',
+  //   dao: {
+  //     UserID: 0,
+  //     Username: '',
+  //     access_token: '',
+  //     expires_in: 0
+  //   }
+  // }
+  public returnUserName: string = ''
+  public returnJWT: string = ''
+  public isOK: boolean = false
 
   public static getInstance(): HTTPForLoginState {
     if (!HTTPForLoginState.instance) {
@@ -46,8 +58,19 @@ export class HTTPForLoginState {
       if (err) {
         HTTPForLoginLogger.error('HttpRequest获取数据失败')
       }
-      let msg = data.result.toString()
-      HTTPForLoginLogger.info(`msg: ${msg}`)
+      const msg = data.result as ReturnDataType | string
+      const response: ReturnDataType = typeof msg === 'string' ? JSON.parse(msg) as ReturnDataType : msg
+      if (response.code !== 0) {
+        this.isOK = false
+        return
+      }
+      HTTPForLoginLogger.info(`response: ${JSON.stringify(response)}`)
+      HTTPForLoginLogger.info(`extraData: ${JSON.stringify(this.extraData)}`)
+      this.returnUserName = response.dao.username
+      this.returnJWT = response.dao.access_token
+      this.isOK = true
+      HTTPForLoginLogger.info(`response.dao.Username: ${JSON.stringify(response)}`)
+      HTTPForLoginLogger.info(`response.dao.Username: ${JSON.stringify(this.returnUserName)}`)
       }
     )
   }
