@@ -56,8 +56,11 @@ export class HTTPForLoginState {
         extraData: this.extraData
       }, (err: BusinessError, data: http.HttpResponse) => {
       if (err) {
-        HTTPForLoginLogger.error('HttpRequest获取数据失败')
+        HTTPForLoginLogger.error('HttpRequest获取数据失败 err: ' +
+          `code=${err.code}, msg=${err.message}`)
+        return
       }
+
       const msg = data.result as ReturnDataType | string
       const response: ReturnDataType = typeof msg === 'string' ? JSON.parse(msg) as ReturnDataType : msg
       if (response.code !== 0) {

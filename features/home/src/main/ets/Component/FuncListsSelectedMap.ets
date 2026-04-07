@@ -336,7 +336,7 @@ export struct funcListsSelectedMap {
             let acc: string = AppStorage.get('currLoginAcc') as string
             let eat_portion: number = this.safeParseNumber(this.textFir)
             let totalCarEmi: number = parseFloat((eat_portion * item.carEmissionPer / 1000).toFixed(2))
-            let eat_time: number = parseFloat(this.textSec)
+            let eat_time: number = this.textSec === '' ? 0 : parseFloat(this.textSec)
             FoodDVM.setItemListData(item.ts, totalCarEmi, eat_portion, eat_time)
             FoodDVM.setCarEmiData(totalCarEmi)
             FoodDVM.setCarEmiDay()

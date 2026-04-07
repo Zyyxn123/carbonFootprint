@@ -8,6 +8,16 @@ export { HTTPForCarCircle } from './/src//main//ets//HTTP//HTTPForCarCircle'
 
 export { HealthNewsResult, HealthNewsItem } from './src/main/ets/Interface/HealthyNewsInterface'
 
+export {
+  createExtraCommentType,
+  topComment_dataType,
+  innerComment_dataType,
+  postDataType,
+  createExtraDataType,
+  topComment_listType,
+  innerComment_listType
+} from './src/main/ets/Interface/HTTPForCarCiecleType'
+
 export { UserBasicDataType } from './src/main/ets/Interface/UserBasicDataType'
 
 export { TransTotalDataType, TransItemDataType } from './src/main/ets/Interface/TransDataType'

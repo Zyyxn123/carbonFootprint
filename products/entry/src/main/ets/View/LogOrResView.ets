@@ -6,6 +6,7 @@ import {
   CarEmiTotalWeeklyTable,
   CarEmiTransTable,
   HealthyNewsPreference,
+  HTTPForCarCircle,
   HTTPForHealthyNews,
   HTTPForLoginState,
   TendTasksTable,
@@ -41,6 +42,7 @@ export struct logOrResView {
   private accJWTPre: AccJWTPreference = AccJWTPreference.getInstance()
   private healthyNewsPre: HealthyNewsPreference = HealthyNewsPreference.getInstance()
   private httpForHN: HTTPForHealthyNews = HTTPForHealthyNews.getInstance()
+  private httpForCarCir: HTTPForCarCircle = HTTPForCarCircle.getInstance()
   private userRdbStoreIns: UserRdbStore = UserRdbStore.getInstance()
   private carEmiTransTableIns: CarEmiTransTable = CarEmiTransTable.getInstance()
   private carEmiApplianceTable: CarEmiApplianceTable = CarEmiApplianceTable.getInstance()
@@ -172,73 +174,6 @@ export struct logOrResView {
 
   build() {
     Stack({ alignContent: Alignment.TopStart }) {
-      // // 1. 纯白色背景（确保输入区域清晰）
-      // Column()
-      //   .width('100%')
-      //   .height('100%')
-      //   .backgroundColor('#FFFFFF')
-      // 2. 上半区域动画元素（与绿色主题协调）
-      // // 顶部光晕效果（更subtle）
-      // Circle()
-      //   .width(200)
-      //   .height(200)
-      //   .fill('#E8F5E9')  // 浅绿色背景协调
-      //   .position({ x: '-5%', y: '-10%' })
-      //   .opacity(0.15 + this.glowIntensity * 0.1)  // 降低透明度
-      //   .shadow({ radius: 50, color: '#C8E6C960' })
-      //
-      // // 漂浮叶子1（使用叶子形状）
-      // Circle()
-      //   .width(40)
-      //   .height(25)  // 椭圆形状更像叶子
-      //   .fill('#4CAF50')
-      //   .position({ x: '15%', y: '12%' })
-      //   .translate({ y: this.floatLeaf1Y })
-      //   .rotate({ angle: this.leafRotation / 2 })
-      //   .opacity(0.5)  // 降低透明度，不干扰输入
-      //
-      // // 漂浮叶子2
-      // Circle()
-      //   .width(28)
-      //   .height(20)  // 椭圆形状
-      //   .fill('#37800F')  // 深绿色
-      //   .position({ x: '75%', y: '8%' })
-      //   .translate({ y: this.floatLeaf2Y })
-      //   .rotate({ angle: this.leafRotation })
-      //   .opacity(0.4)  // 更低透明度
-      //
-      // // 漂浮叶子3
-      // Circle()
-      //   .width(20)
-      //   .height(15)  // 小椭圆
-      //   .fill('#8BC34A')  // 浅绿色
-      //   .position({ x: '35%', y: '3%' })
-      //   .translate({ y: this.floatLeaf3Y })
-      //   .rotate({ angle: -this.leafRotation / 3 })
-      //   .opacity(0.3)  // 最低透明度
-      //
-      // // 粒子效果（更小、更淡，不干扰输入）
-      // Circle()
-      //   .width(4)
-      //   .height(4)
-      //   .fill('#37800F')  // 主题绿色
-      //   .position({ x: '25%', y: '18%' })
-      //   .opacity(this.particleOpacity * 0.4)
-      //
-      // Circle()
-      //   .width(3)
-      //   .height(3)
-      //   .fill('#4CAF50')
-      //   .position({ x: '65%', y: '15%' })
-      //   .opacity(this.particleOpacity * 0.3)
-      //
-      // Circle()
-      //   .width(5)
-      //   .height(5)
-      //   .fill('#8BC34A')
-      //   .position({ x: '45%', y: '22%' })
-      //   .opacity(this.particleOpacity * 0.35)
-
       // 3. 内容区域容器（白色卡片，确保输入清晰）
       Column() {
         // 页面内容容器
@@ -423,7 +358,7 @@ export struct logOrResView {
               await this.httpForLoginState.HTTPFunc()
 
               // 模拟登录过程
-              setTimeout(() => {
+              setTimeout(async () => {
                 if (this.httpForLoginState.isOK === false) {
                   this.getUIContext().getPromptAction().showToast({
                     message: '登录或注册出错',
@@ -431,8 +366,28 @@ export struct logOrResView {
                     bottom: 80
                   })
                 } else {
+                  const date = new Date().toLocaleDateString()
+                  const JWT = this.httpForLoginState.returnJWT
                   AppStorage.set('currLoginAcc', this.accountStr)
-                  this.accJWTPre.setCurrAccJWT(this.accountStr, this.httpForLoginState.returnJWT)
+                  this.accJWTPre.setCurrAccJWT(this.accountStr, JWT)
+                  this.httpForCarCir.setJWT(JWT)
+
+                  const bol_acc: boolean = await this.userRdbStoreIns.hasAcc(this.accountStr)
+                  const bol_totalData: boolean = await this.carEmiTotalWeeklyTable.hasTodayItem(this.accountStr, date)
+                  const bol_TaskData: boolean = await this.tendTasksTable.hasTodayItem(this.accountStr, date)
+                  if (!bol_acc) {
+                    this.userRdbStoreIns.setOriginalData(this.accountStr)
+                    this.carEmiTransTableIns.setOriginalTotalData(this.accountStr)
+                    this.carEmiApplianceTable.setOriginalTotalData(this.accountStr)
+                    this.carEmiFoodTable.setOriginalTotalData(this.accountStr)
+                  }
+                  if (!bol_totalData) {
+                    this.carEmiTotalWeeklyTable.setOriginalTotalData(this.accountStr, date)
+                  }
+                  if (!bol_TaskData) {
+                    this.tendTasksTable.setOriginalTotalData(this.accountStr, date)
+                  }
+
                   this.isLogin = true
                   console.log('数据：' + this.accountStr + ';;' + this.httpForLoginState.returnUserName)
                 }

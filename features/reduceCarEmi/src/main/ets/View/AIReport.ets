@@ -50,16 +50,22 @@ export struct AIReport {
           .width('100%')
           .animation({ duration: 600 })
         } else {
-          Button('获取报告')
-            .width('50%')
-            .height(40)
-            .fontSize(16)
-            .fontColor('#fff')
-            .backgroundColor('#37800f')
-            .onClick(async () => {
-              await aiReportVM.getMsg()
-              this.hasContent = true
-            })
+          Column() {
+            Button('获取报告')
+              .width('50%')
+              .height(40)
+              .fontSize(16)
+              .fontColor('#fff')
+              .backgroundColor('#37800f')
+              .onClick(async () => {
+                await aiReportVM.getMsg()
+                this.hasContent = true
+              })
+          }
+          .alignItems(HorizontalAlign.Center)
+          .justifyContent(FlexAlign.Center)
+          .width('100%')
+          .height('100%')
         }
       }
       .alignItems(HorizontalAlign.Center)

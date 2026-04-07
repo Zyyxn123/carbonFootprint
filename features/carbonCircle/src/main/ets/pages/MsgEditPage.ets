@@ -20,6 +20,8 @@ struct MsgEditPage {
   @State canDeleteImg: boolean = false
   @State offsetX: number = 0
   @State offsetY: number = 0
+  @State titleStr: string = ''
+  @State isLoading: boolean = false
 
   aboutToAppear(): void {
     userDataVM.getUserData()
@@ -180,12 +182,33 @@ struct MsgEditPage {
           pageTitle: '编辑',
           hasContent: this.hasContent,
           imgSrc: this.imgSrc,
-          textStr: this.textStr
+          textStr: this.textStr,
+          titleStr: this.titleStr,
+          isLoading: this.isLoading
         })
           .margin({ bottom: 50 })
 
         Column({ space: 20 }) {
-          TextArea({ placeholder: '这一刻的想法...', text: $$this.textStr })
+          Row({ space: 5 }) {
+            Text('标题：')
+              .fontSize(18)
+              .fontWeight(FontWeight.Medium)
+              .fontColor('#000')
+
+            TextInput({ placeholder: '标题(选，最多十字)', text: $$this.titleStr })
+              .placeholderColor('#B2B2B2')
+              .maxLines(1)
+              .maxLength(10)
+              .fontColor('#000')
+              .fontSize(16)
+              .backgroundColor(Color.Transparent)
+              .layoutWeight(1)
+          }
+          .justifyContent(FlexAlign.Start)
+          .width('100%')
+          .border({ width: { bottom: 1 }, color: '#ccc' })
+
+          TextArea({ placeholder: '这一刻的想法...(必填)', text: $$this.textStr })
             .placeholderColor('#B2B2B2')
             .maxLines(5)
             .maxLength(100)
@@ -233,7 +256,7 @@ struct MsgEditPage {
                             console.log(`PanGesture success offsetX: ${this.offsetX}, offsetY: ${this.offsetY}`)
 
                             const group = Math.floor(index / 3)
-                            if (this.offsetY >= 435 - group * 100) {
+                            if (this.offsetY >= 415 - group * 100) {
                               this.canDeleteImg = true
                             } else {
                               this.canDeleteImg = false
@@ -284,6 +307,15 @@ struct MsgEditPage {
         }
         .width('100%')
         .padding({ left: 25, right: 25 })
+
+        if (this.isLoading) {
+          Row() {
+            LoadingProgress()
+              .width(35)
+          }
+          .justifyContent(FlexAlign.Center)
+          .width('100%')
+        }
       }
       .justifyContent(FlexAlign.Start)
       .height('100%')

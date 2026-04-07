@@ -7,10 +7,13 @@ import userDataVM from "../ViewModel/UserDataViewModel"
 export struct backButton {
   @Prop pageTitle: ResourceStr | string = ''
   @Link hasContent: boolean
+  @Link isLoading: boolean
   @Link imgSrc: string[]
   @Link textStr: string
+  @Link titleStr: string
   private httpForCarCircleIns: HTTPForCarCircle = HTTPForCarCircle.getInstance()
   private accJWTPre: AccJWTPreference = AccJWTPreference.getInstance()
+
   build() {
     Row({ space: 10 }) {
       Row({ space: 8 }) {
@@ -33,28 +36,55 @@ export struct backButton {
 
       Row() {
         Text('发表')
-          .fontColor(this.hasContent ? '#fff' : '#ccc')
+          .fontColor(this.hasContent && this.textStr ? '#fff' : '#ccc')
           .fontSize(15)
           .onClick(() => {
-            if (this.hasContent) {
-              const acc = AppStorage.get('currLoginAcc') as string
-              const title: string = '今日分享'
-              const name: string =  userDataVM.name
-              const avatar: string =  userDataVM.avatar
-              const date = new Date().toLocaleString()
-              const JWT = this.accJWTPre.getCurrAccJWT(acc)
-              this.httpForCarCircleIns.setJWT(JWT)
-              console.log('send msg: ' + `acc=${acc}, name=${name}, avatar=${avatar}, date=${date}`)
-              // msgListVM.setMsg(acc, name, avatar, this.imgSrc, this.textStr, date, 0)
-              this.httpForCarCircleIns.httpForPublishData(title, this.textStr,  this.imgSrc, avatar)
-
+            if (this.textStr === '') {
               this.getUIContext().getPromptAction().showToast({
-                message: '发表成功',
+                message: '内容不能为空',
                 bottom: 80,
                 duration: 2000
               })
-              this.hasContent = false
-              RouterModule.pop(RouterNameConstants.ENTRY_HAP)
+            } else {
+              if (this.hasContent) {
+                const acc = AppStorage.get('currLoginAcc') as string
+                const title: string = this.titleStr
+                const text: string = this.textStr
+                const name: string = userDataVM.name
+                const avatar: string = userDataVM.avatar
+                const JWT = this.accJWTPre.getCurrAccJWT(acc)
+                this.httpForCarCircleIns.setJWT(JWT)
+                console.log('send msg: ' + `acc=${acc}, name=${name},
+                 avatar=${avatar}, JWT=${JWT}`)
+                msgListVM.sendPostToServer(title, text, this.imgSrc, avatar)
+                this.isLoading = true
+
+                setTimeout(() => {
+                  if (this.httpForCarCircleIns.returnData !== undefined &&
+                    this.httpForCarCircleIns.returnData.id !== undefined) {
+                    this.getUIContext().getPromptAction().showToast({
+                      message: '发表成功',
+                      bottom: 80,
+                      duration: 1500
+                    })
+                  } else {
+                    this.getUIContext().getPromptAction().showToast({
+                      message: '发表失败',
+                      bottom: 80,
+                      duration: 1500
+                    })
+                  }
+                  RouterModule.pop(RouterNameConstants.ENTRY_HAP)
+                  this.hasContent = false
+                  this.isLoading = false
+                }, 4000)
+              } else {
+                this.getUIContext().getPromptAction().showToast({
+                  message: '内容出错，请重新尝试',
+                  bottom: 80,
+                  duration: 1500
+                })
+              }
             }
           })
       }

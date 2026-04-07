@@ -1,3 +1,5 @@
+import msgListVM from "../ViewModel/MsgListViewModel"
+
 @Component
 export struct OptionSelect {
   @State offsetX: number = 57
@@ -8,8 +10,9 @@ export struct OptionSelect {
           .fontColor('#000')
           .fontSize(18)
           .fontWeight(FontWeight.Medium)
-          .onClick(() => {
+          .onClick(async () => {
             this.offsetX = 57
+            await msgListVM.getPostListFromServer()
           })
           .onAreaChange((oldValue: Area, newValue: Area) => {
             const offsetX = oldValue.globalPosition.x
