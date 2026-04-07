@@ -4,6 +4,8 @@ export { HTTPForLoginState } from './/src//main//ets//HTTP//HTTPForLoginState'
 
 export { HTTPForAIReport } from './/src//main//ets//HTTP//HTTPForAIReport'
 
+export { HTTPForAI_deepSeek } from './/src//main//ets//HTTP//HTTPForAI_deepSeek'
+
 export { HTTPForCarCircle } from './/src//main//ets//HTTP//HTTPForCarCircle'
 
 export { HealthNewsResult, HealthNewsItem } from './src/main/ets/Interface/HealthyNewsInterface'

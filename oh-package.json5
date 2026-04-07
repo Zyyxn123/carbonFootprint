@@ -4,7 +4,9 @@
   "dependencies": {
     "@abner/polyline": "^1.0.0",
     "@mcui/mccharts": "^2.8.9",
-    "@abner/pie": "^1.0.0"
+    "@abner/pie": "^1.0.0",
+    "markdown_hm": "^1.0.0",
+    "@luvi/lv-markdown-in": "^3.3.1"
   },
   "devDependencies": {
     "@ohos/hypium": "1.0.24",

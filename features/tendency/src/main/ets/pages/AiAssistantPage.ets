@@ -1,8 +1,13 @@
 import { BuilderNameConstants, RouterModule, RouterNameConstants } from "@ohos/customrouter"
+import { dataType } from "../Model/DeepSeekModel"
+import dpVM from "../ViewModel/DeepSeekViewModel"
+import { Markdown } from "@luvi/lv-markdown-in"
 
 @Component
 export struct aiAssistantPage {
   @State textStr: string = ''
+  private scroller = new Scroller()
+
   build() {
     Column() {
       Row({ space: 10 }) {
@@ -31,25 +36,106 @@ export struct aiAssistantPage {
       //   { colorMode: ThemeColorMode.LIGHT, adaptiveColor: AdaptiveColor.DEFAULT, scale: 1.0 })
       .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.END])
 
-      List() {
+      Column() {
+        List({ space: 8, scroller: this.scroller }) {
+          ForEach(dpVM.dataList, (item: dataType, index: number) => {
+            ListItem() {
+              Column() {
+                Column() {
+                  Text(item.que)
+                    .fontSize(15)
+                    .fontColor('#fff')
+                }
+                .borderRadius({ topLeft: 15, topRight: 5, bottomLeft: 15, bottomRight: 15 })
+                .backgroundColor('#4285F4')
+                .padding(10)
+                .constraintSize({ maxWidth: '80%' })
+              }
+              .alignItems(HorizontalAlign.End)
+              .width('100%')
+            }
 
+            ListItem() {
+              Column() {
+                Column() {
+                  Markdown({ text: item.ans })
+                    .width('95%')
+                }
+                .alignItems(HorizontalAlign.Center)
+                .borderRadius({ topLeft: 5, topRight: 15, bottomLeft: 15, bottomRight: 15 })
+                .backgroundColor('#F1F3F4')
+                .padding(6)
+                .constraintSize({ maxWidth: '95%' })
+              }
+              .alignItems(HorizontalAlign.Start)
+              .width('100%')
+            }
+          })
+
+          if (dpVM.currQues !== '') {
+            ListItem() {
+              Column() {
+                Column() {
+                  Text(dpVM.currQues)
+                    .fontSize(15)
+                    .fontColor('#fff')
+                }
+                .borderRadius({ topLeft: 15, topRight: 5, bottomLeft: 15, bottomRight: 15 })
+                .backgroundColor('#4285F4')
+                .padding(10)
+                .constraintSize({ maxWidth: '80%' })
+              }
+              .alignItems(HorizontalAlign.End)
+              .width('100%')
+            }
+          }
+
+          if (dpVM.currAns !== '') {
+            ListItem() {
+              Column() {
+                Column() {
+                  Markdown({ text: dpVM.currAns })
+                    .width('95%')
+                }
+                .alignItems(HorizontalAlign.Center)
+                .borderRadius({ topLeft: 5, topRight: 15, bottomLeft: 15, bottomRight: 15 })
+                .backgroundColor('#F1F3F4')
+                .padding(6)
+                .constraintSize({ maxWidth: '95%' })
+              }
+              .alignItems(HorizontalAlign.Start)
+              .width('100%')
+            }
+          }
+        }
+        .padding({ left: 12, right: 12 })
+        .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: true })
+        .width('100%')
+        .onAttach(() => {
+          this.scroller.scrollEdge(Edge.Bottom) // 组件挂载后立即滚动到底部
+        })
+        .stackFromEnd(true)
       }
-      .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: true })
-      .width('100%')
       .layoutWeight(1)
+      .margin({ bottom: 6 })
 
       Row({ space: 15 }) {
-        TextInput({ placeholder: '理性发言，友善互动', text: $$this.textStr})
+        TextInput({ placeholder: '理性发言，友善互动', text: $$this.textStr })
           .fontSize(16)
           .borderRadius(15)
           .padding(8)
           .width('80%')
-          .fontColor('#ccc')
+          .placeholderColor('#ccc')
+          .fontColor('#000')
           .backgroundColor('#fff6f6f6')
 
         Text('发送')
           .fontSize(17)
           .fontColor(this.textStr === '' ? '#ffa3bfec' : '#ff1c6df1')
+          .onClick(() => {
+            dpVM.getQues(this.textStr)
+            this.textStr = ''
+          })
       }
       .width('100%')
       .height(70)
