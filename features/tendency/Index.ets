@@ -11,8 +11,8 @@ export async function harInit(builderName: string): Promise<void> {
     case BuilderNameConstants.HAR_tendency_lowTask:
       await import("./src/main/ets/pages/LowTaskPage")
       break
-    case BuilderNameConstants.HAR_tendency_tomorrowTendency:
-      await import("./src/main/ets/pages/TomorrowTendencyPage")
+    case BuilderNameConstants.HAR_tendency_aiAssistant:
+      await import("./src/main/ets/pages/AiAssistantPage")
       break
     default:
       break

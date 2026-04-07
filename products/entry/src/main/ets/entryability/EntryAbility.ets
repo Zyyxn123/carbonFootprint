@@ -1,6 +1,6 @@
 import { AbilityConstant, ConfigurationConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
-import { window } from '@kit.ArkUI';
+import { window, KeyboardAvoidMode } from '@kit.ArkUI';
 import { CarbonMsgDBManager, CarEmiTransTable, TendencyDBManager, UserRdbStore } from '@ohos/utils';
 
 const DOMAIN = 0x0000;
@@ -38,6 +38,8 @@ export default class EntryAbility extends UIAbility {
         return;
       }
       hilog.info(DOMAIN, 'testTag', 'Succeeded in loading the content.');
+
+      windowStage.getMainWindowSync().getUIContext().setKeyboardAvoidMode(KeyboardAvoidMode.OFFSET)
 
 
       // if (AppStorage.get('expandSafeArea') as boolean) {

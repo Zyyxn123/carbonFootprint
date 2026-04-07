@@ -14,7 +14,7 @@ export struct funcListsSelectedMap {
   @Prop index_page: number
   @Prop funcList: transportsTypeModel[]
   @Prop title: string
-  private sheetHeight: number = 800
+  private sheetHeight: number = 500
 
   private safeParseNumber(value: string): number {
     const num = parseFloat(value || '0')
@@ -104,24 +104,32 @@ export struct funcListsSelectedMap {
         Button('确定')
           .width('45%')
           .fontSize(18)
-          .backgroundColor('#37800f')
+          .backgroundColor(this.textFir === '' ? '#ffa3d781' : '#37800f')
           .fontColor('#fff')
           .onClick(() => {
-            let acc: string = AppStorage.get('currLoginAcc') as string
-            const mileage = this.safeParseNumber(this.textFir)
-            let totalCarEmi: number = parseFloat((mileage * item.carEmissionPer).toFixed(2))
-            let tripTime: number = this.textSec === '' ? 0 : parseFloat(this.textSec)
-            GreenTVM.setItemListData(item.ts, totalCarEmi, mileage, tripTime)
-            GreenTVM.setCarEmiData(totalCarEmi)
-            GreenTVM.setCarEmiDay()
-            GreenTVM.setMonthlyDistance(mileage)
-            GreenTVM.setPoint(item.pointsPerOrder)
-            CarLevVM.updateData(1, totalCarEmi)
-            setTimeout(() => {
-              GreenTVM.updateItemData(item.ts, totalCarEmi, mileage, tripTime)
-              GreenTVM.updateTotalData(acc)
-            }, 500)
-            this.isShow = false
+            if (this.textFir === '') {
+              this.getUIContext().getPromptAction().showToast({
+                message: '出行里程不能为空',
+                duration: 1000,
+                bottom: 80
+              })
+            } else {
+              let acc: string = AppStorage.get('currLoginAcc') as string
+              const mileage = this.safeParseNumber(this.textFir)
+              let totalCarEmi: number = parseFloat((mileage * item.carEmissionPer).toFixed(2))
+              let tripTime: number = this.textSec === '' ? 0 : parseFloat(this.textSec)
+              GreenTVM.setItemListData(item.ts, totalCarEmi, mileage, tripTime)
+              GreenTVM.setCarEmiData(totalCarEmi)
+              GreenTVM.setCarEmiDay()
+              GreenTVM.setMonthlyDistance(mileage)
+              GreenTVM.setPoint(item.pointsPerOrder)
+              CarLevVM.updateData(1, totalCarEmi)
+              setTimeout(() => {
+                GreenTVM.updateItemData(item.ts, totalCarEmi, mileage, tripTime)
+                GreenTVM.updateTotalData(acc)
+              }, 500)
+              this.isShow = false
+            }
           })
       }
       .justifyContent(FlexAlign.SpaceBetween)
@@ -217,24 +225,32 @@ export struct funcListsSelectedMap {
         Button('确定')
           .width('45%')
           .fontSize(18)
-          .backgroundColor('#37800f')
+          .backgroundColor(this.textFir === '' ? '#ffa3d781' : '#37800f')
           .fontColor('#fff')
           .onClick(() => {
-            let acc: string = AppStorage.get('currLoginAcc') as string
-            let use_time: number = this.safeParseNumber(this.textFir)
-            let totalCarEmi: number = parseFloat((use_time * item.carEmissionPer).toFixed(2))
-            let elect_power: number = this.textSec === '' ? 0 : parseFloat(this.textSec)
-            HouseAPPVM.setItemListData(item.ts, totalCarEmi, use_time, elect_power)
-            HouseAPPVM.setCarEmiData(totalCarEmi)
-            HouseAPPVM.setCarEmiDay()
-            HouseAPPVM.setMonthlyDegree(use_time)
-            HouseAPPVM.setPoint(item.pointsPerOrder)
-            CarLevVM.updateData(2, totalCarEmi)
-            setTimeout(() => {
-              HouseAPPVM.updateItemData(item.ts, totalCarEmi, use_time, elect_power)
-              HouseAPPVM.updateTotalData(acc)
-            }, 500)
-            this.isShow = false
+            if (this.textFir === '') {
+              this.getUIContext().getPromptAction().showToast({
+                message: '使用时长不能为空',
+                duration: 1000,
+                bottom: 80
+              })
+            } else {
+              let acc: string = AppStorage.get('currLoginAcc') as string
+              let use_time: number = this.safeParseNumber(this.textFir)
+              let totalCarEmi: number = parseFloat((use_time * item.carEmissionPer).toFixed(2))
+              let elect_power: number = this.textSec === '' ? 0 : parseFloat(this.textSec)
+              HouseAPPVM.setItemListData(item.ts, totalCarEmi, use_time, elect_power)
+              HouseAPPVM.setCarEmiData(totalCarEmi)
+              HouseAPPVM.setCarEmiDay()
+              HouseAPPVM.setMonthlyDegree(use_time)
+              HouseAPPVM.setPoint(item.pointsPerOrder)
+              CarLevVM.updateData(2, totalCarEmi)
+              setTimeout(() => {
+                HouseAPPVM.updateItemData(item.ts, totalCarEmi, use_time, elect_power)
+                HouseAPPVM.updateTotalData(acc)
+              }, 500)
+              this.isShow = false
+            }
           })
       }
       .justifyContent(FlexAlign.SpaceBetween)
@@ -330,24 +346,32 @@ export struct funcListsSelectedMap {
         Button('确定')
           .width('45%')
           .fontSize(18)
-          .backgroundColor('#37800f')
+          .backgroundColor(this.textFir === '' ? '#ffa3d781' : '#37800f')
           .fontColor('#fff')
           .onClick(() => {
-            let acc: string = AppStorage.get('currLoginAcc') as string
-            let eat_portion: number = this.safeParseNumber(this.textFir)
-            let totalCarEmi: number = parseFloat((eat_portion * item.carEmissionPer / 1000).toFixed(2))
-            let eat_time: number = this.textSec === '' ? 0 : parseFloat(this.textSec)
-            FoodDVM.setItemListData(item.ts, totalCarEmi, eat_portion, eat_time)
-            FoodDVM.setCarEmiData(totalCarEmi)
-            FoodDVM.setCarEmiDay()
-            FoodDVM.setMonthlyPortion(eat_portion)
-            FoodDVM.setPoint(item.pointsPerOrder)
-            CarLevVM.updateData(3, totalCarEmi)
-            setTimeout(() => {
-              FoodDVM.updateItemData(item.ts, totalCarEmi, eat_portion, eat_time)
-              FoodDVM.updateTotalData(acc)
-            }, 500)
-            this.isShow = false
+            if (this.textFir === '') {
+              this.getUIContext().getPromptAction().showToast({
+                message: '食用份量不能为空',
+                duration: 1000,
+                bottom: 80
+              })
+            } else {
+              let acc: string = AppStorage.get('currLoginAcc') as string
+              let eat_portion: number = this.safeParseNumber(this.textFir)
+              let totalCarEmi: number = parseFloat((eat_portion * item.carEmissionPer / 1000).toFixed(2))
+              let eat_time: number = this.textSec === '' ? 0 : parseFloat(this.textSec)
+              FoodDVM.setItemListData(item.ts, totalCarEmi, eat_portion, eat_time)
+              FoodDVM.setCarEmiData(totalCarEmi)
+              FoodDVM.setCarEmiDay()
+              FoodDVM.setMonthlyPortion(eat_portion)
+              FoodDVM.setPoint(item.pointsPerOrder)
+              CarLevVM.updateData(3, totalCarEmi)
+              setTimeout(() => {
+                FoodDVM.updateItemData(item.ts, totalCarEmi, eat_portion, eat_time)
+                FoodDVM.updateTotalData(acc)
+              }, 500)
+              this.isShow = false
+            }
           })
       }
       .justifyContent(FlexAlign.SpaceBetween)

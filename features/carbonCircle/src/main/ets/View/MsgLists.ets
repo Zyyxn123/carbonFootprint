@@ -65,7 +65,7 @@ export struct MsgLists {
         .width('33%')
         .justifyContent(FlexAlign.Center)
         .onClick(async () => {
-          const result = /*await this.httpForCarCircleIns.httpForLikeState(item.me_liked, item.id)*/true
+          const result = await this.httpForCarCircleIns.httpForLikeState(item.me_liked, item.id)
           if (result) {
             const bol = !item.me_liked
             msgListVM.updatePostLikeStatus(index, bol)
@@ -95,7 +95,7 @@ export struct MsgLists {
         .justifyContent(FlexAlign.Center)
         .width('33%')
         .onClick(async () => {
-          const result = /*await this.httpForCarCircleIns.httpForFavoriteState(item.me_favorited, item.id)*/true
+          const result = await this.httpForCarCircleIns.httpForFavoriteState(item.me_favorited, item.id)
           if (result) {
             const bol = !item.me_favorited
             msgListVM.updatePostFavoriteStatus(index, bol)

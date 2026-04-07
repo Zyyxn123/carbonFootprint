@@ -8,6 +8,7 @@ import { ColorMetrics } from "@kit.ArkUI"
 @Component
 export struct CommentsPage {
   @Prop val: object
+  @State up: boolean = false
   @State item: postDataType | undefined = undefined
   @State isShow: boolean = false
   @State commentStr: string = ''
@@ -142,7 +143,7 @@ export struct CommentsPage {
                               .fillColor(item.me_liked ? '#ffff0000' : '#000')
                               .width(20)
                               .onClick(async () => {
-                                const result: boolean = /*await msgListVM.setCommentLikeStateToServer(item.me_liked, item.id)*/true
+                                const result: boolean = await msgListVM.setCommentLikeStateToServer(item.me_liked, item.id)
                                 if (result) {
                                   const bol = !item.me_liked
                                   msgListVM.updateCommentLikeStatus(index, bol)
@@ -208,6 +209,7 @@ export struct CommentsPage {
           .onClick(() => {
             this.isShowComment = false
             this.commentStr = ''
+            this.up = false
           })
 
           if (this.isShowComment) {
@@ -225,6 +227,10 @@ export struct CommentsPage {
                 .showCounter(true, {
                   counterTextColor: ColorMetrics.rgba(0, 0, 0)
                 })
+                .onFocus(() => {
+                  this.up = true
+                })
+                .enableKeyboardOnFocus(true)
 
               Row() {
                 Image($r('app.media.carCircle_images'))
@@ -246,22 +252,24 @@ export struct CommentsPage {
                     } else {
                       if (this.isTopComment) {
                         msgListVM.sendCommentToServer(this.item?.id, this.commentStr,
-                          null, this.imgSrc, this.item?.author_avatar)
+                          null, this.imgSrc, this.item?.avatar)
                       } else {
                         msgListVM.sendCommentToServer(this.item?.id, this.commentStr,
-                          this.sendId, this.imgSrc, this.item?.author_avatar)
+                          this.sendId, this.imgSrc, this.item?.avatar)
                       }
                       this.isShowComment = false
                     }
                   })
               }
               .justifyContent(FlexAlign.SpaceBetween)
+              .alignItems(VerticalAlign.Top)
               .width('100%')
-              .height(50)
-              .padding({ left: 15, right: 15 })
+              .height(this.up ? 170 : 50)
+              .padding({ left: 15, right: 15, top: 15 })
             }
+            .justifyContent(FlexAlign.Start)
             .width('100%')
-            .height(200)
+            .height(this.up ? 320 : 200)
             .backgroundColor('#fff')
             .border({ width: { top: 1 }, color: '#ccc' })
             .borderRadius({ topLeft: 20, topRight: 20 })

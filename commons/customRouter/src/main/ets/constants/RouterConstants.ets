@@ -10,7 +10,7 @@ export class BuilderNameConstants {
   static readonly HAR_home_webNews: string = '@ohos/home_webNewsPage'
   static readonly HAR_tendency_lowFootprint: string = '@ohos/tendency_lowFootprintPage'
   static readonly HAR_tendency_lowTask: string = '@ohos/tendency_lowTaskPage'
-  static readonly HAR_tendency_tomorrowTendency: string = '@ohos/tendency_tomorrowTendencyPage'
+  static readonly HAR_tendency_aiAssistant: string = '@ohos/tendency_aiAssistantPage'
   static readonly HAR_carboncircle_comment: string = '@ohos/carboncircle_commentPage'
   static readonly HAR_carboncircle_innerComment: string = '@ohos/carboncircle_innerCommentPage'
   static readonly HAR_carboncircle_msgEditingPage: string = '@ohos/carboncircle_msgEditingPage'

@@ -18,13 +18,13 @@ import {
 export class HTTPForCarCircle {
   private static instance: HTTPForCarCircle
   private readonly publishUrl: string = 'http://192.168.43.16:8081/api/v1/posts/publish'
-  private readonly publishCommentUrl: string = 'http://192.168.43.16:8081/api/v1/posts/:'
-  private readonly getPostListUrl: string = 'http://192.168.43.16:8081/api/v1/posts'
-  private readonly getPostTopCommentUrl: string = 'http://192.168.43.16:8081/api/v1/posts/:'
-  private readonly getPostInnerCommentUrl: string = 'http://192.168.43.16:8081/api/v1/comments/:'
-  private readonly praiseCommentUrl: string = 'http://192.168.43.16:8081/api/v1/comments/:'
-  private readonly praisePostUrl: string = 'http://192.168.43.16:8081/api/v1/posts/:'
-  private readonly favoriteCommentUrl: string = 'http://192.168.43.16:8081/api/v1/posts/:'
+  private readonly publishCommentUrl: string = 'http://192.168.43.16:8081/api/v1/posts/'
+  private readonly getPostListUrl: string = 'http://192.168.43.16:8081/api/v1/Yposts'
+  private readonly getPostTopCommentUrl: string = 'http://192.168.43.16:8081/api/v1/posts/'
+  private readonly getPostInnerCommentUrl: string = 'http://192.168.43.16:8081/api/v1/comments/'
+  private readonly praiseCommentUrl: string = 'http://192.168.43.16:8081/api/v1/comments/'
+  private readonly praisePostUrl: string = 'http://192.168.43.16:8081/api/v1/posts/'
+  private readonly favoriteCommentUrl: string = 'http://192.168.43.16:8081/api/v1/posts/'
   public extraData: createExtraDataType = {
     title: '',
     content: '',
@@ -167,8 +167,8 @@ export class HTTPForCarCircle {
         HTTPForCarCleLogger.error(`request失败: request.code=${response.code}, response.msg=${response.msg}`)
         return null
       }
-      HTTPForCarCleLogger.info(`response=${response}`)
-      return response.data.list
+      HTTPForCarCleLogger.info(`response=${JSON.stringify(response)}`)
+      return response.dao.list
 
       // const data: returnPostListType = {
       //   code: 0,
@@ -192,6 +192,7 @@ export class HTTPForCarCircle {
     }
 
     HTTPForCarCleLogger.info(`JWT=${this.JWT}`)
+    HTTPForCarCleLogger.info(`id=${id}, bol=${curState}`)
 
     try {
       const res = await httpRequest.request(
@@ -220,7 +221,7 @@ export class HTTPForCarCircle {
         return null
       }
       HTTPForCarCleLogger.info(`response=${response}`)
-      return response.data.ok
+      return response.dao.ok
     } catch (err) {
       HTTPForCarCleLogger.error(`err=${err}`)
       return null
@@ -234,6 +235,7 @@ export class HTTPForCarCircle {
     }
 
     HTTPForCarCleLogger.info(`JWT=${this.JWT}`)
+    HTTPForCarCleLogger.info(`id=${id}, bol=${curState}`)
 
     try {
       const res = await httpRequest.request(
@@ -262,7 +264,7 @@ export class HTTPForCarCircle {
         return null
       }
       HTTPForCarCleLogger.info(`response=${response}`)
-      return response.data.ok
+      return response.dao.ok
     } catch (err) {
       HTTPForCarCleLogger.error(`err=${err}`)
       return null
@@ -304,7 +306,7 @@ export class HTTPForCarCircle {
         return null
       }
       HTTPForCarCleLogger.info(`response=${response}`)
-      return response.data.ok
+      return response.dao.ok
     } catch (err) {
       HTTPForCarCleLogger.error(`err=${err}`)
       return null
@@ -346,7 +348,7 @@ export class HTTPForCarCircle {
         return null
       }
       HTTPForCarCleLogger.info(`response=${response}`)
-      return response.data
+      return response.dao
     } catch (error) {
       HTTPForCarCleLogger.error(`err=${error}`)
       return null
@@ -391,7 +393,7 @@ export class HTTPForCarCircle {
         return null
       }
       HTTPForCarCleLogger.info(`response=${response}`)
-      return response.data
+      return response.dao
     } catch (error) {
       HTTPForCarCleLogger.error(`err=${error}`)
       return null

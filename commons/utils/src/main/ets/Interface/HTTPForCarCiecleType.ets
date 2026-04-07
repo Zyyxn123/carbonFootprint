@@ -24,7 +24,7 @@ export interface createExtraCommentType {
 export interface returnCommentType {
   code: number
   msg: string
-  data: comment_publishReturn
+  dao: comment_publishReturn
 }
 
 export interface comment_publishReturn {
@@ -49,7 +49,7 @@ export interface comment_publishReturn {
 export interface returnPostListType {
   code: number
   msg: string
-  data: dataType
+  dao: dataType
 }
 
 export interface dataType {
@@ -73,7 +73,7 @@ export interface postDataType {
   created_at: string
   updated_at: string
   author_username: string
-  author_avatar: string
+  // author_avatar: string
   me_liked: boolean
   me_favorited: boolean
 }
@@ -84,7 +84,7 @@ export interface postDataType {
 export interface returnPraiseStateType {
   code: number
   msg: string
-  data: praise_dataType
+  dao: praise_dataType
 }
 
 export interface praise_dataType {
@@ -97,7 +97,7 @@ export interface praise_dataType {
 export interface returnPostTopCommentListType {
   code: number
   msg: string
-  data: topComment_dataType
+  dao: topComment_dataType
 }
 
 export interface topComment_dataType {
@@ -128,7 +128,7 @@ export interface topComment_listType {
 export interface returnPostInnerCommentListType {
   code: number
   msg: string
-  data: innerComment_dataType
+  dao: innerComment_dataType
 }
 
 export interface innerComment_dataType {

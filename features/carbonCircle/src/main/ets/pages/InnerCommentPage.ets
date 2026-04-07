@@ -13,6 +13,7 @@ export struct InnerCommentPage {
   @State isShowComment: boolean = false
   @State sendId: number = 0
   @State imgSrc: string[] = []
+  @State up: boolean = false
 
   aboutToAppear(): void {
     setTimeout(() => {
@@ -142,9 +143,7 @@ export struct InnerCommentPage {
                               .fillColor(item.me_liked ? '#ffff0000' : '#000')
                               .width(20)
                               .onClick(async () => {
-                                const result: boolean =
-                                  /*await msgListVM.setCommentLikeStateToServer(item.me_liked, item.id)*/
-                                  true
+                                const result: boolean = await msgListVM.setCommentLikeStateToServer(item.me_liked, item.id)
                                 if (result) {
                                   const bol = !item.me_liked
                                   msgListVM.updateInnerCommentLikeStatus(index, bol)
@@ -212,6 +211,10 @@ export struct InnerCommentPage {
               .showCounter(true, {
                 counterTextColor: ColorMetrics.rgba(0, 0, 0)
               })
+              .onFocus(() => {
+                this.up = true
+              })
+              .enableKeyboardOnFocus(true)
 
             Row() {
               Image($r('app.media.carCircle_images'))
@@ -238,12 +241,14 @@ export struct InnerCommentPage {
                 })
             }
             .justifyContent(FlexAlign.SpaceBetween)
+            .alignItems(VerticalAlign.Top)
             .width('100%')
-            .height(50)
-            .padding({ left: 15, right: 15 })
+            .height(this.up ? 170 : 50)
+            .padding({ left: 15, right: 15, top: 15 })
           }
+          .justifyContent(FlexAlign.Start)
           .width('100%')
-          .height(200)
+          .height(this.up ? 320 : 200)
           .backgroundColor('#fff')
           .border({ width: { top: 1 }, color: '#ccc' })
           .borderRadius({ topLeft: 20, topRight: 20 })

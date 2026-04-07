@@ -75,6 +75,40 @@ export struct carbonRecordAndTasks {
   }
 
   @Builder
+  aiItemBuilder() {
+    Column() {
+      Text('AI 小助手')
+        .fontSize(16)
+        .width(80)
+        .textAlign(TextAlign.Start)
+        .fontColor($r('app.color.recAndTask_title_color'))
+        .margin({ left: 15, top: 10, bottom: 6 })
+        .fontWeight(600)
+
+      Row() {
+        Text('智能分析你的所有疑问')
+          .fontSize(12)
+          .textAlign(TextAlign.Start)
+          .fontColor($r('app.color.recAndTask_content_color'))
+          .margin(4)
+      }
+      .borderRadius(15)
+      .backgroundColor($r('app.color.recAndTask_background'))
+      .justifyContent(FlexAlign.Start)
+      .padding(3)
+      .margin({ left: 15 })
+    }
+    .linearGradient({
+      angle: 225,
+      colors: [["#e7fdff", 0.4], ['#ffffff', 0.6]]
+    })
+    .alignItems(HorizontalAlign.Start)
+    .justifyContent(FlexAlign.Start)
+    .width('100%')
+    .height('100%')
+  }
+
+  @Builder
   tasksItemBuilder(item: RecordAndTaskTypeModel, index: number) {
     if (this.isShown) {
       LoadingProgress()
@@ -212,7 +246,7 @@ export struct carbonRecordAndTasks {
 
       Column() {
         if (index === 0) {
-
+          this.aiItemBuilder()
         } else {
           this.tasksItemBuilder(item, index)
         }

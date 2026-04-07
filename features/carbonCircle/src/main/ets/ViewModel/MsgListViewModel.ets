@@ -10,73 +10,73 @@ import { MsgListModel } from "../Model/MsgListModel"
 @ObservedV2
 class MsgListViewModel {
   @Trace msgList: postDataType[] = [
-    {
-      id: 1,
-      user_id: 1,
-      title: '结构体',
-      content: '里面所有的结构体就直接按里面那个写法照写就行，我给你写的时候就是按照给你返回的JSON的字段形式写的',
-      status: 1,
-      images: [],
-      avatar: 'avatar_1th',
-      published_at: '3/25/2026',
-      like_count: 5,
-      favorite_count: 10,
-      comment_count: 15,
-      hot_score: 20,
-      created_at: 'ddd',
-      updated_at: 'eee',
-      author_username: '流年似水',
-      author_avatar: 'ggg',
-      me_liked: true,
-      me_favorited: false
-    }
+    // {
+    //   id: 1,
+    //   user_id: 1,
+    //   title: '结构体',
+    //   content: '里面所有的结构体就直接按里面那个写法照写就行，我给你写的时候就是按照给你返回的JSON的字段形式写的',
+    //   status: 1,
+    //   images: [],
+    //   avatar: 'avatar_1th',
+    //   published_at: '3/25/2026',
+    //   like_count: 5,
+    //   favorite_count: 10,
+    //   comment_count: 15,
+    //   hot_score: 20,
+    //   created_at: 'ddd',
+    //   updated_at: 'eee',
+    //   author_username: '流年似水',
+    //   author_avatar: 'ggg',
+    //   me_liked: true,
+    //   me_favorited: false
+    // }
   ]
   @Trace commentList: topComment_listType[] = [
-    {
-      id: 1, // 评论ID
-      post_id: 0, // 所属帖子ID
-      user_id: 0, // 评论用户ID
-      parent_id: 0, // 父评论ID（null=一级评论）
-      content: 'TypeScript 中使⽤的异步编程是⼀种处理并发的，学习如何处理并发问题。 多线程这种处理并发的能⼒在后续 ArkTS 的学习中也会着重进⾏学习，现阶段了解概念即可。', // 评论内容
-      images: [], // 评论图片数组
-      avatar: 'avatar_1th', // 评论者头像
-      like_count: 0, // 点赞数
-      created_at: '3/24/2026', // 创建时间
-      updated_at: 'string', // 更新时间
-      username: '流年似水', // 评论者昵称
-      reply_count: 0, // 回复数（楼中楼数量）
-      me_liked: false      // 我是否点赞（控制高亮）
-    },
-    {
-      id: 1, // 评论ID
-      post_id: 0, // 所属帖子ID
-      user_id: 0, // 评论用户ID
-      parent_id: 0, // 父评论ID（null=一级评论）
-      content: 'TypeScript 中使⽤的异步编程是⼀种处理并发的，学习如何处理并发问题。 多线程这种处理并发的能⼒在后续 ArkTS 的学习中也会着重进⾏学习，现阶段了解概念即可。', // 评论内容
-      images: [], // 评论图片数组
-      avatar: 'avatar_1th', // 评论者头像
-      like_count: 0, // 点赞数
-      created_at: '3/24/2026', // 创建时间
-      updated_at: 'string', // 更新时间
-      username: '流年似水', // 评论者昵称
-      reply_count: 30, // 回复数（楼中楼数量）
-      me_liked: false      // 我是否点赞（控制高亮）
-    },
-    {
-      id: 1, // 评论ID
-      post_id: 0, // 所属帖子ID
-      user_id: 0, // 评论用户ID
-      parent_id: 0, // 父评论ID（null=一级评论）
-      content: 'TypeScript 中使⽤的异步编程是⼀种处理并发的，学习如何处理并发问题。 多线程这种处理并发的能⼒在后续 ArkTS 的学习中也会着重进⾏学习，现阶段了解概念即可。', // 评论内容
-      images: [], // 评论图片数组
-      avatar: 'avatar_1th', // 评论者头像
-      like_count: 0, // 点赞数
-      created_at: '3/24/2026', // 创建时间
-      updated_at: 'string', // 更新时间
-      username: '流年似水', // 评论者昵称
-      reply_count: 30, // 回复数（楼中楼数量）
-      me_liked: false      // 我是否点赞（控制高亮）
-    }
+    // {
+    //   id: 1, // 评论ID
+    //   post_id: 0, // 所属帖子ID
+    //   user_id: 0, // 评论用户ID
+    //   parent_id: 0, // 父评论ID（null=一级评论）
+    //   content: 'TypeScript 中使⽤的异步编程是⼀种处理并发的，学习如何处理并发问题。 多线程这种处理并发的能⼒在后续 ArkTS 的学习中也会着重进⾏学习，现阶段了解概念即可。', // 评论内容
+    //   images: [], // 评论图片数组
+    //   avatar: 'avatar_1th', // 评论者头像
+    //   like_count: 0, // 点赞数
+    //   created_at: '3/24/2026', // 创建时间
+    //   updated_at: 'string', // 更新时间
+    //   username: '流年似水', // 评论者昵称
+    //   reply_count: 0, // 回复数（楼中楼数量）
+    //   me_liked: false      // 我是否点赞（控制高亮）
+    // },
+    // {
+    //   id: 1, // 评论ID
+    //   post_id: 0, // 所属帖子ID
+    //   user_id: 0, // 评论用户ID
+    //   parent_id: 0, // 父评论ID（null=一级评论）
+    //   content: 'TypeScript 中使⽤的异步编程是⼀种处理并发的，学习如何处理并发问题。 多线程这种处理并发的能⼒在后续 ArkTS 的学习中也会着重进⾏学习，现阶段了解概念即可。', // 评论内容
+    //   images: [], // 评论图片数组
+    //   avatar: 'avatar_1th', // 评论者头像
+    //   like_count: 0, // 点赞数
+    //   created_at: '3/24/2026', // 创建时间
+    //   updated_at: 'string', // 更新时间
+    //   username: '流年似水', // 评论者昵称
+    //   reply_count: 30, // 回复数（楼中楼数量）
+    //   me_liked: false      // 我是否点赞（控制高亮）
+    // },
+    // {
+    //   id: 1, // 评论ID
+    //   post_id: 0, // 所属帖子ID
+    //   user_id: 0, // 评论用户ID
+    //   parent_id: 0, // 父评论ID（null=一级评论）
+    //   content: 'TypeScript 中使⽤的异步编程是⼀种处理并发的，学习如何处理并发问题。 多线程这种处理并发的能⼒在后续 ArkTS 的学习中也会着重进⾏学习，现阶段了解概念即可。', // 评论内容
+    //   images: [], // 评论图片数组
+    //   avatar: 'avatar_1th', // 评论者头像
+    //   like_count: 0, // 点赞数
+    //   created_at: '3/24/2026', // 创建时间
+    //   updated_at: 'string', // 更新时间
+    //   username: '流年似水', // 评论者昵称
+    //   reply_count: 30, // 回复数（楼中楼数量）
+    //   me_liked: false      // 我是否点赞（控制高亮）
+    // }
   ]
   @Trace commentSum: number = 3
   @Trace innerCommentList: innerComment_listType[] = [
@@ -161,7 +161,6 @@ class MsgListViewModel {
       created_at: item.created_at,
       updated_at: item.updated_at,
       author_username: item.author_username,
-      author_avatar: item.author_avatar,
       me_liked: liked,
       me_favorited: item.me_favorited
     }
@@ -226,7 +225,6 @@ class MsgListViewModel {
       created_at: item.created_at,
       updated_at: item.updated_at,
       author_username: item.author_username,
-      author_avatar: item.author_avatar,
       me_liked: item.me_liked,
       me_favorited: favorited
     }
@@ -284,7 +282,6 @@ class MsgListViewModel {
       created_at: item.created_at,
       updated_at: item.updated_at,
       author_username: item.author_username,
-      author_avatar: item.author_avatar,
       me_liked: liked,
       me_favorited: item.me_favorited
     }
