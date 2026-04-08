@@ -133,8 +133,16 @@ export struct aiAssistantPage {
           .fontSize(17)
           .fontColor(this.textStr === '' ? '#ffa3bfec' : '#ff1c6df1')
           .onClick(() => {
-            dpVM.getQues(this.textStr)
-            this.textStr = ''
+            if (this.textStr === '') {
+             this.getUIContext().getPromptAction().showToast({
+               message: '请输入询问内容',
+               duration: 1200,
+               bottom: 80
+             })
+            } else {
+              dpVM.getQues(this.textStr)
+              this.textStr = ''
+            }
           })
       }
       .width('100%')

@@ -7,6 +7,7 @@ import {
   CarEmiTransTable,
   HealthyNewsPreference,
   HTTPForHealthyNews,
+  ReduceCarEmiPreference,
   TendTasksTable
 } from '@ohos/utils';
 import { LogOrResPage } from './LogOrResPage';
@@ -34,6 +35,7 @@ struct c {
   private tabCtrl: TabsController = new TabsController()
   private context = this.getUIContext().getHostContext() as common.UIAbilityContext
   private healthyNewsPre: HealthyNewsPreference = HealthyNewsPreference.getInstance()
+  private redCarEmiPre: ReduceCarEmiPreference = ReduceCarEmiPreference.getInstance()
   private accJWTPre: AccJWTPreference = AccJWTPreference.getInstance()
   private httpForHN: HTTPForHealthyNews = HTTPForHealthyNews.getInstance()
   private carEmiTransTable: CarEmiTransTable = CarEmiTransTable.getInstance()
@@ -44,6 +46,7 @@ struct c {
 
   async aboutToAppear() {
     this.healthyNewsPre.getMyPre(this.context)
+    this.redCarEmiPre.getMyPre(this.context)
     this.accJWTPre.getMyPre(this.context)
     if (!this.entryHapRouter) {
       this.entryHapRouter = new NavPathStack()

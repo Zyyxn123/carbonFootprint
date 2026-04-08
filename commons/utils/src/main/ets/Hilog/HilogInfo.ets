@@ -35,6 +35,7 @@ class Logger {
 }
 
 export const HTTPLogger: Logger = new Logger('[HTTPLogger]')
+
 export const HTTPForDeepSeekLogger: Logger = new Logger('[HTTPForDeepSeekLogger]')
 
 export const HTTPForCarCleLogger: Logger = new Logger('[HTTPForCarCleLogger]')
@@ -46,6 +47,8 @@ export const HTTPForAIReportLogger: Logger = new Logger('[HTTPForAIReportLogger]
 export const PreLogger_HN: Logger = new Logger('[PreLogger]')
 
 export const AccJWTPreLogger: Logger = new Logger('[AccJWTPreLogger]')
+
+export const RedCarEmiPreLogger: Logger = new Logger('[RedCarEmiPreLogger]')
 
 export const UserRdbLogger: Logger = new Logger('[UserRdbLogger]')
 

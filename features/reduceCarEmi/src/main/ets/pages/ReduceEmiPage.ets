@@ -13,9 +13,6 @@ export struct ReduceEmiPage {
     List() {
       DataSummary()
 
-      /**
-       * @todo: 后续完善 ai 功能
-       */
       AIReport()
 
       LittleTips()

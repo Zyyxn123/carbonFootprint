@@ -1,11 +1,12 @@
-import { HTTPForAIReport } from "@ohos/utils"
+import { BuilderNameConstants, buildRouterModel, RouterNameConstants } from "@ohos/customrouter"
+import { HTTPForAIReport, ReduceCarEmiPreference } from "@ohos/utils"
 import aiReportVM from "../ViewModel/AIReportViewModel"
 
 @Component
 export struct AIReport {
   @State hasContent: boolean = false
-  @State @Watch('returnData') fullText: string = "" // 🔥 最终完整文字
-  @State displayText: string = "" // 🔥 逐字显示的文字
+  @State @Watch('returnData') fullText: string = ""
+  @State displayText: string = ""
 
   returnData(propName: string) {
 
@@ -35,15 +36,19 @@ export struct AIReport {
           Text('展开全部')
             .fontSize(16)
             .fontColor('#2E7D32')
+            .onClick(async () => {
+              buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_reducecaremi_aiReportPage)
+            })
         }
         .width('100%')
         .margin({ bottom: 5 })
 
         if (this.hasContent || aiReportVM.showTextStr !== '') {
           Text() {
-            Span(aiReportVM.showTextStr)
+            Span(this.filterMarkdown(aiReportVM.showTextStr.trim()))
             Span(aiReportVM.isOk ? '' : '...')
           }
+          .maxLines(10)
           .textAlign(TextAlign.Start)
           .fontColor('#000')
           .fontSize(14)
@@ -58,8 +63,10 @@ export struct AIReport {
               .fontColor('#fff')
               .backgroundColor('#37800f')
               .onClick(async () => {
-                await aiReportVM.getMsg()
+                const acc: string = AppStorage.get('currLoginAcc') as string
+                await aiReportVM.getMsg(acc)
                 this.hasContent = true
+                buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_reducecaremi_aiReportPage)
               })
           }
           .alignItems(HorizontalAlign.Center)
@@ -82,5 +89,12 @@ export struct AIReport {
     .borderRadius({ topLeft: 25, topRight: 25 })
     .border({ width: { top: 2 }, color: '#ccc' })
     .margin({ top: 15 })
+  }
+
+  filterMarkdown(str: string): string {
+    if (!str) return '';
+
+    // 正则规则：只保留 中文汉字、中文标点（。，！？；：“”‘’（）【】《》…—）
+    return str.replace(/[^\u4e00-\u9fa5\u3002\uff0c\uff01\uff1f\uff1b\uff1a\u201c\u201d\u2018\u2019\uff08\uff09\u3010\u3011\u300a\u300b\u2026\u2014]/g, '');
   }
 }

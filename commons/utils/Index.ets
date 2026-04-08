@@ -36,6 +36,8 @@ export { HealthyNewsPreference } from './src/main/ets/Perferences/HealthyNewsPre
 
 export { AccJWTPreference } from './src/main/ets/Perferences/AccJWTPreference'
 
+export { ReduceCarEmiPreference } from './src/main/ets/Perferences/ReduceCarEmiPreference'
+
 export { UserRdbStore } from './src/main/ets/RdbStore/UserRdbStore'
 
 export { CarbonMsgDBManager } from './src/main/ets/RdbStore/CarbonMsgDBManager'

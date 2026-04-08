@@ -14,6 +14,7 @@ export class BuilderNameConstants {
   static readonly HAR_carboncircle_comment: string = '@ohos/carboncircle_commentPage'
   static readonly HAR_carboncircle_innerComment: string = '@ohos/carboncircle_innerCommentPage'
   static readonly HAR_carboncircle_msgEditingPage: string = '@ohos/carboncircle_msgEditingPage'
+  static readonly HAR_reducecaremi_aiReportPage: string = '@ohos/reducecaremi_aiReportPage'
 }
 
 
