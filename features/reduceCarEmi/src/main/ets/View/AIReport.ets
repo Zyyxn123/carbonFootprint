@@ -64,9 +64,17 @@ export struct AIReport {
               .backgroundColor('#37800f')
               .onClick(async () => {
                 const acc: string = AppStorage.get('currLoginAcc') as string
-                await aiReportVM.getMsg(acc)
+                const bol: boolean = await aiReportVM.getMsg(acc)
+                if (bol === false) {
+                  this.getUIContext().getPromptAction().showToast({
+                    message: `已有数据，请${aiReportVM.getRemainRequestDays()}后再次获取`,
+                    duration: 1000,
+                    bottom: 80
+                  })
+                } else {
+                  buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_reducecaremi_aiReportPage)
+                }
                 this.hasContent = true
-                buildRouterModel(RouterNameConstants.ENTRY_HAP, BuilderNameConstants.HAR_reducecaremi_aiReportPage)
               })
           }
           .alignItems(HorizontalAlign.Center)

@@ -1,4 +1,5 @@
 import { BuilderNameConstants, buildRouterModel, RouterModule, RouterNameConstants } from "@ohos/customrouter"
+import mapFootVM from "../ViewModel/MapFootprintViewModel"
 
 @Component
 export struct backButton {
@@ -15,6 +16,9 @@ export struct backButton {
         .padding(10)
         .borderRadius(25)
         .onClick(() => {
+          if (this.pageTitle === '碳足迹') {
+            mapFootVM.getLatelyData()
+          }
           AppStorage.set('expandSafeArea', false)
           this.bol = false
           RouterModule.pop(RouterNameConstants.ENTRY_HAP)

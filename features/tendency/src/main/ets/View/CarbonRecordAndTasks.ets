@@ -5,6 +5,7 @@ import RecordAndTaskViewModel from "../ViewModel/RecordAndTaskViewModel"
 import { abilityAccessCtrl, common, Permissions } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { bundleManager } from "@kit.AbilityKit";
+import mapFootVM from "../ViewModel/MapFootprintViewModel";
 
 let date = new Date().toLocaleDateString()
 AppStorage.setOrCreate('tasksBol', true)
@@ -77,33 +78,61 @@ export struct carbonRecordAndTasks {
   @Builder
   aiItemBuilder() {
     Column() {
-      Text('AI 小助手')
-        .fontSize(16)
-        .width(80)
-        .textAlign(TextAlign.Start)
-        .fontColor($r('app.color.recAndTask_title_color'))
-        .margin({ left: 15, top: 10, bottom: 6 })
-        .fontWeight(600)
-
-      Row() {
-        Text('智能分析你的所有疑问')
+      if (mapFootVM.latelyData === undefined) {
+        LoadingProgress()
+          .color('#37800f')
+          .width(35)
+        Text('正在加载中...')
           .fontSize(12)
-          .textAlign(TextAlign.Start)
-          .fontColor($r('app.color.recAndTask_content_color'))
-          .margin(4)
+          .fontColor('#000')
+      } else {
+        Column({ space: 10 }) {
+          Row({ space: 6 }) {
+            Image($r('app.media.tendency_markLocation'))
+              .width(40)
+
+            Text(mapFootVM.latelyData.data.titles[0].content)
+              .fontSize(20)
+              .fontColor('#000')
+              .layoutWeight(1)
+              .maxLines(2)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+          }
+          .width('100%')
+          .alignItems(VerticalAlign.Center)
+          .justifyContent(FlexAlign.Start)
+          .margin({ left: 5, right: 5, bottom: 8 })
+
+          Text('+ ' + mapFootVM.latelyData.carEmi + 'g CO₂碳排')
+            .fontColor('#37800f')
+            .fontSize(16)
+
+          if (mapFootVM.latelyData.extraData === '') {
+            Text('暂未设置额外信息')
+              .fontSize(18)
+              .fontColor('#000')
+              .layoutWeight(1)
+          } else {
+            Text(mapFootVM.latelyData.extraData)
+              .layoutWeight(1)
+              .maxLines(3)
+              .fontSize(16)
+              .fontColor('#000')
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+          }
+        }
+        .alignItems(HorizontalAlign.Start)
+        .padding(10)
+        .width('100%')
+        .height('100%')
       }
-      .borderRadius(15)
-      .backgroundColor($r('app.color.recAndTask_background'))
-      .justifyContent(FlexAlign.Start)
-      .padding(3)
-      .margin({ left: 15 })
     }
     .linearGradient({
       angle: 225,
       colors: [["#e7fdff", 0.4], ['#ffffff', 0.6]]
     })
-    .alignItems(HorizontalAlign.Start)
-    .justifyContent(FlexAlign.Start)
+    .alignItems(HorizontalAlign.Center)
+    .justifyContent(FlexAlign.Center)
     .width('100%')
     .height('100%')
   }

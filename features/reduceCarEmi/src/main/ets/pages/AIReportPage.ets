@@ -5,6 +5,7 @@ import { Markdown } from "@luvi/lv-markdown-in"
 
 @Component
 export struct AIReportPage {
+  @State isShow: boolean = false
   build() {
     Column() {
       ReportBack({ pageTitle: '你的专属报告' })
@@ -13,8 +14,10 @@ export struct AIReportPage {
         List() {
           ListItem() {
             Column() {
-              Markdown({ text: aiReportVM.showTextStr })
-                .width('95%')
+              if (aiReportVM.showTextStr !== '') {
+                Markdown({ text: aiReportVM.showTextStr })
+                  .width('95%')
+              }
             }
             .padding(10)
             .width('100%')

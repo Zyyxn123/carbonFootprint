@@ -20,6 +20,7 @@ import {
 import { promptAction } from "@kit.ArkUI";
 import { MapFootprintView } from "../View/MapFootprintView";
 import { MapTrackView } from "../View/MapTrackView";
+import mapFootVM from "../ViewModel/MapFootprintViewModel";
 
 const permissions: Permissions[] = ['ohos.permission.LOCATION', 'ohos.permission.APPROXIMATELY_LOCATION'];
 
@@ -313,6 +314,9 @@ export struct lowFootprintPage {
   async aboutToAppear(): Promise<void> {
     this.checkPermission()
 
+    const acc: string = AppStorage.get('currLoginAcc') as string
+    await mapFootVM.getItemData(acc)
+
     this.callback = async (err, mapController) => {
       if (!err) {
         this.mapController = mapController;
@@ -321,17 +325,17 @@ export struct lowFootprintPage {
         this.mapController.setCompassControlsEnabled(false)
 
         // 初始化默认标注
-        for (let data of this.addedAnnotations) {
+        for (let data of mapFootVM.dataSummaryList) {
           let pointAnnotationOptions: mapCommon.PointAnnotationParams = {
             position: {
-              latitude: data.latitude,
-              longitude: data.longitude
+              latitude: data.data.position.latitude,
+              longitude: data.data.position.longitude
             },
             repeatable: true,
             collisionRule: mapCommon.CollisionRule.NAME,
             titles: [{
-              content: data.title,
-              color: 0xFF000000,
+              content: data.data.titles[0].content || '未知地点',
+              color: 0xFF37800f,
               fontSize: 15,
               strokeColor: 0xFFFFFFFF,
               strokeWidth: 2,

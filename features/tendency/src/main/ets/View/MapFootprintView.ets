@@ -7,6 +7,7 @@ import { geoLocationManager } from '@kit.LocationKit';
 import { abilityAccessCtrl, common, Permissions } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { JSON } from "@kit.ArkTS";
+import mapFootVM from "../ViewModel/MapFootprintViewModel";
 
 
 @Component
@@ -22,6 +23,7 @@ export struct MapFootprintView {
 
   @State showSearchResults: boolean = false
   @State isLoading: boolean = false
+  @State pointAnnoOpt: mapCommon.PointAnnotationParams | undefined = undefined
   // @State showAnnotationDetail: boolean = false
   @Link textStr: string
   @State carbonEmission: string = ''
@@ -142,6 +144,7 @@ export struct MapFootprintView {
         fontStyle: mapCommon.FontStyle.ITALIC
       }],
     }
+    this.pointAnnoOpt = pointAnnotationOptions
 
     try {
       await this.mapController.addPointAnnotation(pointAnnotationOptions)
@@ -177,7 +180,7 @@ export struct MapFootprintView {
       Column() {
         // 可选数据
         Column({ space: 10 }) {
-          Text('碳排放数据 (可选)')
+          Text('碳排放数据 (必填)')
             .fontSize(14)
             .fontColor('#37800f')
             .fontWeight(FontWeight.Medium)
@@ -267,8 +270,29 @@ export struct MapFootprintView {
             .fontColor('#fff')
             .fontSize(18)
             .onClick(async () => {
+              if (this.carbonEmission === '') {
+                this.getUIContext().getPromptAction().showToast({
+                  message: '请输入碳排数据',
+                  duration: 1000,
+                  bottom: 80
+                })
+                return
+              }
               if (this.canMark && (this.currData!.name === this.textStr)) {
                 await this.addPointAnno()
+                const acc: string = AppStorage.get('currLoginAcc') as string
+                const date = new Date().toLocaleDateString()
+                if (this.pointAnnoOpt === undefined) {
+                  this.getUIContext().getPromptAction().showToast({
+                    message: '位置信息错误',
+                    duration: 1000,
+                    bottom: 80
+                  })
+                  return
+                }
+                await mapFootVM.insertItemData(acc, date, this.pointAnnoOpt,
+                  this.remark, Number(Number(this.carbonEmission).toFixed(0)))
+
                 this.getUIContext().getPromptAction().showToast({
                   message: `添加成功`,
                   bottom: 80,
@@ -285,13 +309,16 @@ export struct MapFootprintView {
                 this.canMark = false
                 this.makeSureToQuit = true
               } else {
+                this.remark = ''
+                this.carbonEmission = ''
+                this.canMark = false
                 this.getUIContext().getPromptAction().showToast({
-                  message: `信息错误，请重新输入`,
+                  message: `信息错误或重复标记，请重新输入`,
                   bottom: 80,
-                  duration: 1500,
-                  textColor: '#ffff0000'
+                  duration: 1500
                 })
               }
+              this.pointAnnoOpt = undefined
               this.BSHeight1 = 500
               this.myShowResults = true
             })

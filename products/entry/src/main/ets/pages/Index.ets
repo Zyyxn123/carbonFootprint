@@ -8,6 +8,7 @@ import {
   HealthyNewsPreference,
   HTTPForHealthyNews,
   ReduceCarEmiPreference,
+  TendMapFootTable,
   TendTasksTable
 } from '@ohos/utils';
 import { LogOrResPage } from './LogOrResPage';
@@ -43,6 +44,7 @@ struct c {
   private carEmiFoodTable: CarEmiFoodTable = CarEmiFoodTable.getInstance()
   private carEmiTotalWeeklyTable: CarEmiTotalWeeklyTable = CarEmiTotalWeeklyTable.getInstance()
   private tendTasksTable: TendTasksTable = TendTasksTable.getInstance()
+  private tendMapFootTable: TendMapFootTable = TendMapFootTable.getInstance()
 
   async aboutToAppear() {
     this.healthyNewsPre.getMyPre(this.context)
@@ -68,6 +70,7 @@ struct c {
       this.carEmiFoodTable.initTable()
       this.carEmiTotalWeeklyTable.initTable()
       this.tendTasksTable.initTable()
+      this.tendMapFootTable.initTable()
     }, 500)
   }
 

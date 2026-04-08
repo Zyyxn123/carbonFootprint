@@ -65,3 +65,5 @@ export const CarEmiFoodLogger: Logger = new Logger('[CarEmiFoodLogger]')
 export const CarEmiTotalWeeklyLogger: Logger = new Logger('[CarEmiTotalWeeklyLogger]')
 
 export const TendTasksLogger: Logger = new Logger('[TendTasksLogger]')
+
+export const TendMapFootLogger: Logger = new Logger('[TendMapFootLogger]')

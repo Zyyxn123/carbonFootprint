@@ -1,6 +1,6 @@
 import { relationalStore } from '@kit.ArkData';
 import { BusinessError } from '@kit.BasicServicesKit';
-import { TendencyRdbLogger } from '../Hilog/HilogInfo';
+import { TendencyRdbLogger, TendMapFootLogger } from '../Hilog/HilogInfo';
 
 export class TendencyDBManager {
   private static instance: TendencyDBManager
@@ -28,6 +28,8 @@ export class TendencyDBManager {
         }
         this.tendencyRdbStore = rdbStore
         TendencyRdbLogger.info('数据库创建成功')
+
+        TendMapFootLogger.info('数据库创建成功')
       })
   }
 
