@@ -3,7 +3,7 @@ export class TendencySQL {
     return `CREATE TABLE IF NOT EXISTS ${tableName} (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     account TEXT NOT NULL,
-    recordDate TEXT NOT NULL UNIQUE,
+    recordDate TEXT NOT NULL,
     tasksMsg TEXT,
     UNIQUE(account, recordDate));`
   }

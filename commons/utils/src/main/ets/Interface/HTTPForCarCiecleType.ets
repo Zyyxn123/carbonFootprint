@@ -9,6 +9,49 @@ export interface createExtraDataType {
 }
 
 /**
+ * 创建帖子返回参数
+ */
+export interface returnPubPost {
+  // 状态码 0=成功
+  code: number;
+  // 提示信息
+  msg: string;
+  // 数据主体
+  dao: FootprintDao;
+}
+
+export interface FootprintDao {
+  // 主键ID
+  id: number;
+  // 用户ID
+  user_id: number;
+  // 标题
+  title: string;
+  // 内容
+  content: string;
+  // 状态 1=正常
+  status: number;
+  // 图片地址数组
+  images: string[];
+  // 用户头像标识
+  avatar: string;
+  // 发布时间
+  published_at: string;
+  // 点赞数
+  like_count: number;
+  // 收藏数
+  favorite_count: number;
+  // 评论数
+  comment_count: number;
+  // 热度分数
+  hot_score: number;
+  // 创建时间
+  created_at: string;
+  // 更新时间
+  updated_at: string;
+}
+
+/**
  * 发表评论的传递参数
  */
 export interface createExtraCommentType {

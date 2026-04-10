@@ -18,7 +18,7 @@ export struct BackButtonOri {
             if (this.pageTitle === '帖子详情') {
               RouterModule.pop(RouterNameConstants.ENTRY_HAP)
             } else {
-              RouterModule.pop(BuilderNameConstants.HAR_carboncircle_comment)
+              RouterModule.pop(RouterNameConstants.ENTRY_HAP)
             }
           })
 

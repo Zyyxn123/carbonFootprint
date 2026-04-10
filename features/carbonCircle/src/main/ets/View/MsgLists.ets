@@ -7,20 +7,25 @@ import msgListVM from "../ViewModel/MsgListViewModel"
 export struct MsgLists {
   private httpForCarCircleIns: HTTPForCarCircle = HTTPForCarCircle.getInstance()
 
+  getRandomInt(): number {
+    // 核心公式：Math.random() 生成 0~1(不含1) 的随机数，*20 得到 0~20(不含20)，向下取整为 0~19，+1 得到 1~20
+    return Math.floor(Math.random() * 20) + 1;
+  }
+
   @Builder
   listItemBuilder(item: postDataType, index: number) {
     Column({ space: 8 }) {
       Row({ space: 10 }) {
-        Image($r(`app.media.${item.avatar}`))
+        Image($r(`app.media.avatar_a0${this.getRandomInt()}`))
           .width(40)
           .borderRadius(25)
 
         Column({ space: 5 }) {
-          Text(item.author_username + '')
+          Text(/*item.author_username + ''*/$r(`app.string.userName_a0${this.getRandomInt()}`))
             .fontSize(15)
             .fontColor('#000')
 
-          Text(item.published_at)
+          Text(item.published_at.split('T')[0])
             .fontSize(12)
             .fontColor('#ccc')
         }

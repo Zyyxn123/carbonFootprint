@@ -389,6 +389,9 @@ export struct logOrResView {
                   }
 
                   this.isLogin = true
+                  this.healthyNewsPre.setTodayData_HN(this.httpForHN.data)
+                  this.loginProgressBol = false
+                  this.isSubmitting = false
                   console.log('数据：' + this.accountStr + ';;' + this.httpForLoginState.returnUserName)
                 }
 

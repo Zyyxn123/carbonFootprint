@@ -18,13 +18,15 @@ export struct carbonRecordAndTasks {
   @StorageLink('tasksBol') isShown: boolean = true
   private context: common.UIAbilityContext = this.getUIContext().getHostContext() as common.UIAbilityContext
   @State bol: boolean = false
+  @State isLoad: boolean = true
 
   async aboutToAppear(): Promise<void> {
     await lowTVM.getTotalData(this.acc, date)
     this.showIndex = await lowTVM.findFirstUnfinishedIndex()
     setTimeout(() => {
       this.isShown = false
-    }, 1000)
+      this.isLoad = false
+    }, 1500)
 
     this.bol = await checkPermissions()
     console.info('lowFootprintPage1: ' + this.bol)
@@ -79,12 +81,19 @@ export struct carbonRecordAndTasks {
   aiItemBuilder() {
     Column() {
       if (mapFootVM.latelyData === undefined) {
-        LoadingProgress()
-          .color('#37800f')
-          .width(35)
-        Text('正在加载中...')
-          .fontSize(12)
-          .fontColor('#000')
+        if (this.isLoad) {
+          LoadingProgress()
+            .color('#37800f')
+            .width(35)
+          Text('正在加载中...')
+            .fontSize(12)
+            .fontColor('#000')
+        } else {
+          Text('暂无内容')
+            .fontSize(12)
+            .fontColor('#000')
+        }
+
       } else {
         Column({ space: 10 }) {
           Row({ space: 6 }) {
@@ -203,7 +212,7 @@ export struct carbonRecordAndTasks {
         .justifyContent(FlexAlign.SpaceEvenly)
         .width('100%')
         .height(180)
-        .backgroundColor(this.getLightBgColor(lowTVM.taskList[this.showIndex].taskItem.category))
+        .backgroundColor(this.getLightBgColor(lowTVM.taskList[this.showIndex].taskItem?.category))
         .padding(10)
         .borderRadius(15)
       }

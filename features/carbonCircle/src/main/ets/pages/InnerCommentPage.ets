@@ -15,6 +15,11 @@ export struct InnerCommentPage {
   @State imgSrc: string[] = []
   @State up: boolean = false
 
+  getRandomInt(): number {
+    // 核心公式：Math.random() 生成 0~1(不含1) 的随机数，*20 得到 0~20(不含20)，向下取整为 0~19，+1 得到 1~20
+    return Math.floor(Math.random() * 20) + 1;
+  }
+
   aboutToAppear(): void {
     setTimeout(() => {
       this.isShow = true
@@ -45,11 +50,11 @@ export struct InnerCommentPage {
           ListItem() {
             Column({ space: 8 }) {
               Row({ space: 10 }) {
-                Image($r(`app.media.${this.item.avatar}`))
+                Image($r(`app.media.avatar_a0${this.getRandomInt()}`))
                   .width(50)
                   .borderRadius(25)
 
-                Text(this.item.username + '')
+                Text(/*this.item.username + ''*/$r(`app.string.userName_a0${this.getRandomInt()}`))
                   .fontSize(16)
                   .fontColor('#000')
               }
@@ -76,7 +81,7 @@ export struct InnerCommentPage {
               .rowsGap(6)
 
               Row() {
-                Text(this.item.created_at)
+                Text(this.item.created_at.split('T')[0])
                   .fontSize(1)
                   .fontSize(15)
                   .fontColor('#ccc')
@@ -110,12 +115,13 @@ export struct InnerCommentPage {
                 ForEach(msgListVM.innerCommentList,
                   (item: innerComment_listType, index: number) => {
                     Row({ space: 6 }) {
-                      Image($r(`app.media.${item.avatar}`))
+                      Image($r(`app.media.avatar_a0${this.getRandomInt()}`))
                         .width(35)
                         .borderRadius(20)
+                        .margin({ left: 6 })
 
                       Column({ space: 5 }) {
-                        Text(item.username)
+                        Text(/*item.username*/$r(`app.string.userName_a0${this.getRandomInt()}`))
                           .fontColor('#000')
                           .fontSize(16)
 
@@ -125,7 +131,7 @@ export struct InnerCommentPage {
                           .fontColor('#000')
 
                         Row({ space: 6 }) {
-                          Text(item.created_at)
+                          Text(item.created_at.split('T')[0])
                             .fontSize(12)
                             .fontColor('#ff7a7a7a')
 
@@ -134,6 +140,7 @@ export struct InnerCommentPage {
                             .fontColor('#000')
                             .layoutWeight(1)
                             .onClick(() => {
+                              this.commentStr = ''
                               this.isShowComment = true
                               this.sendId = item.id
                             })
@@ -143,7 +150,8 @@ export struct InnerCommentPage {
                               .fillColor(item.me_liked ? '#ffff0000' : '#000')
                               .width(20)
                               .onClick(async () => {
-                                const result: boolean = await msgListVM.setCommentLikeStateToServer(item.me_liked, item.id)
+                                const result: boolean =
+                                  await msgListVM.setCommentLikeStateToServer(item.me_liked, item.id)
                                 if (result) {
                                   const bol = !item.me_liked
                                   msgListVM.updateInnerCommentLikeStatus(index, bol)
@@ -234,10 +242,11 @@ export struct InnerCommentPage {
                       bottom: 80
                     })
                   } else {
-                      msgListVM.sendCommentToServer(this.item?.id, this.commentStr,
-                        this.sendId, this.imgSrc, this.item?.avatar)
+                    msgListVM.sendCommentToServer(this.item?.id, this.commentStr,
+                      this.sendId, this.imgSrc, this.item?.avatar)
                     this.isShowComment = false
                   }
+                  this.commentStr = ''
                 })
             }
             .justifyContent(FlexAlign.SpaceBetween)

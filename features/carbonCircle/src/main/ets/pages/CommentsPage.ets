@@ -37,6 +37,11 @@ export struct CommentsPage {
     }
   }
 
+  getRandomInt(): number {
+    // 核心公式：Math.random() 生成 0~1(不含1) 的随机数，*20 得到 0~20(不含20)，向下取整为 0~19，+1 得到 1~20
+    return Math.floor(Math.random() * 20) + 1;
+  }
+
   build() {
     Column() {
       Column() {
@@ -47,7 +52,7 @@ export struct CommentsPage {
             ListItem() {
               Column({ space: 8 }) {
                 Row({ space: 10 }) {
-                  Image($r(`app.media.${this.item.avatar}`))
+                  Image($r(`app.media.avatar_a0${this.getRandomInt()}`))
                     .width(50)
                     .borderRadius(25)
 
@@ -82,7 +87,7 @@ export struct CommentsPage {
                 .columnsGap(6)
                 .rowsGap(6)
 
-                Text(this.item.published_at)
+                Text(this.item.published_at.split('T')[0])
                   .fontSize(1)
                   .fontSize(15)
                   .fontColor('#ccc')
@@ -102,12 +107,13 @@ export struct CommentsPage {
 
                   ForEach(msgListVM.commentList, (item: topComment_listType, index: number) => {
                     Row({ space: 6 }) {
-                      Image($r(`app.media.${item.avatar}`))
+                      Image(/*$r(`app.media.${item.avatar}`)*/$r(`app.media.avatar_a0${this.getRandomInt()}`))
                         .width(35)
                         .borderRadius(20)
+                        .margin({ left: 6 })
 
                       Column({ space: 5 }) {
-                        Text(item.username)
+                        Text(/*item.username*/$r(`app.string.userName_a0${this.getRandomInt()}`))
                           .fontColor('#000')
                           .fontSize(16)
 
@@ -117,7 +123,7 @@ export struct CommentsPage {
                           .fontColor('#000')
 
                         Row({ space: 6 }) {
-                          Text(item.created_at)
+                          Text(item.created_at.split('T')[0])
                             .fontSize(12)
                             .fontColor('#ff7a7a7a')
 
@@ -133,6 +139,7 @@ export struct CommentsPage {
                           .layoutWeight(1)
                           .margin({ left: 5 })
                           .onClick(() => {
+                            this.commentStr = ''
                             this.isShowComment = true
                             this.isTopComment = false
                             this.sendId = item.id
@@ -259,6 +266,7 @@ export struct CommentsPage {
                       }
                       this.isShowComment = false
                     }
+                    this.commentStr = ''
                   })
               }
               .justifyContent(FlexAlign.SpaceBetween)

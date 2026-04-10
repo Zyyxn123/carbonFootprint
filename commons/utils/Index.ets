@@ -17,7 +17,8 @@ export {
   postDataType,
   createExtraDataType,
   topComment_listType,
-  innerComment_listType
+  innerComment_listType,
+  FootprintDao
 } from './src/main/ets/Interface/HTTPForCarCiecleType'
 
 export { UserBasicDataType } from './src/main/ets/Interface/UserBasicDataType'

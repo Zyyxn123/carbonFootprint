@@ -1,6 +1,7 @@
 import {
   createExtraCommentType,
   createExtraDataType,
+  FootprintDao,
   HTTPForCarCircle,
   innerComment_dataType,
   postDataType,
@@ -31,7 +32,7 @@ export class MsgListModel {
     await MsgListModel.httpForCarCirIns.httpForPublishComment(id, data)
   }
 
-  public static getPostFromServer(): postDataType | undefined {
+  public static getPostFromServer(): FootprintDao | undefined {
     return MsgListModel.httpForCarCirIns.returnData
   }
 

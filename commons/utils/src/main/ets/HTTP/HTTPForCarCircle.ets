@@ -5,6 +5,7 @@ import { JSON } from '@kit.ArkTS';
 import {
   createExtraCommentType,
   createExtraDataType,
+  FootprintDao,
   innerComment_dataType,
   postDataType,
   returnCommentType,
@@ -12,6 +13,7 @@ import {
   returnPostListType,
   returnPostTopCommentListType,
   returnPraiseStateType,
+  returnPubPost,
   topComment_dataType
 } from '../Interface/HTTPForCarCiecleType';
 
@@ -22,7 +24,7 @@ export class HTTPForCarCircle {
   private readonly getPostListUrl: string = 'http://192.168.43.16:8081/api/v1/Yposts'
   private readonly getPostTopCommentUrl: string = 'http://192.168.43.16:8081/api/v1/posts/'
   private readonly getPostInnerCommentUrl: string = 'http://192.168.43.16:8081/api/v1/comments/'
-  private readonly praiseCommentUrl: string = 'http://192.168.43.16:8081/api/v1/comments/'
+  private readonly praiseCommentUrl: string = 'http://192.168.43.16:8081/api/v1/posts/'
   private readonly praisePostUrl: string = 'http://192.168.43.16:8081/api/v1/posts/'
   private readonly favoriteCommentUrl: string = 'http://192.168.43.16:8081/api/v1/posts/'
   public extraData: createExtraDataType = {
@@ -31,7 +33,7 @@ export class HTTPForCarCircle {
     images: [],
     avatar: ''
   }
-  public returnData: postDataType | undefined = undefined
+  public returnData: FootprintDao | undefined = undefined
   public JWT: string = ''
   public isOK: boolean = false
 
@@ -71,6 +73,22 @@ export class HTTPForCarCircle {
         HTTPForCarCleLogger.error(`HttpRequest获取数据失败 err:code=${err.code}, msg=${err.message}`)
         this.isOK = false
         return
+      }
+      if (data.responseCode !== 200) {
+        return
+      }
+      HTTPForCarCleLogger.info(`${JSON.stringify(data.result)}`)
+      try {
+        const res = data.result as string | returnPubPost
+
+
+        const msg: returnPubPost = typeof res === 'string' ? JSON.parse(res) as returnPubPost  : res
+        if (msg.code !== 0) {
+          this.isOK = false
+          return
+        }
+        this.returnData = msg.dao
+      } catch (e) {
       }
       // const msg = data.result as returnPostType | string
       // const response: returnPostType =
